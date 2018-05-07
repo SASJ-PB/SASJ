@@ -1,13 +1,13 @@
 package br.edu.ifpb.monteiro.ads.sasj.api.enums;
 
-public enum TipoFuncionario {
+public enum TipoUsuario {
 
 	ADMIN("Admin"),
 	PADRAO("Padrão");
 	
 	private String descricao;
 	
-	TipoFuncionario(String descricao) {
+	TipoUsuario(String descricao) {
 		this.descricao = descricao;
 	}
 	

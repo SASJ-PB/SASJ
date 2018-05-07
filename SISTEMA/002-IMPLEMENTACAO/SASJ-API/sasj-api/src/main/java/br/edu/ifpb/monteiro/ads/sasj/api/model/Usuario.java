@@ -9,21 +9,19 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 
-import br.edu.ifpb.monteiro.ads.sasj.api.enums.TipoFuncionario;
+import br.edu.ifpb.monteiro.ads.sasj.api.enums.TipoUsuario;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "usuario")
 public class Usuario {
 
@@ -38,6 +36,7 @@ public class Usuario {
 	private String cargo;
 
 	@NotNull
+	@Pattern(regexp = "^[a-zA-Z]{2}\\-\\d{3,4}$")
 	private String matricula;
 
 	@NotNull
@@ -50,14 +49,13 @@ public class Usuario {
 
 	@Enumerated(EnumType.STRING)
 	@NotNull
-	private TipoFuncionario tipoFuncionario;
+	private TipoUsuario tipoUsuario;
 
 	@NotNull
 	private boolean ativo;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "usuario_permissao", joinColumns = @JoinColumn(name = "codigo_usuario"),
-	inverseJoinColumns = @JoinColumn(name = "codigo_permissao"))
+	@JoinTable(name = "usuario_permissao", joinColumns = @JoinColumn(name = "codigo_usuario"), inverseJoinColumns = @JoinColumn(name = "codigo_permissao"))
 	private List<Permissao> permissoes;
 
 	public Long getCodigo() {
@@ -108,12 +106,12 @@ public class Usuario {
 		this.email = email;
 	}
 
-	public TipoFuncionario getTipoFuncionario() {
-		return tipoFuncionario;
+	public TipoUsuario getTipoUsuario() {
+		return tipoUsuario;
 	}
 
-	public void setTipoFuncionario(TipoFuncionario tipoFuncionario) {
-		this.tipoFuncionario = tipoFuncionario;
+	public void setTipoUsuario(TipoUsuario tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
 	}
 
 	public boolean isAtivo() {

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Usuario;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.UsuarioRepository;
 
-
 @Service
 public class AppUserDetailsService implements UserDetailsService {
 
@@ -31,7 +30,6 @@ public class AppUserDetailsService implements UserDetailsService {
 		else {
 			throw new UsernameNotFoundException("Usuário e/ou senha incorretos");
 		}
-		
 	}
 
 	private Collection<? extends GrantedAuthority> getPermissoes(Usuario usuario) {

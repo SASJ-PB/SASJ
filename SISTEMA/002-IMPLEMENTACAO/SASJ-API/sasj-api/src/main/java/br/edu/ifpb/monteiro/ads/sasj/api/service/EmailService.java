@@ -55,7 +55,7 @@ public class EmailService {
 		email.setSubject("Configuração de conta");
 		email.addTo(usuario.getEmail());
 
-		email.setHtmlMsg(converterHtmlEmString("funcionario_redefinicao_senha")
+		email.setHtmlMsg(converterHtmlEmString("usuario_redefinicao_senha")
 				.replaceAll("NOMEDOUSUARIO", usuario.getNome())
 				.replace("LINKDEREDEFINICAO", originPermitida + "/recuperacao/senha/" + tokenParaEmailDeRedefinicao));
 
@@ -65,12 +65,12 @@ public class EmailService {
 
 	private HtmlEmail construirEmail() throws EmailException {
 		HtmlEmail email = new HtmlEmail();
-		email.setHostName("smtp.live.com");
+		email.setHostName("smtp.zoho.com");
 		email.setSmtpPort(587);
 		// TODO: Criar e-mail "sasj.desenvolvimento@hotmail.com"
-		email.setAuthenticator(new DefaultAuthenticator("sasj.desenvolvimento@hotmail.com", "ambientededesenvolvimento"));
+		email.setAuthenticator(new DefaultAuthenticator("sasj.desenvolvimento@zoho.com", "123456789"));
 		email.setStartTLSEnabled(true);
-		email.setFrom("sasj.desenvolvimento@hotmail.com", "Sistema de Alocação de Sessões Jurídicas");
+		email.setFrom("sasj.desenvolvimento@zoho.com", "Sistema de Alocação de Sessões Jurídicas");
 		email.setContent(null, "text/html; charset=iso-8859-1");
 		return email;
 	}
