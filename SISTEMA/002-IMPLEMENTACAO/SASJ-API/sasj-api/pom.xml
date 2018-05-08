@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>sasj-api</name>
-	<description>API REST do Sistema de Alocacao de Sessoes Juridicas</description>
+	<description>API REST do Sistema de Alocacao de Sessoes Jurídicas</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
