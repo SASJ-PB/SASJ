@@ -13,11 +13,13 @@ import br.edu.ifpb.monteiro.ads.sasj.api.enums.TipoUsuario;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Permissao;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Usuario;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.UsuarioRepository;
-import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaJaCadastradaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailJaCadastradoException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaInvalidaException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaJaCadastradaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.NomeInvalidoException;
-import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.SenhaAntigaNaoConfereException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.UsuarioInexistenteOuInativoException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.UsuarioJaInativoException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.util.RegexMatriculaValidator;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.util.RegexNomeValidator;
 
 @Service
@@ -44,6 +46,9 @@ public class UsuarioService {
 		usuario.setSenha(encoder.encode(senhaTemporaria));
 		usuario.setEmail(usuario.getEmail().toLowerCase());
 		usuario.setAtivo(true);
+		usuario.setMatricula(usuario.getMatricula().toUpperCase());
+		usuario.setCargo(usuario.getCargo().toUpperCase());
+		usuario.setEmail(usuario.getEmail().toLowerCase());
 
 		adicionarPermissoes(usuario);
 
@@ -66,6 +71,9 @@ public class UsuarioService {
 		Usuario usuarioSalvo = buscarUsuarioPeloCodigo(codigo);
 		if (usuarioSalvo == null) {
 			throw new UsuarioInexistenteOuInativoException();
+		}
+		if(!usuarioSalvo.isAtivo() && !ativo) {
+			throw new UsuarioJaInativoException();
 		}
 		usuarioSalvo.setAtivo(ativo);
 		return usuarioRepository.save(usuarioSalvo);
@@ -94,14 +102,10 @@ public class UsuarioService {
 	public Usuario atualizar(Long codigo, Usuario usuario) {
 		Usuario usuarioSalvo = buscarUsuarioPeloCodigo(codigo);
 
-		// VERIFICAR SENHA
-		if (!usuario.getSenha().equals(usuarioSalvo.getSenha())) {
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			usuario.setSenha(encoder.encode(usuario.getSenha()));
-		}
+		BeanUtils.copyProperties(usuario, usuarioSalvo, "codigo", "ativo", "permissoes");
+		adicionarPermissoes(usuarioSalvo);
 
-		BeanUtils.copyProperties(usuario, usuarioSalvo, "codigo", "permissoes");
-		validarAtualizacao(usuario);
+		validarAtualizacao(usuarioSalvo);
 
 		return usuarioRepository.save(usuarioSalvo);
 	}
@@ -114,15 +118,25 @@ public class UsuarioService {
 
 	private void validarAtualizacao(Usuario usuarioNovaVersao) {
 		Usuario usuarioEmailCadastrado = usuarioRepository.findByEmail(usuarioNovaVersao.getEmail());
+		Usuario usuarioMatriculaCadastrada = usuarioRepository.findByMatricula(usuarioNovaVersao.getMatricula());
 
 		if (!RegexNomeValidator.isNomeValido(usuarioNovaVersao.getNome())) {
 			throw new NomeInvalidoException();
 		}
 
-		else if (usuarioEmailCadastrado != null) {
+		if (usuarioEmailCadastrado != null) {
 			if (!usuarioEmailCadastrado.getCodigo().equals(usuarioNovaVersao.getCodigo())) {
 				throw new EmailJaCadastradoException();
 			}
+		}
+
+		if (usuarioMatriculaCadastrada != null) {
+			if (!usuarioMatriculaCadastrada.getCodigo().equals(usuarioNovaVersao.getCodigo())) {
+				throw new MatriculaJaCadastradaException();
+			}
+		}
+		if (!RegexMatriculaValidator.isMatriculaValida(usuarioNovaVersao.getMatricula())) {
+			throw new MatriculaInvalidaException();
 		}
 	}
 
@@ -133,8 +147,6 @@ public class UsuarioService {
 			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 			if (encoder.matches(senhaAntiga, usuario.getSenha())) {
 				return true;
-			} else {
-				throw new SenhaAntigaNaoConfereException();
 			}
 		}
 		return false;
@@ -142,14 +154,19 @@ public class UsuarioService {
 
 	private void validarUsuario(Usuario usuario) {
 		Usuario usuarioEmailCadastrado = usuarioRepository.findByEmail(usuario.getEmail());
-		Usuario usuarioCpfCadastrado = usuarioRepository.findByMatricula(usuario.getMatricula());
+		Usuario usuarioMatriculaCadastrada = usuarioRepository.findByMatricula(usuario.getMatricula());
 
 		if (usuarioEmailCadastrado != null) {
 			throw new EmailJaCadastradoException();
-		} else if (usuarioCpfCadastrado != null) {
+		}
+		if (usuarioMatriculaCadastrada != null) {
 			throw new MatriculaJaCadastradaException();
-		} else if (!RegexNomeValidator.isNomeValido(usuario.getNome())) {
+		}
+		if (!RegexNomeValidator.isNomeValido(usuario.getNome())) {
 			throw new NomeInvalidoException();
+		}
+		if (!RegexMatriculaValidator.isMatriculaValida(usuario.getMatricula())) {
+			throw new MatriculaInvalidaException();
 		}
 	}
 
@@ -161,18 +178,18 @@ public class UsuarioService {
 			cadastrarUsuario.setCodigo(1L);
 			cadastrarUsuario.setDescricao("ROLE_CADASTRAR_USUARIO");
 			permissoesUsuario.add(cadastrarUsuario);
-			
+
 			Permissao removerFuncionario = new Permissao();
 			removerFuncionario.setCodigo(4L);
 			removerFuncionario.setDescricao("ROLE_REMOVER_USUARIO");
 			permissoesUsuario.add(removerFuncionario);
 		}
-		
+
 		Permissao atualizarUsuario = new Permissao();
 		atualizarUsuario.setCodigo(3L);
 		atualizarUsuario.setDescricao("ROLE_ATUALIZAR_USUARIO");
 		permissoesUsuario.add(atualizarUsuario);
-		
+
 		Permissao pesquisarUsuario = new Permissao();
 		pesquisarUsuario.setCodigo(2L);
 		pesquisarUsuario.setDescricao("ROLE_PESQUISAR_USUARIO");

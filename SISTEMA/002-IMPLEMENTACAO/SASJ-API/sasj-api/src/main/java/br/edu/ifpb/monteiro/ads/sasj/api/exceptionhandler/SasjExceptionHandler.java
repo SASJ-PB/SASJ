@@ -26,9 +26,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailJaCadastradoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailJaVerificadoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailNaoCadastradoException;
-import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.SenhaAntigaNaoConfereException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaInvalidaException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaJaCadastradaException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.NomeInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.TokenInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.UsuarioInexistenteOuInativoException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.UsuarioJaInativoException;
 
 @ControllerAdvice
 public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
@@ -43,20 +46,6 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 		List<Erro> erros = criarListaErros(ex.getBindingResult());
 
 		return handleExceptionInternal(ex, erros, headers, HttpStatus.BAD_REQUEST, request);
-	}
-
-	private List<Erro> criarListaErros(BindingResult bindingResult) {
-
-		List<Erro> erros = new ArrayList<>();
-
-		for (FieldError fieldError : bindingResult.getFieldErrors()) {
-			String mensagemUsuario = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
-			String mensagemDesenvolvedor = fieldError.toString();
-
-			erros.add(new Erro(mensagemUsuario, mensagemDesenvolvedor));
-		}
-
-		return erros;
 	}
 
 	@Override
@@ -112,20 +101,7 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 			WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("email.nao-cadastrado-usuario", null,
 				LocaleContextHolder.getLocale());
-		String mensagemDesenvolvedor = messageSource.getMessage("email.nao-cadastrado-desenvolvedor", null,
-				LocaleContextHolder.getLocale());
-
-		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
-
-		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
-
-	@ExceptionHandler({ UsernameNotFoundException.class })
-	public ResponseEntity<Object> handleUsernameNotFoundException(EmailNaoCadastradoException ex, WebRequest request) {
-		String mensagemUsuario = messageSource.getMessage("usuario.inativo-usuario", null,
-				LocaleContextHolder.getLocale());
-		String mensagemDesenvolvedor = messageSource.getMessage("usuario.inativo-desenvolvedor", null,
-				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 
@@ -136,8 +112,18 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleEmailJaVerificadoException(EmailJaVerificadoException ex, WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("usuario.ja-ativo-usuario", null,
 				LocaleContextHolder.getLocale());
-		String mensagemDesenvolvedor = messageSource.getMessage("usuario.ja-ativo-desenvolvedor", null,
+		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+
+	@ExceptionHandler({ UsernameNotFoundException.class })
+	public ResponseEntity<Object> handleUsernameNotFoundException(EmailNaoCadastradoException ex, WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("usuario.inativo-usuario", null,
 				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 
@@ -148,8 +134,7 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<Object> handleTokenInvalidoException(TokenInvalidoException ex, WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("token.invalido-usuario", null,
 				LocaleContextHolder.getLocale());
-		String mensagemDesenvolvedor = messageSource.getMessage("token.invalido-desenvolvedor", null,
-				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 
@@ -161,7 +146,30 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 			WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("usuario.inexistente-usuario", null,
 				LocaleContextHolder.getLocale());
-		String mensagemDesenvolvedor = messageSource.getMessage("usuario.inexistente-desenvolvedor", null,
+		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+
+	@ExceptionHandler({ NomeInvalidoException.class })
+	public ResponseEntity<Object> handleNomeInvalidoException(NomeInvalidoException ex, WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("nome.invalido-usuario", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = messageSource.getMessage("nome.invalido-desenvolvedor", null,
+				LocaleContextHolder.getLocale());
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ MatriculaJaCadastradaException.class })
+	public ResponseEntity<Object> handleMatriculaJaCadastradaException(MatriculaJaCadastradaException ex, WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("matricula.ja-cadastrada-usuario", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = messageSource.getMessage("matricula.ja-cadastrada-desenvolvedor", null,
 				LocaleContextHolder.getLocale());
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
@@ -169,17 +177,42 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 
-	@ExceptionHandler({ SenhaAntigaNaoConfereException.class })
-	public ResponseEntity<Object> handleSenhaAntigaNaoConfereException(SenhaAntigaNaoConfereException ex,
-			WebRequest request) {
-		String mensagemUsuario = messageSource.getMessage("usuario.senha-antiga-nao-confere-usuario", null,
+	@ExceptionHandler({ MatriculaInvalidaException.class })
+	public ResponseEntity<Object> handleMatriculaInvalidaException(MatriculaInvalidaException ex, WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("matricula.invalida-usuario", null,
 				LocaleContextHolder.getLocale());
-		String mensagemDesenvolvedor = messageSource.getMessage("usuario.senha-antiga-nao-confere-desenvolvedor", null,
+		String mensagemDesenvolvedor = messageSource.getMessage("matricula.invalida-desenvolvedor", null,
 				LocaleContextHolder.getLocale());
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ UsuarioJaInativoException.class })
+	public ResponseEntity<Object> handleUsuarioJaInativoException(UsuarioJaInativoException ex, WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("usuario.ja.inativo-usuario", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = messageSource.getMessage("usuario.ja.inativo-desenvolvedor", null,
+				LocaleContextHolder.getLocale());
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	private List<Erro> criarListaErros(BindingResult bindingResult) {
+
+		List<Erro> erros = new ArrayList<>();
+
+		for (FieldError fieldError : bindingResult.getFieldErrors()) {
+			String mensagemUsuario = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+			String mensagemDesenvolvedor = fieldError.toString();
+
+			erros.add(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+		}
+
+		return erros;
 	}
 
 	public static class Erro {

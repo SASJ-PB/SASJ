@@ -2,7 +2,7 @@
 INSERT INTO usuario (nome, cargo, matricula, senha, email, tipo_usuario, ativo) VALUES ('João Silva', 'Técnico Administrativo', 'MM-1234', '$2a$10$k6mErhbNu9NKu.lgfVSvWeqJNQ9L4DppfUSK9QPTsHL52S9NUrkCa', 'admin@admin.com', 'ADMIN', true);
 
 -- senha = padrao
-INSERT INTO usuario (nome, cargo, matricula, senha, email, tipo_usuario, ativo) VALUES ('Maria Ferreira', 'Secretária(o)', 'TT-123', '$2a$10$LpoTVnTPdfcNRjKSaNOkeORFm9LXCsopU8nN0svyOHmJIOr8UCipS', 'padrao@padrao.com', 'PADRAO', true);
+INSERT INTO usuario (nome, cargo, matricula, senha, email, tipo_usuario, ativo) VALUES ('Maria Ferreira', 'Secretária(o)', 'MM-123', '$2a$10$LpoTVnTPdfcNRjKSaNOkeORFm9LXCsopU8nN0svyOHmJIOr8UCipS', 'padrao@padrao.com', 'PADRAO', true);
 
 INSERT INTO permissao (codigo, descricao) VALUES (1, 'ROLE_CADASTRAR_USUARIO');
 INSERT INTO permissao (codigo, descricao) VALUES (2, 'ROLE_PESQUISAR_USUARIO');

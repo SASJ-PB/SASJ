@@ -33,7 +33,7 @@ public class RecuperacaoResource {
 	@GetMapping("/{token}")
 	public ResponseEntity<Usuario> buscarUsuarioPorToken(@PathVariable String token) {
 		Usuario usuario = tokenRecuperacaoService.buscarUsuarioPorToken(token);
-		return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();		
+		return usuario != null ? ResponseEntity.ok(usuario) : ResponseEntity.notFound().build();	
 	}
 	
 	@PutMapping("/usuario/{codigo}")	

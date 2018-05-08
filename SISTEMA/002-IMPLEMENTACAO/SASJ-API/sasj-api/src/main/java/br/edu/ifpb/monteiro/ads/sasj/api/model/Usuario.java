@@ -14,7 +14,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
@@ -36,7 +35,6 @@ public class Usuario {
 	private String cargo;
 
 	@NotNull
-	@Pattern(regexp = "^[a-zA-Z]{2}\\-\\d{3,4}$")
 	private String matricula;
 
 	@NotNull
