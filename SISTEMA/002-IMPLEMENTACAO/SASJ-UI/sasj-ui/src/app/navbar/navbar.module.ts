@@ -13,6 +13,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
+import { UsuarioModule } from '../usuario/usuario.module';
+
 
 @NgModule({
   imports: [
@@ -25,7 +27,8 @@ import { RouterModule } from '@angular/router';
     MatMenuModule,
     MatCardModule,
     MatDividerModule,
-    RouterModule
+    RouterModule,
+    UsuarioModule,
   ],
   declarations: [ ToolbarComponent ],
   exports: [ ToolbarComponent ],

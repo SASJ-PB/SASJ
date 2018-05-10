@@ -1,0 +1,46 @@
+<form>
+  <div class="form-container-usuario" >
+    <mat-form-field appearance="outline" class="spacer-field">
+      <mat-label>Nome</mat-label>
+      <input matInput placeholder="Nome completo do usuário" [formControl]="campoNome"
+          required>
+
+      <mat-error *ngIf="campoNome.hasError('required')">
+        O nome deve ser informado
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="spacer-field">
+      <mat-label>Cargo</mat-label>
+      <input matInput placeholder="Nome do cargo do usuário">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="spacer-field">
+      <mat-label>Matrícula</mat-label>
+      <input matInput placeholder="Matrícula do usuário" [formControl]="campoMatricula"
+          [textMask]="{mask: mascaraMatricula}" required>
+
+      <mat-error *ngIf="campoMatricula.hasError('required')">
+        A matrícula deve ser informada
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="spacer-field">
+      <mat-label>E-mail</mat-label>
+      <input matInput placeholder="Endereço de e-mail do usuário"
+          [formControl]="campoEmail" required>
+
+      <mat-error *ngIf="campoEmail.hasError('email')">
+        O e-mail informado não é válido
+      </mat-error>
+      <mat-error *ngIf="campoEmail.hasError('required')">
+        O e-mail deve ser informado
+      </mat-error>
+    </mat-form-field>
+
+    <div>
+      <button class="spacer-button" color="accent" mat-raised-button> SALVAR </button>
+      <a class="spacer-button" mat-raised-button> CANCELAR </a>
+    </div>
+  </div>
+</form>
