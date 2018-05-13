@@ -1,0 +1,8 @@
+.container-agendamento {
+  display: flow-root;
+  padding: 15px;
+}
+
+.container-agendamento > * {
+  width: 100%;
+}

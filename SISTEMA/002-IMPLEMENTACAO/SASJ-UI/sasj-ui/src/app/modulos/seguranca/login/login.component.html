@@ -1,0 +1,37 @@
+<div class="container-login">
+  <form #loginForm="ngForm">
+    <mat-card class="form-container-login">
+
+      <div style="text-align: center">
+        <img src="https://material.angular.io/assets/img/examples/shiba2.jpg" style="width: 150px; height: 150px; border-radius: 100px">
+      </div>
+
+      <mat-form-field appearance="outline" class="spacer-field">
+        <mat-label>Matrícula</mat-label>
+        <input matInput placeholder="Matrícula"
+            required [textMask]="{mask: mascaraMatricula}" [formControl]="campoMatricula"
+            ngModel name="campoMatricula">
+
+        <mat-error *ngIf="campoMatricula.hasError('required')">
+          A matrícula deve ser informada
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="spacer-field">
+        <mat-label>Senha</mat-label>
+        <input matInput placeholder="Senha" required type="password"
+            [formControl]="campoSenha" ngModel name="campoSenha" >
+
+        <mat-error *ngIf="campoSenha.hasError('required')">
+          A senha deve ser informada
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button type="submit" color="accent" class="spacer-field"
+          [disabled]="campoMatricula.invalid || campoSenha.invalid"
+          (click)="login()">ENTRAR</button>
+
+      <a mat-button class="spacer-field"> Esqueceu a senha? <span style="font-weight: bold">Recuperar</span> </a>
+    </mat-card>
+  </form>
+</div>

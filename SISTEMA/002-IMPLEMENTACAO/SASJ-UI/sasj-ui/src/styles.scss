@@ -9,3 +9,7 @@ $style-warn: mat-palette($mat-red);
 $style-theme: mat-light-theme($style-primary, $style-accent, $style-warn);
 
 @include angular-material-theme($style-theme);
+
+.snack-bar-error{
+  background: #F44336;
+}

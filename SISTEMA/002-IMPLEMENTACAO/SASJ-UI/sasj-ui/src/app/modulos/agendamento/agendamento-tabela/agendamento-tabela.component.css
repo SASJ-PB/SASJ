@@ -1,0 +1,9 @@
+.div-filtro {
+  max-height: 50px;
+  padding: 20px 10px 0;
+}
+
+.botao-busca-avancada {
+  float: right;
+  margin-top: 7px;
+}

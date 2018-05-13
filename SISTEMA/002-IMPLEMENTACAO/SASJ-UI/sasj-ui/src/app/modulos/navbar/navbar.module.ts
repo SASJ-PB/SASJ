@@ -12,9 +12,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-import { RouterModule } from '@angular/router';
-import { UsuarioModule } from '../usuario/usuario.module';
 
+import { SessaoConteudoModule } from './../sessao-conteudo/sessao-conteudo.module';
 
 @NgModule({
   imports: [
@@ -27,8 +26,8 @@ import { UsuarioModule } from '../usuario/usuario.module';
     MatMenuModule,
     MatCardModule,
     MatDividerModule,
-    RouterModule,
-    UsuarioModule,
+
+    SessaoConteudoModule,
   ],
   declarations: [ ToolbarComponent ],
   exports: [ ToolbarComponent ],
