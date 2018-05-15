@@ -1,6 +1,6 @@
 <div class="container" [class.is-mobile]="mobileQuery.matches">
-  <mat-toolbar color="primary" class="toolbar">
-    <mat-toolbar-row>
+  <mat-toolbar color="primary" class="toolbar" *ngIf="ocultarToolbar()">
+    <mat-toolbar-row *ngIf="ocultarToolbar()">
       <button mat-icon-button (click)="sidenavRef.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
@@ -18,14 +18,14 @@
           <img src="https://material.angular.io/assets/img/examples/shiba2.jpg" id="imagem-usuario">
         </div>
         <div class="mat-typography" id="div-label-bem-vindo">
-          <span>Bem vindo usuário</span>
+          <span>Bem-vindo(a) {{ authService.jwtPayload?.nome }}</span>
         </div>
         <mat-divider></mat-divider>
         <button mat-menu-item>
           <span>Perfil</span>
         </button>
         <mat-divider></mat-divider>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="logout()">
           <span>Sair</span>
         </button>
         <mat-divider></mat-divider>
@@ -35,8 +35,8 @@
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container"
-                         [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-    <mat-sidenav #sidenavRef [mode]="mobileQuery.matches ? 'over' : 'side'"
+                         [style.marginTop.px]="mobileQuery.matches && ocultarToolbar() ? 56 : 0">
+    <mat-sidenav #sidenavRef [mode]="mobileQuery.matches ? 'over' : 'side'" *ngIf="ocultarToolbar()"
                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" id="sidebar">
       <mat-nav-list>
         <mat-list-item *ngFor="let opcao of opcoesMenuLateral">
