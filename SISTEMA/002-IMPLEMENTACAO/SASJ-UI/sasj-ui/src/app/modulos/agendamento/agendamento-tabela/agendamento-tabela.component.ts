@@ -12,6 +12,7 @@ export class AgendamentoTabelaComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+
   dataSource: MatTableDataSource<Agendamento>;
 
   colunasExibidas = ['processo', 'nomeParte', 'dataAudiencia', 'status', 'acoes'];

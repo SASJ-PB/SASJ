@@ -1,0 +1,109 @@
+#titulo-dialog{
+  text-align: center;
+}
+
+.espacamento-card{
+  margin: 10px 0px;
+}
+
+.titulo-card{
+  font-size: 13px;
+}
+
+
+/*---------- LABEL HORA AGENDAMENTO ----------*/
+
+/* Se a tela for menor que 560px...*/
+@media screen and (max-width: 560px) {
+  #label-hora-desktop{
+    display: none;
+  }
+}
+
+/* Se a tela for maior que 560px...*/
+@media screen and (min-width: 560px) {
+  #label-hora-desktop{
+    float: right;
+    margin-right: 40%;
+  }
+}
+
+/* Se a tela for maior que 561px...*/
+@media screen and (min-width: 561px){
+  #label-hora-mobile{
+    display: none;
+  }
+}
+
+
+/*---------- LABEL NOME DA PARTE ----------*/
+
+/* Se a tela for menor que 980px...*/
+@media screen and (max-width: 980px) {
+  #label-nome-parte-desktop{
+    display: none;
+  }
+}
+
+/* Se a tela for maior que 980px...*/
+@media screen and (min-width: 980px) {
+  #label-nome-parte-desktop{
+    float: right;
+  }
+}
+
+/* Se a tela for maior que 981px...*/
+@media screen and (min-width: 981px){
+  #label-nome-parte-mobile{
+    display: none;
+  }
+}
+
+
+/*---------- LABEL TEMPO DE DURAÇÃO ----------*/
+
+/* Se a tela for menor que 538px...*/
+@media screen and (max-width: 538px) {
+  #label-duracao-desktop{
+    display: none;
+  }
+}
+
+/* Se a tela for maior que 538px...*/
+@media screen and (min-width: 538px) {
+  #label-duracao-desktop{
+    padding: 0 7%;
+  }
+}
+
+/* Se a tela for maior que 539px...*/
+@media screen and (min-width: 539px){
+  #label-duracao-mobile{
+    display: none;
+  }
+}
+
+
+/*---------- LABEL CONCILIADOR ----------*/
+
+/* Se a tela for menor que 827px...*/
+@media screen and (max-width: 827px) {
+  #label-conciliador-desktop{
+    display: none;
+  }
+}
+
+/* Se a tela for maior que 827px...*/
+@media screen and (min-width: 827px) {
+  #label-conciliador-desktop{
+    float: right;
+  }
+}
+
+/* Se a tela for maior que 828px...*/
+@media screen and (min-width: 828px){
+  #label-conciliador-mobile{
+    display: none;
+  }
+}
+

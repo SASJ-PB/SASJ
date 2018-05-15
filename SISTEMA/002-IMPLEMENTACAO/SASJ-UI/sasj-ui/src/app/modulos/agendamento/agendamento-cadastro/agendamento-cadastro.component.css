@@ -1,0 +1,23 @@
+.container-agendamento-cadastro {
+  padding: 10px;
+}
+
+.espacamento-card{
+  margin: 10px 0;
+}
+
+.card-content-2 > * {
+  width: 40%;
+}
+
+.card-content-3 > * {
+  width: 30%;
+}
+
+.card-content-4 > * {
+  width: 20%;
+}
+
+.titulo-card{
+  font-size: 13px;
+}

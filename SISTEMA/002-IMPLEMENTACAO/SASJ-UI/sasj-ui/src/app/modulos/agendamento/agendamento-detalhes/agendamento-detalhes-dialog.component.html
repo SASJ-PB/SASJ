@@ -1,0 +1,100 @@
+<h2 mat-dialog-title id="titulo-dialog">DETALHES DO AGENDAMENTO</h2>
+<mat-dialog-content>
+  <mat-card class="espacamento-card">
+    <mat-card-header>
+      <mat-card-title class="titulo-card"> AGENDAMENTO </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>
+        <span> <strong>Data:</strong> 06/06/2018 </span>
+        <span id="label-hora-desktop"> <strong>Hora:</strong> 10:44 </span>
+      </p>
+      <p id="label-hora-mobile"> <span> <strong>Hora:</strong> 10:44 </span> </p>
+
+      <p>
+        <span> <strong>Status:</strong> [ADIADA] Bage - devido imprevisto acontecido com o juíz </span>
+      </p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="espacamento-card">
+    <mat-card-header>
+      <mat-card-title class="titulo-card">PROCESSO</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        <span> <strong>Número:</strong> 0000854-84.2013.4.05.8205 </span>
+        <span id="label-nome-parte-desktop"> <strong>Nome da parte:</strong> José de Arimatéia e outros </span>
+      </p>
+      <p id="label-nome-parte-mobile">
+        <span> <strong>Nome da parte:</strong> José de Arimatéia e outros </span>
+      </p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="espacamento-card">
+    <mat-card-header>
+      <mat-card-title class="titulo-card">CONCILIAÇÃO / AUDIÊNCIA</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        <span> <strong>Quantidade de oitivas:</strong> 5 </span>
+        <span id="label-duracao-desktop"> <strong>Tempo de duração:</strong> 0:44 </span>
+        <span id="label-conciliador-desktop"> <strong>Conciliador</strong> João Alfredo </span>
+      </p>
+      <p id="label-duracao-mobile">
+        <span> <strong>Tempo de duração:</strong> 0:44 </span>
+      </p>
+      <p id="label-conciliador-mobile">
+        <span> <strong>Conciliador</strong> João Alfredo </span>
+      </p>
+
+      <p>
+        <span>
+          <strong>Observação:</strong>
+          Videoconferência com João Pessoa, Sousa, Brasília e 6ª Vara de Campina Grande
+        </span>
+      </p>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="espacamento-card">
+    <mat-card-header>
+      <mat-card-title class="titulo-card">PARTES INTERESSADAS</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <table mat-table [dataSource]="dataSource" matSort style="width: 100%;">
+
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> NOME </th>
+          <td mat-cell *matCellDef="let row"> {{row.nome}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> E-MAIL </th>
+          <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="papel">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> PAPEL </th>
+          <td mat-cell *matCellDef="let row"> {{row.papel}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef> VISUALIZAR </th>
+          <td mat-cell *matCellDef="let row" >
+            <button mat-icon-button>
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="colunasExibidas"></tr><!-- Determina quais colunas serão renderizadas -->
+        <tr mat-row *matRowDef="let row; columns: colunasExibidas;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+</mat-dialog-content>
+

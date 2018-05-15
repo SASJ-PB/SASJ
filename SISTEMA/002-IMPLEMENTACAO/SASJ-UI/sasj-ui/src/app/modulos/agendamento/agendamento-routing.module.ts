@@ -1,17 +1,24 @@
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+import { AuthGuard } from './../seguranca/auth.guard';
+import { AgendamentoDetalhesComponent } from './agendamento-detalhes/agendamento-detalhes.component';
 import { AgendamentoPesquisaComponent } from './agendamento-pesquisa/agendamento-pesquisa.component';
 import { AgendamentoCadastroComponent } from './agendamento-cadastro/agendamento-cadastro.component';
 
-import { Routes, RouterModule } from '@angular/router';
-import { NgModule } from '@angular/core';
-
-/*
-{ path: 'pessoas/novo', component: PessoaCadastroComponent, canActivate: [AuthGuard],
-      data: {roles: ['ROLE_CADASTRAR_PESSOA']} }
-*/
-
 const routes: Routes = [
-  { path: 'agendamentos', component: AgendamentoPesquisaComponent},
-  { path: 'agendamentos/novo', component: AgendamentoCadastroComponent}
+  {
+    path: 'agendamentos',
+    component: AgendamentoPesquisaComponent,
+    canActivate: [AuthGuard],
+    data: {roles: ['ROLE_PESQUISAR_AGENDAMENTO']}
+  },
+  {
+    path: 'agendamentos/novo',
+    component: AgendamentoCadastroComponent,
+    canActivate: [AuthGuard],
+    data: {roles: ['ROLE_CADASTRAR_AGENDAMENTO']}
+  }
 ];
 
 @NgModule({

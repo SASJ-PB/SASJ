@@ -1,3 +1,183 @@
-<p>
-  agendamento-cadastro works!
-</p>
+<form>
+  <div class="container-agendamento-cadastro">
+    <mat-card class="espacamento-card" style="margin-top: 0">
+      <mat-card-header>
+        <mat-card-title class="titulo-card"> AGENDAMENTO </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-form-field appearance="outline">
+          <mat-label>Data</mat-label>
+          <input matInput placeholder="Escolha uma data" [formControl]="campoData"
+              required [textMask]="{mask: mascaraData}">
+
+          <mat-error *ngIf="campoData.hasError('required')">
+            A data deve ser informada
+          </mat-error>
+        </mat-form-field>
+
+        <span style="margin:0 2%"></span>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hora</mat-label>
+          <input matInput placeholder="HH:mm" [formControl]="campoHora"
+              required [textMask]="{mask: mascaraHora}">
+
+          <mat-error *ngIf="campoHora.hasError('required')">
+            A hora deve ser informada
+          </mat-error>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="espacamento-card">
+      <mat-card-header>
+        <mat-card-title class="titulo-card"> PROCESSO </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="card-content-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Número</mat-label>
+          <input matInput placeholder="Número do processo">
+        </mat-form-field>
+
+        <span style="margin:0 2%"></span>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome da parte</mat-label>
+          <input matInput placeholder="Nome(s) da(s) parte(s) envolvida(s)">
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="espacamento-card">
+      <mat-card-header>
+        <mat-card-title class="titulo-card"> SESSÃO JURÍDICA </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="card-content-3">
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de sessão</mat-label>
+          <mat-select>
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let tipo of tiposSessoes" [value]="tipo">
+              {{tipo}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <span style="margin:0 2%"></span>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Quantidade de oitivas</mat-label>
+          <input type="number" min="0" matInput placeholder="Quantas oitivas participarão?">
+        </mat-form-field>
+
+        <span style="margin:0 2%"></span>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de audiência</mat-label>
+          <mat-select>
+            <mat-option>--</mat-option>
+            <mat-option *ngFor="let tipo of tiposAudiencias" [value]="tipo">
+              {{tipo}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tempo de duração</mat-label>
+          <input matInput placeholder="HH:mm" [textMask]="{mask: mascaraHora}">
+        </mat-form-field>
+
+        <span style="margin:0 2%"></span>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Observação</mat-label>
+          <textarea matInput placeholder="Alguma observação a ser feita?"></textarea>
+        </mat-form-field>
+
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="espacamento-card">
+      <mat-card-header>
+        <mat-card-title class="titulo-card"> PARTES INTERESSADAS </mat-card-title>
+        <mat-card-subtitle>Preencha os campos e aperte em "adicionar" para adicionar uma parte interessada</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="card-content-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput placeholder="Nome da parte">
+        </mat-form-field>
+
+        <span style="margin:0 2%"></span>
+
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input matInput placeholder="E-mail da parte">
+        </mat-form-field>
+
+        <span style="margin:0 2%"></span>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Papel</mat-label>
+          <input matInput placeholder="Papel da parte">
+        </mat-form-field>
+
+        <span style="margin:0 2%"></span>
+
+        <button mat-raised-button color="accent" >ADICIONAR</button>
+
+        <div style="width: 100%">
+          <table mat-table [dataSource]="dataSource" matSort style="width: 100%;">
+            <ng-container matColumnDef="nome">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> NOME </th>
+              <td mat-cell *matCellDef="let row"> {{row.nome}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> E-MAIL </th>
+              <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="papel">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> PAPEL </th>
+              <td mat-cell *matCellDef="let row"> {{row.papel}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="colunasExibidas"></tr><!-- Determina quais colunas serão renderizadas -->
+            <tr mat-row *matRowDef="let row; columns: colunasExibidas;"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="espacamento-card">
+      <mat-card-header>
+        <mat-card-title class="titulo-card"> LEMBRETE </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <span>Enviar lembrete em:</span>
+
+        <span style="margin:0 2%"></span>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data</mat-label>
+          <input matInput placeholder="Escolha uma data" [formControl]="campoDataLembrete"
+              [textMask]="{mask: mascaraData}">
+        </mat-form-field>
+
+        <span style="margin:0 2%"></span>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hora</mat-label>
+          <input matInput placeholder="HH:mm" [formControl]="campoHoraLembrete"
+              [textMask]="{mask: mascaraHora}">
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</form>
