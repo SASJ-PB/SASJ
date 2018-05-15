@@ -1,0 +1,31 @@
+<h2 mat-dialog-title id="titulo-dialog">Recuperação de senha</h2>
+<mat-dialog-content>
+  <form>
+    <mat-card class="espacamento-card">
+      <mat-card-header>
+        <mat-card-subtitle> Informe seu e-mail de cadastro para receber o link de recuperação de senha </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>E-mail</mat-label>
+          <input matInput placeholder="Digite seu e-mail de cadastro"
+              name="campoEmailRecuperacao" ngModel #campoEmailRecuperacaoRef required
+              [formControl]="campoEmailRecuperacao">
+
+          <mat-error *ngIf="campoEmailRecuperacao.hasError('email')">
+            O e-mail informado não é válido
+          </mat-error>
+          <mat-error *ngIf="campoEmailRecuperacao.hasError('required')">
+            O e-mail deve ser informado
+          </mat-error>
+        </mat-form-field>
+      </mat-card-content>
+
+      <button mat-raised-button color="accent" (click)="recuperar()" [disabled]="campoEmailRecuperacao.invalid">ENVIAR LINK</button>
+
+    </mat-card>
+  </form>
+
+</mat-dialog-content>
+

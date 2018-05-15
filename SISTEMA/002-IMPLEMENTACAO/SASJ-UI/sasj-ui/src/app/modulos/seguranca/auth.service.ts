@@ -4,8 +4,6 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-// import 'rxjs/add/operator/toPromise';
-
 @Injectable()
 export class AuthService {
 
@@ -27,7 +25,6 @@ export class AuthService {
         return true;
       }
     }
-
     return false;
   }
 
@@ -39,24 +36,24 @@ export class AuthService {
   login(matricula: string, senha: string): Promise<void> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEByMA==');
+    headers.append('Authorization', 'Basic YW5ndWxhcjpAbmd1bEBy');
 
     const body = `username=${matricula}&password=${senha}&grant_type=password`;
 
     return this.http.post(this.oauthTokenUrl, body, { headers, withCredentials: true })
       .toPromise()
       .then(response => {
-
         this.armazenarToken(response.json().access_token);
       })
       .catch(response => {
+
         if (response.status === 400){
           const responseJson = response.json();
+
           if (responseJson.error === 'invalid_grant'){
             return Promise.reject('Matrícula ou senha inválida !');
           }
         }
-
         return Promise.reject(response);
       });
   }
@@ -89,10 +86,12 @@ export class AuthService {
         this.armazenarToken(response.json().access_token);
 
         console.log('Novo Access token criado');
+
         return Promise.resolve(null);
       })
       .catch(response => {
         console.log('Erro ao renovar token', response);
+
         return Promise.resolve(null);
       });
   }

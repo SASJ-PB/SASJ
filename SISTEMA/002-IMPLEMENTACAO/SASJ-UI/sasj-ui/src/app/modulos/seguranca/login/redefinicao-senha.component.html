@@ -1,0 +1,38 @@
+<div class="container-redefinicao-senha">
+  <form >
+    <mat-card>
+      <mat-form-field appearance="outline" class="spacer-field">
+        <mat-label>Nova senha</mat-label>
+        <input matInput placeholder="Digite uma nova senha" type="password" required
+            [formControl]="campoNovaSenha" ngModel name="campoNovaSenha" #campoNovaSenhaRef>
+
+        <mat-error *ngIf="campoNovaSenha.hasError('required')">
+          A nova senha deve ser informada
+        </mat-error>
+      </mat-form-field>
+
+      <span style="padding: 1%"></span>
+
+      <mat-form-field appearance="outline" class="spacer-field">
+        <mat-label>Confirmação da senha</mat-label>
+        <input matInput placeholder="Digite a nova senha novamente" required type="password"
+            [formControl]="campoConfirmacaoNovaSenha" ngModel name="campoConfirmacaoNovaSenha"
+            #campoConfirmacaoNovaSenhaRef > <!-- (change)="verificarSenhasDiferentes()" -->
+
+        <mat-error *ngIf="campoConfirmacaoNovaSenha.hasError('required')">
+          A nova senha deve ser informada novamente
+        </mat-error>
+      </mat-form-field>
+
+      <span style="padding: 1%"></span>
+
+      <button mat-raised-button type="submit" color="accent" class="spacer-field"
+          [disabled]="campoNovaSenha.invalid || campoConfirmacaoNovaSenha.invalid
+          || isSenhasDiferentes()"
+          (click)="redefinir(); campoNovaSenhaRef.value = ''; campoConfirmacaoNovaSenhaRef.value = ''">
+        REDEFINIR
+      </button>
+    </mat-card> <!--  -->
+  </form>
+
+</div>
