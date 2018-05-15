@@ -16,3 +16,7 @@
 .form-container-usuario > * {
   width: 100%;
 }
+
+.campo-tipo-usuario{
+  margin-bottom: 25px;
+}

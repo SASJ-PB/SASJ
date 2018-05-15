@@ -1,15 +1,15 @@
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+
+import { AuthGuard } from './../seguranca/auth.guard';
 import { UsuarioCadastroComponent } from './usuario-cadastro/usuario-cadastro.component';
 
-import { Routes, RouterModule } from '@angular/router';
-import { NgModule } from '@angular/core';
-
-/*
-{ path: 'pessoas/novo', component: PessoaCadastroComponent, canActivate: [AuthGuard],
-      data: {roles: ['ROLE_CADASTRAR_PESSOA']} }
-*/
-
 const routes: Routes = [
-  { path: 'usuarios/novo', component: UsuarioCadastroComponent}
+  {
+    path: 'usuarios/novo',
+    component: UsuarioCadastroComponent,
+    canActivate: [AuthGuard],
+    data: {roles: ['ROLE_CADASTRAR_USUARIO']}}
 ];
 
 @NgModule({

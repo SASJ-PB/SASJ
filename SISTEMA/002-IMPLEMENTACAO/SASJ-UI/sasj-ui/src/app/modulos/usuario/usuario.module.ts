@@ -8,6 +8,8 @@ import { UsuarioRoutingModule } from './usuario-routing.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
 
 import { TextMaskModule } from 'angular2-text-mask';
 
@@ -20,6 +22,8 @@ import { TextMaskModule } from 'angular2-text-mask';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSelectModule,
+    MatCardModule,
 
     TextMaskModule,
 
