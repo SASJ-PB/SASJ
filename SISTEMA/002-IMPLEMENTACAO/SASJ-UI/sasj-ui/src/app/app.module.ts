@@ -1,3 +1,4 @@
+import { SegurancaModule } from './modulos/seguranca/seguranca.module';
 import { CoreModule } from './modulos/core/core.module';
 
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,7 +17,8 @@ import { HttpModule } from '@angular/http';
     BrowserModule,
     CoreModule,
     AppRoutingModule,
-    HttpModule
+    HttpModule,
+    SegurancaModule
   ],
   providers: [],
   bootstrap: [AppComponent]
