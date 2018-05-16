@@ -58,8 +58,7 @@
       <mat-card-content class="card-content-3">
         <mat-form-field appearance="outline">
           <mat-label>Tipo de sessão</mat-label>
-          <mat-select>
-            <mat-option>--</mat-option>
+          <mat-select #tiposSessoesRef [(value)]="tipoSessaoEscolhido">
             <mat-option *ngFor="let tipo of tiposSessoes" [value]="tipo">
               {{tipo}}
             </mat-option>
@@ -70,24 +69,36 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Quantidade de oitivas</mat-label>
-          <input type="number" min="0" matInput placeholder="Quantas oitivas participarão?">
+          <input ng-readonly="false" [formControl]="campoQuantidadeOitivas" type="number" min="1"
+              matInput placeholder="Quantas oitivas participarão?"
+              (click)="recalcularTempoDuracao(campoQuantidadeOitivas.value)"
+              (keyup)="recalcularTempoDuracao(campoQuantidadeOitivas.value)">
         </mat-form-field>
 
         <span style="margin:0 2%"></span>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline"
+            *ngIf="tipoSessaoEscolhido === 'Audiência'? true : false">
           <mat-label>Tipo de audiência</mat-label>
-          <mat-select>
+          <mat-select [disabled]="!(campoQuantidadeOitivas.value >= 1)">
             <mat-option>--</mat-option>
-            <mat-option *ngFor="let tipo of tiposAudiencias" [value]="tipo">
-              {{tipo}}
+            <mat-option *ngFor="let tipo of tiposAudiencias" [value]="tipo"
+                (click)="setTempoDuracao(tipo.duracao, campoQuantidadeOitivas.value)"> <!-- -->
+              {{tipo.nome}}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
+        <mat-form-field appearance="outline"
+            *ngIf="tipoSessaoEscolhido === 'Conciliação'? true : false">
+          <mat-label>Nome do conciliador</mat-label>
+          <input matInput placeholder="Digite o nome do conciliador">
+        </mat-form-field>
+
         <mat-form-field appearance="outline">
-          <mat-label>Tempo de duração</mat-label>
-          <input matInput placeholder="HH:mm" [textMask]="{mask: mascaraHora}">
+          <mat-label>Tempo de duração (em minutos)</mat-label>
+          <input [(value)]="tempoDuracao" matInput placeholder="HH:mm"
+              [textMask]="{mask: mascaraHora}">
         </mat-form-field>
 
         <span style="margin:0 2%"></span>
@@ -103,7 +114,9 @@
     <mat-card class="espacamento-card">
       <mat-card-header>
         <mat-card-title class="titulo-card"> PARTES INTERESSADAS </mat-card-title>
-        <mat-card-subtitle>Preencha os campos e aperte em "adicionar" para adicionar uma parte interessada</mat-card-subtitle>
+        <mat-card-subtitle>
+          Preencha os campos e aperte o botão "+" para adicionar uma parte interessada
+        </mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content class="card-content-4">
@@ -128,7 +141,11 @@
 
         <span style="margin:0 2%"></span>
 
-        <button mat-raised-button color="accent" >ADICIONAR</button>
+        <div style="display: unset;">
+          <button mat-fab color="accent" >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
 
         <div style="width: 100%">
           <table mat-table [dataSource]="dataSource" matSort style="width: 100%;">
@@ -166,7 +183,7 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Data</mat-label>
-          <input matInput placeholder="Escolha uma data" [formControl]="campoDataLembrete"
+          <input matInput placeholder="dd/mm/aaaa" [formControl]="campoDataLembrete"
               [textMask]="{mask: mascaraData}">
         </mat-form-field>
 
@@ -179,5 +196,10 @@
         </mat-form-field>
       </mat-card-content>
     </mat-card>
+
+    <div style="text-align: right">
+      <button mat-raised-button style="margin: 0 10px">CANCELAR</button>
+      <button mat-raised-button color="accent">CADASTRAR</button>
+    </div>
   </div>
 </form>
