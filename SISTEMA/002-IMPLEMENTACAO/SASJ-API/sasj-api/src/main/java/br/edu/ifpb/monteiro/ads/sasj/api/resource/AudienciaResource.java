@@ -50,7 +50,7 @@ public class AudienciaResource {
 	@GetMapping("/{codigo}")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_AUDIENCIA') and #oauth2.hasScope('read')")
 	public ResponseEntity<Audiencia> buscarPeloCodigo(@PathVariable Long codigo) {
-		Audiencia audiencia = audienciaService.buscarUsuarioPeloCodigo(codigo);
+		Audiencia audiencia = audienciaService.buscarAudienciaPeloCodigo(codigo);
 		return audiencia != null ? ResponseEntity.ok(audiencia) : ResponseEntity.notFound().build();
 	}
 

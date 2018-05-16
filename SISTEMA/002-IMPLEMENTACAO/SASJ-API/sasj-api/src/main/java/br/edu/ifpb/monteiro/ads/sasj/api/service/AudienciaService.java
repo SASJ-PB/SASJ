@@ -39,14 +39,14 @@ public class AudienciaService {
 	}
 
 	public Audiencia atualizar(Long codigo, Audiencia audiencia) {
-		Audiencia audienciaSalva = buscarUsuarioPeloCodigo(codigo);
+		Audiencia audienciaSalva = buscarAudienciaPeloCodigo(codigo);
 
 		BeanUtils.copyProperties(audiencia, audienciaSalva, "codigo", "processo");
 
 		return audienciaRepository.save(audienciaSalva);
 	}
 
-	public Audiencia buscarUsuarioPeloCodigo(Long codigo) {
+	public Audiencia buscarAudienciaPeloCodigo(Long codigo) {
 		Audiencia audiencia = audienciaRepository.findOne(codigo);
 		if (audiencia == null) {
 			throw new EmptyResultDataAccessException(1);
