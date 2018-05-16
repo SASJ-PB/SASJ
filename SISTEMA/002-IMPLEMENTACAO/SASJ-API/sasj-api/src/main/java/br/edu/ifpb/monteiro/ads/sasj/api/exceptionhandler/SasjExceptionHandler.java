@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.hibernate.PersistentObjectException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -195,6 +196,17 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 				LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = messageSource.getMessage("usuario.ja.inativo-desenvolvedor", null,
 				LocaleContextHolder.getLocale());
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ PersistentObjectException.class })
+	public ResponseEntity<Object> handlePersistentObjectException(PersistentObjectException ex, WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("Ocorreu um erro ao tentar salvar os dados", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 

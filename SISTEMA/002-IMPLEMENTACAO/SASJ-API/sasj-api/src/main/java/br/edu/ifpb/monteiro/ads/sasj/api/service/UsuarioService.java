@@ -1,6 +1,5 @@
 package br.edu.ifpb.monteiro.ads.sasj.api.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -9,8 +8,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.edu.ifpb.monteiro.ads.sasj.api.enums.TipoUsuario;
-import br.edu.ifpb.monteiro.ads.sasj.api.model.Permissao;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Usuario;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.UsuarioRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailJaCadastradoException;
@@ -37,6 +34,9 @@ public class UsuarioService {
 	@Autowired
 	private TokenRecuperacaoService tokenRecuperacaoService;
 
+	@Autowired
+	private PermissoesService permissoesService;
+
 	public Usuario criar(Usuario usuario) {
 		validarUsuario(usuario);
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -50,7 +50,7 @@ public class UsuarioService {
 		usuario.setCargo(usuario.getCargo().toUpperCase());
 		usuario.setEmail(usuario.getEmail().toLowerCase());
 
-		adicionarPermissoes(usuario);
+		permissoesService.adicionarPermissoes(usuario);
 
 		Usuario usuarioSalvo = usuarioRepository.save(usuario);
 
@@ -72,7 +72,7 @@ public class UsuarioService {
 		if (usuarioSalvo == null) {
 			throw new UsuarioInexistenteOuInativoException();
 		}
-		if(!usuarioSalvo.isAtivo() && !ativo) {
+		if (!usuarioSalvo.isAtivo() && !ativo) {
 			throw new UsuarioJaInativoException();
 		}
 		usuarioSalvo.setAtivo(ativo);
@@ -103,7 +103,7 @@ public class UsuarioService {
 		Usuario usuarioSalvo = buscarUsuarioPeloCodigo(codigo);
 
 		BeanUtils.copyProperties(usuario, usuarioSalvo, "codigo", "ativo", "permissoes");
-		adicionarPermissoes(usuarioSalvo);
+		permissoesService.adicionarPermissoes(usuarioSalvo);
 
 		validarAtualizacao(usuarioSalvo);
 
@@ -168,34 +168,6 @@ public class UsuarioService {
 		if (!RegexMatriculaValidator.isMatriculaValida(usuario.getMatricula())) {
 			throw new MatriculaInvalidaException();
 		}
-	}
-
-	private void adicionarPermissoes(Usuario usuario) {
-		List<Permissao> permissoesUsuario = new ArrayList<>();
-
-		if (usuario.getTipoUsuario() == TipoUsuario.ADMIN) {
-			Permissao cadastrarUsuario = new Permissao();
-			cadastrarUsuario.setCodigo(1L);
-			cadastrarUsuario.setDescricao("ROLE_CADASTRAR_USUARIO");
-			permissoesUsuario.add(cadastrarUsuario);
-
-			Permissao removerFuncionario = new Permissao();
-			removerFuncionario.setCodigo(4L);
-			removerFuncionario.setDescricao("ROLE_REMOVER_USUARIO");
-			permissoesUsuario.add(removerFuncionario);
-		}
-
-		Permissao atualizarUsuario = new Permissao();
-		atualizarUsuario.setCodigo(3L);
-		atualizarUsuario.setDescricao("ROLE_ATUALIZAR_USUARIO");
-		permissoesUsuario.add(atualizarUsuario);
-
-		Permissao pesquisarUsuario = new Permissao();
-		pesquisarUsuario.setCodigo(2L);
-		pesquisarUsuario.setDescricao("ROLE_PESQUISAR_USUARIO");
-		permissoesUsuario.add(pesquisarUsuario);
-
-		usuario.setPermissoes(permissoesUsuario);
 	}
 
 }
