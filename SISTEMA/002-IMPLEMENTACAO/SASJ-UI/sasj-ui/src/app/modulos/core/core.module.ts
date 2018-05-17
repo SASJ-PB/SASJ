@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AuthService } from './../seguranca/auth.service';
 import { LogoutService } from './../seguranca/logout.service';
 import { UsuarioService } from './../usuario/usuario.service';
+import { AgendamentoService } from './../agendamento/agendamento.service';
 import { NaoAutorizadoComponent } from './nao-autorizado.component';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
 import { ErrorHandlerService } from './error-handler.service';
@@ -31,7 +32,8 @@ import { JwtHelper } from 'angular2-jwt';
     LogoutService,
     JwtHelper,
     ErrorHandlerService,
-    UsuarioService
+    UsuarioService,
+    AgendamentoService
   ]
 
 })
