@@ -1,7 +1,7 @@
 CREATE TABLE sessao_juridica (
 	codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
 	quantidade_oitivas INT(20) NOT NULL,
-    observacao VARCHAR(150) NOT NULL,
+    observacao VARCHAR(150),
     duracao_estimada INT(8) NOT NULL,
     codigo_processo BIGINT(20),
     FOREIGN KEY (codigo_processo) REFERENCES processo(codigo)
