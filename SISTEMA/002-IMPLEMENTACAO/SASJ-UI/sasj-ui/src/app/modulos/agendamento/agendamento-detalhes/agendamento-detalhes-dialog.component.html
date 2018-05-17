@@ -1,6 +1,6 @@
 <h2 mat-dialog-title id="titulo-dialog">DETALHES DO AGENDAMENTO</h2>
 <mat-dialog-content>
-  <mat-card class="espacamento-card">
+  <mat-card class="espacamento-card" *ngIf="false">
     <mat-card-header>
       <mat-card-title class="titulo-card"> AGENDAMENTO </mat-card-title>
     </mat-card-header>
@@ -24,42 +24,42 @@
     </mat-card-header>
     <mat-card-content>
       <p>
-        <span> <strong>Número:</strong> 0000854-84.2013.4.05.8205 </span>
-        <span id="label-nome-parte-desktop"> <strong>Nome da parte:</strong> José de Arimatéia e outros </span>
+        <span> <strong>Número:</strong> {{isAudiencia ? audiencia.processo.numeroProcesso : conciliacao.processo.numeroProcesso}} </span>
+        <span id="label-nome-parte-desktop"> <strong>Nome da parte:</strong> {{isAudiencia ? audiencia.processo.nomeDaParte : conciliacao.processo.nomeDaParte}} </span>
       </p>
       <p id="label-nome-parte-mobile">
-        <span> <strong>Nome da parte:</strong> José de Arimatéia e outros </span>
+        <span> <strong>Nome da parte:</strong> {{isAudiencia ? audiencia.processo.nomeDaParte : conciliacao.processo.nomeDaParte}} </span>
       </p>
     </mat-card-content>
   </mat-card>
 
   <mat-card class="espacamento-card">
     <mat-card-header>
-      <mat-card-title class="titulo-card">CONCILIAÇÃO / AUDIÊNCIA</mat-card-title>
+      <mat-card-title class="titulo-card">{{isAudiencia ? 'AUDIÊNCIA' : 'CONCILIAÇÃO'}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <p>
-        <span> <strong>Quantidade de oitivas:</strong> 5 </span>
-        <span id="label-duracao-desktop"> <strong>Tempo de duração:</strong> 0:44 </span>
-        <span id="label-conciliador-desktop"> <strong>Conciliador</strong> João Alfredo </span>
+        <span> <strong>Quantidade de oitivas:</strong> {{isAudiencia ? audiencia.quantidadeOitivas : conciliacao.quantidadeOitivas}} </span>
+        <span id="label-duracao-desktop"> <strong>Tempo de duração:</strong> {{isAudiencia ? audiencia.duracaoEstimada : conciliacao.duracaoEstimada}} </span>
+        <span id="label-conciliador-desktop"> <strong>{{isAudiencia ? 'Tipo de audiência' : 'Conciliador' }}</strong> {{isAudiencia ? audiencia.tipoAudiencia : conciliacao.nomeConciliador}} </span>
       </p>
       <p id="label-duracao-mobile">
-        <span> <strong>Tempo de duração:</strong> 0:44 </span>
+        <span> <strong>Tempo de duração:</strong> {{isAudiencia ? audiencia.duracaoEstimada : conciliacao.duracaoEstimada}} </span>
       </p>
       <p id="label-conciliador-mobile">
-        <span> <strong>Conciliador</strong> João Alfredo </span>
+        <span> <strong>{{isAudiencia ? 'Tipo de audiência' : 'Conciliador' }}</strong> {{isAudiencia ? audiencia.tipoAudiencia : conciliacao.nomeConciliador}} </span>
       </p>
 
       <p>
         <span>
           <strong>Observação:</strong>
-          Videoconferência com João Pessoa, Sousa, Brasília e 6ª Vara de Campina Grande
+              {{isAudiencia ? audiencia.observacao : conciliacao.observacao}}
         </span>
       </p>
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="espacamento-card">
+  <!-- <mat-card class="espacamento-card" *ngIf="false">
     <mat-card-header>
       <mat-card-title class="titulo-card">PARTES INTERESSADAS</mat-card-title>
     </mat-card-header>
@@ -90,11 +90,11 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="colunasExibidas"></tr><!-- Determina quais colunas serão renderizadas -->
-        <tr mat-row *matRowDef="let row; columns: colunasExibidas;"></tr>
+        <tr mat-header-row *matHeaderRowDef="colunasExibidas"></tr>
+        <tr mat-row *matRowDef="let row; columns: colunasExibidas;"></tr>  Determina quais colunas serão renderizadas
       </table>
     </mat-card-content>
-  </mat-card>
+  </mat-card> -->
 
 </mat-dialog-content>
 

@@ -21,6 +21,7 @@ import { AgendamentoTabelaComponent } from './agendamento-tabela/agendamento-tab
 import { AgendamentoDetalhesComponent, AgendamentoDetalhesDialogComponent } from './agendamento-detalhes/agendamento-detalhes.component';
 import { AgendamentoCadastroComponent } from './agendamento-cadastro/agendamento-cadastro.component';
 import { AgendamentoRoutingModule } from './agendamento-routing.module';
+import { AgendamentoRemocaoComponent, AgendamentoRemocaoDialogComponent } from './agendamento-remocao/agendamento-remocao.component';
 
 @NgModule({
   imports: [
@@ -50,11 +51,15 @@ import { AgendamentoRoutingModule } from './agendamento-routing.module';
     AgendamentoDetalhesComponent,
     AgendamentoCadastroComponent,
 
-    AgendamentoDetalhesDialogComponent
+    AgendamentoDetalhesDialogComponent,
+
+    AgendamentoRemocaoComponent,
+    AgendamentoRemocaoDialogComponent
   ],
   providers: [],
   entryComponents: [
-    AgendamentoDetalhesDialogComponent
+    AgendamentoDetalhesDialogComponent,
+    AgendamentoRemocaoDialogComponent
   ],
 })
 export class AgendamentoModule {}

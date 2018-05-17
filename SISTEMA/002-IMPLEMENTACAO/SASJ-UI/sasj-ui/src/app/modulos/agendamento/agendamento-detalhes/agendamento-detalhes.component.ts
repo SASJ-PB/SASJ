@@ -1,6 +1,7 @@
+import { Audiencia, Conciliacao } from './../../core/model';
 import { MatSort } from '@angular/material/sort';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import { Component, OnInit, ViewChild, Input, Inject } from '@angular/core';
+import { MatDialog, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-agendamento-detalhes',
@@ -9,6 +10,10 @@ import { MatDialog, MatTableDataSource } from '@angular/material';
 })
 export class AgendamentoDetalhesComponent implements OnInit {
 
+  @Input() audiencia: Audiencia;
+  @Input() conciliacao: Conciliacao;
+  @Input() isAudiencia: boolean;
+
   constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
@@ -16,7 +21,12 @@ export class AgendamentoDetalhesComponent implements OnInit {
 
   openDialog() {
     const dialogRef = this.dialog.open(AgendamentoDetalhesDialogComponent, {
-      height: '85%'
+      height: '85%',
+      data: {
+        audiencia: this.audiencia,
+        conciliacao: this.conciliacao,
+        isAudiencia: this.isAudiencia
+      }
     });
   }
 
@@ -29,28 +39,23 @@ export class AgendamentoDetalhesComponent implements OnInit {
 })
 export class AgendamentoDetalhesDialogComponent implements OnInit {
 
-  @ViewChild(MatSort) sort: MatSort;
-
-  dataSource: MatTableDataSource<ParteInteressada>;
-
   colunasExibidas = ['nome', 'email', 'papel']; // 'acoes'
 
-  constructor() {
+  conciliacao: Conciliacao;
+  audiencia: Audiencia;
+  isAudiencia: boolean;
 
-    const dadosPartesInteressadas: ParteInteressada[] = [
-      {nome: 'João', email: 'joao@gmail.com', papel: 'Juíz'},
-      {nome: 'Maria', email: 'maria@outlook.com', papel: 'Advogada de defesa'},
-      {nome: 'Rita', email: 'rita@yahoo.com', papel: 'Réu'},
-      {nome: 'Marcio', email: 'marcio@gmail.com', papel: 'Advogado de acusação'},
-      {nome: 'Ariel', email: 'ariel@outlook.com', papel: 'Promotora'},
-    ];
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
 
-    this.dataSource = new MatTableDataSource(dadosPartesInteressadas);
+    this.audiencia = this.data.audiencia;
+    this.conciliacao = this.data.conciliacao;
+    this.isAudiencia = this.data.isAudiencia;
+
+    console.log(this.audiencia);
+    console.log(this.conciliacao);
   }
 
-  ngOnInit() {
-    this.dataSource.sort = this.sort;
-  }
+  ngOnInit() {}
 
 }
 

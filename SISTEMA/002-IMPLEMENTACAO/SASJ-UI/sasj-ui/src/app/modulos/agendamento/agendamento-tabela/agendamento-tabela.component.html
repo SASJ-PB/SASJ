@@ -1,7 +1,8 @@
-<div class="div-filtro">
+<div class="div-filtro" *ngIf="false">
   <mat-form-field style="width: 40%" floatLabel="always">
     <mat-label>Filtrar</mat-label>
-    <input matInput (keyup)="aplicarFiltro($event.target.value)" placeholder="Faça uma busca">
+    <input matInput placeholder="Faça uma busca"
+        (keyup)="aplicarFiltro($event.target.value)"> <!-- (keyup)="aplicarFiltro($event.target.value)" -->
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
 
@@ -10,35 +11,42 @@
 
 <div style="margin: 15px 0px">
 
-  <table mat-table [dataSource]="dataSource" matSort style="width: 100%;">
+  <table mat-table [dataSource]="isAudiencia ? dataSourceAudiencias : dataSourceConciliacoes"
+      style="width: 100%;" #tabelaRef> <!-- matSort -->
 
     <ng-container matColumnDef="processo">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> PROCESSO </th>
-      <td mat-cell *matCellDef="let row"> {{row.processo}} </td>
+      <th mat-header-cell *matHeaderCellDef > PROCESSO </th> <!-- mat-sort-header -->
+      <td mat-cell *matCellDef="let row"> {{row.processo.numeroProcesso}} </td>
     </ng-container>
 
     <ng-container matColumnDef="nomeParte">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> NOME DA PARTE </th>
-      <td mat-cell *matCellDef="let row"> {{row.nomeParte}} </td>
+      <th mat-header-cell *matHeaderCellDef > NOME DA PARTE </th> <!-- mat-sort-header -->
+      <td mat-cell *matCellDef="let row"> {{row.processo.nomeDaParte}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="dataAudiencia">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> DATA DA AUDIÊNCIA </th>
+    <ng-container matColumnDef="dataAudiencia" >
+      <th mat-header-cell *matHeaderCellDef > DATA DA AUDIÊNCIA </th> <!-- mat-sort-header -->
       <td mat-cell *matCellDef="let row"> {{row.dataAudiencia}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> STATUS </th>
+    <ng-container matColumnDef="status" >
+      <th mat-header-cell *matHeaderCellDef> STATUS </th> <!-- mat-sort-header -->
       <td mat-cell *matCellDef="let row" > {{row.status}} </td>
     </ng-container>
 
     <ng-container matColumnDef="acoes">
       <th mat-header-cell *matHeaderCellDef> AÇÕES </th>
       <td mat-cell *matCellDef="let row" >
-        <app-agendamento-detalhes></app-agendamento-detalhes>
-        <button mat-icon-button>
+        <app-agendamento-detalhes [conciliacao]="isAudiencia ? null : row"
+            [audiencia]="isAudiencia ? row : null" [isAudiencia]="isAudiencia"></app-agendamento-detalhes>
+        <button mat-icon-button *ngIf="authService.temPermissao('ROLE_ATUALIZAR_AUDIENCIA')"
+            (click)="editar(row.codigo)">
           <mat-icon>edit</mat-icon>
         </button>
+        <app-agendamento-remocao [tipoSessao]="isAudiencia ? 'audiencia' : 'conciliacao'"
+            [idSessao]="row.codigo" [paginator]="paginatorRef"
+            *ngIf="authService.temPermissao('ROLE_REMOVER_AUDIENCIA')">
+        </app-agendamento-remocao>
       </td>
     </ng-container>
 
@@ -46,5 +54,5 @@
     <tr mat-row *matRowDef="let row; columns: colunasExibidas;"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  <mat-paginator #paginatorRef [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>

@@ -11,5 +11,4 @@ export class AgendamentoPesquisaComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

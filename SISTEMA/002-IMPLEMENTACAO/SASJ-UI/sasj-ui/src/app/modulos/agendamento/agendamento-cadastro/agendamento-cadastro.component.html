@@ -1,6 +1,6 @@
 <form>
   <div class="container-agendamento-cadastro">
-    <mat-card class="espacamento-card" style="margin-top: 0">
+    <mat-card class="espacamento-card" style="margin-top: 0" *ngIf="false">
       <mat-card-header>
         <mat-card-title class="titulo-card"> AGENDAMENTO </mat-card-title>
       </mat-card-header>
@@ -38,14 +38,24 @@
       <mat-card-content class="card-content-2">
         <mat-form-field appearance="outline">
           <mat-label>Número</mat-label>
-          <input matInput placeholder="Número do processo">
+          <input matInput placeholder="Número do processo" [formControl]="campoNumeroProcesso"
+              required>
+
+          <mat-error *ngIf="campoNumeroProcesso.hasError('required')">
+            O processo deve ser informado
+          </mat-error>
         </mat-form-field>
 
         <span style="margin:0 2%"></span>
 
         <mat-form-field appearance="outline">
           <mat-label>Nome da parte</mat-label>
-          <input matInput placeholder="Nome(s) da(s) parte(s) envolvida(s)">
+          <input matInput placeholder="Nome(s) da(s) parte(s) envolvida(s)"
+              [formControl]="campoNomeParte" required>
+
+          <mat-error *ngIf="campoNomeParte.hasError('required')">
+            O nome da parte deve ser informado
+          </mat-error>
         </mat-form-field>
       </mat-card-content>
     </mat-card>
@@ -58,8 +68,8 @@
       <mat-card-content class="card-content-3">
         <mat-form-field appearance="outline">
           <mat-label>Tipo de sessão</mat-label>
-          <mat-select #tiposSessoesRef [(value)]="tipoSessaoEscolhido">
-            <mat-option *ngFor="let tipo of tiposSessoes" [value]="tipo">
+          <mat-select [(value)]="tipoSessaoEscolhido" [formControl]="campoTipoSessao" required>
+            <mat-option *ngFor="let tipo of tiposSessoes" [value]="tipo" (click)="limparOitivas()">
               {{tipo}}
             </mat-option>
           </mat-select>
@@ -69,10 +79,14 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Quantidade de oitivas</mat-label>
-          <input ng-readonly="false" [formControl]="campoQuantidadeOitivas" type="number" min="1"
-              matInput placeholder="Quantas oitivas participarão?"
+          <input [formControl]="campoQuantidadeOitivas" type="number" min="1"
+              matInput placeholder="Quantas oitivas participarão?" required
               (click)="recalcularTempoDuracao(campoQuantidadeOitivas.value)"
               (keyup)="recalcularTempoDuracao(campoQuantidadeOitivas.value)">
+
+          <mat-error *ngIf="campoQuantidadeOitivas.hasError('required')">
+            O nome da parte deve ser informado
+          </mat-error>
         </mat-form-field>
 
         <span style="margin:0 2%"></span>
@@ -80,38 +94,53 @@
         <mat-form-field appearance="outline"
             *ngIf="tipoSessaoEscolhido === 'Audiência'? true : false">
           <mat-label>Tipo de audiência</mat-label>
-          <mat-select [disabled]="!(campoQuantidadeOitivas.value >= 1)">
+          <mat-select [disabled]="!(campoQuantidadeOitivas.value >= 1)"
+              [formControl]="campoTipoAudiencia" required>
             <mat-option>--</mat-option>
             <mat-option *ngFor="let tipo of tiposAudiencias" [value]="tipo"
                 (click)="setTempoDuracao(tipo.duracao, campoQuantidadeOitivas.value)"> <!-- -->
               {{tipo.nome}}
             </mat-option>
           </mat-select>
+
+          <mat-error *ngIf="campoTipoAudiencia.hasError('required')">
+            O tipo de audiência deve ser informado
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline"
             *ngIf="tipoSessaoEscolhido === 'Conciliação'? true : false">
           <mat-label>Nome do conciliador</mat-label>
-          <input matInput placeholder="Digite o nome do conciliador">
+          <input matInput placeholder="Digite o nome do conciliador"
+              [formControl]="campoNomeConciliador" required>
+
+          <mat-error *ngIf="campoNomeConciliador.hasError('required')">
+            O nome do conciliador deve ser informado
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Tempo de duração (em minutos)</mat-label>
-          <input [(value)]="tempoDuracao" matInput placeholder="HH:mm"
-              [textMask]="{mask: mascaraHora}">
+          <input [(value)]="tempoDuracao" matInput placeholder="Minutos"
+            [formControl]="campoTempoDuracao" required type="number">
+
+          <mat-error *ngIf="campoTempoDuracao.hasError('required')">
+            O tempo de duração deve ser informado
+          </mat-error>
         </mat-form-field>
 
         <span style="margin:0 2%"></span>
 
         <mat-form-field appearance="outline">
           <mat-label>Observação</mat-label>
-          <textarea matInput placeholder="Alguma observação a ser feita?"></textarea>
+          <textarea matInput placeholder="Alguma observação a ser feita?"
+              [formControl]="campoObservacao"></textarea>
         </mat-form-field>
 
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="espacamento-card">
+    <mat-card class="espacamento-card" *ngIf="false">
       <mat-card-header>
         <mat-card-title class="titulo-card"> PARTES INTERESSADAS </mat-card-title>
         <mat-card-subtitle>
@@ -171,7 +200,7 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="espacamento-card">
+    <mat-card class="espacamento-card" *ngIf="false">
       <mat-card-header>
         <mat-card-title class="titulo-card"> LEMBRETE </mat-card-title>
       </mat-card-header>
@@ -198,8 +227,8 @@
     </mat-card>
 
     <div style="text-align: right">
-      <button mat-raised-button style="margin: 0 10px">CANCELAR</button>
-      <button mat-raised-button color="accent">CADASTRAR</button>
+      <a mat-raised-button style="margin: 0 10px" [routerLink]="['/agendamentos']">CANCELAR</a>
+      <button mat-raised-button color="accent" (click)="cadastrar()">CADASTRAR</button>
     </div>
   </div>
 </form>
