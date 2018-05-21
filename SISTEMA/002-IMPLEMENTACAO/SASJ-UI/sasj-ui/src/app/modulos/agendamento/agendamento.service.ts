@@ -84,7 +84,7 @@ export class AgendamentoService {
   }
 
   atualizarAudiencia(audiencia: Audiencia): Promise<Audiencia> {
-    console.log(audiencia);
+    // console.log(audiencia);
     return this.http.put(`${this.audienciasUrl}/${audiencia.codigo}`,
         JSON.stringify(audiencia))
       .toPromise()

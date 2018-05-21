@@ -1,4 +1,4 @@
-<form>
+<form #agendamentoForm="ngForm">
   <div class="container-agendamento-cadastro">
     <mat-card class="espacamento-card" style="margin-top: 0" *ngIf="false">
       <mat-card-header>
@@ -68,10 +68,9 @@
       <mat-card-content class="card-content-3">
         <mat-form-field appearance="outline">
           <mat-label>Tipo de sessão</mat-label>
-          <mat-select [(value)]="tipoSessaoEscolhido" [formControl]="campoTipoSessao" required>
-            <mat-option *ngFor="let tipo of tiposSessoes" [value]="tipo" (click)="limparOitivas()">
-              {{tipo}}
-            </mat-option>
+          <mat-select [formControl]="campoTipoSessao" required>
+            <mat-option value="Audiência" (click)="limparCampos()">Audiência</mat-option>
+            <mat-option value="Conciliação" (click)="limparCampos()">Conciliação</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -81,35 +80,38 @@
           <mat-label>Quantidade de oitivas</mat-label>
           <input [formControl]="campoQuantidadeOitivas" type="number" min="1"
               matInput placeholder="Quantas oitivas participarão?" required
-              (click)="recalcularTempoDuracao(campoQuantidadeOitivas.value)"
-              (keyup)="recalcularTempoDuracao(campoQuantidadeOitivas.value)">
+              (click)="recalcularTempoDuracao(campoQuantidadeOitivas.value);
+              setTempoDuracao(0, campoQuantidadeOitivas.value)"
+              (keyup)="recalcularTempoDuracao(campoQuantidadeOitivas.value);
+              setTempoDuracao(0, campoQuantidadeOitivas.value)">
 
           <mat-error *ngIf="campoQuantidadeOitivas.hasError('required')">
-            O nome da parte deve ser informado
+            A quantidade de oitivas deve ser informada
           </mat-error>
         </mat-form-field>
 
         <span style="margin:0 2%"></span>
 
-        <mat-form-field appearance="outline"
-            *ngIf="tipoSessaoEscolhido === 'Audiência'? true : false">
-          <mat-label>Tipo de audiência</mat-label>
-          <mat-select [disabled]="!(campoQuantidadeOitivas.value >= 1)"
-              [formControl]="campoTipoAudiencia" required>
-            <mat-option>--</mat-option>
-            <mat-option *ngFor="let tipo of tiposAudiencias" [value]="tipo"
-                (click)="setTempoDuracao(tipo.duracao, campoQuantidadeOitivas.value)"> <!-- -->
+        <mat-form-field appearance="outline" *ngIf="isAudiencia()">
+          <mat-label>Tipo de Audiência</mat-label>
+          <mat-select [(value)]="tipoAudiencia" required
+
+              (keyup)="setTempoDuracao(0, campoQuantidadeOitivas.value);
+              recalcularTempoDuracao(campoQuantidadeOitivas.value)">
+            <mat-option *ngFor="let tipo of tiposAudiencias" [value]="tipo.nome"
+                (click)="setTempoDuracao(tipo.duracao, campoQuantidadeOitivas.value);
+                recalcularTempoDuracao(campoQuantidadeOitivas.value)"
+                (keyup)="setTempoDuracao(tipo.duracao, campoQuantidadeOitivas.value);
+                recalcularTempoDuracao(campoQuantidadeOitivas.value)">
               {{tipo.nome}}
             </mat-option>
+            <!--<mat-option value="teste1">Teste 1</mat-option>
+            <mat-option value="teste2">Teste 2</mat-option>-->
           </mat-select>
-
-          <mat-error *ngIf="campoTipoAudiencia.hasError('required')">
-            O tipo de audiência deve ser informado
-          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline"
-            *ngIf="tipoSessaoEscolhido === 'Conciliação'? true : false">
+            *ngIf="!isAudiencia()"> <!-- -->
           <mat-label>Nome do conciliador</mat-label>
           <input matInput placeholder="Digite o nome do conciliador"
               [formControl]="campoNomeConciliador" required>
@@ -120,9 +122,9 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Tempo de duração (em minutos)</mat-label>
-          <input [(value)]="tempoDuracao" matInput placeholder="Minutos"
-            [formControl]="campoTempoDuracao" required type="number">
+          <mat-label>Tempo de duração (em minutos)</mat-label> <!-- [(value)]="tempoDuracao" -->
+          <input matInput placeholder="Minutos"
+            [formControl]="campoTempoDuracao" required type="number" min="1">
 
           <mat-error *ngIf="campoTempoDuracao.hasError('required')">
             O tempo de duração deve ser informado
@@ -228,7 +230,7 @@
 
     <div style="text-align: right">
       <a mat-raised-button style="margin: 0 10px" [routerLink]="['/agendamentos']">CANCELAR</a>
-      <button mat-raised-button color="accent" (click)="cadastrar()">CADASTRAR</button>
+      <button mat-raised-button color="accent" [disabled]="agendamentoForm.invalid" (click)="cadastrar()">CADASTRAR</button>
     </div>
   </div>
 </form>

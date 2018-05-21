@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AgendamentoService } from './../agendamento.service';
 import { ParteInteressada } from './../agendamento-detalhes/agendamento-detalhes.component';
 import { MatSort } from '@angular/material/sort';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 
@@ -18,27 +18,28 @@ export class AgendamentoCadastroComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
+  formulario: FormGroup;
   campoData: FormControl;
   campoHora: FormControl;
   campoNumeroProcesso: FormControl;
   campoNomeParte: FormControl;
   campoQuantidadeOitivas: FormControl;
-  campoTipoAudiencia: FormControl;
+  // campoTipoAudiencia: FormControl;
   campoNomeConciliador: FormControl;
   campoTempoDuracao: FormControl;
   campoTipoSessao: FormControl;
   campoDataLembrete: FormControl;
   campoHoraLembrete: FormControl;
   campoObservacao: FormControl;
-  isEdicao = false;
+
 
   public mascaraData = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public mascaraHora = [/\d/, /\d/, ':', /\d/, /\d/];
 
   tempoDuracaoAudienciaEscolhida = 0;
-  tipoSessaoEscolhido = 'Audiência';
-  tempoDuracao = 0;
-  tiposSessoes = ['Audiência', 'Conciliação'];
+  tipoAudiencia = 'Ação civíl';
+  tempoDuracao = 1;
+  isEdicao = false;
   dataSource: MatTableDataSource<ParteInteressada>;
   colunasExibidas = ['nome', 'email', 'papel']; // 'acoes'
   conciliacao = new Conciliacao();
@@ -49,18 +50,18 @@ export class AgendamentoCadastroComponent implements OnInit {
     {nome: 'Ação civíl', duracao: 20}, {nome: 'Improbidade', duracao: 20},
     {nome: 'Instrução do creta', duracao: 7}, {nome: 'Leilão', duracao: 60},
     {nome: 'Outros', duracao: 20}, {nome: 'Penal', duracao: 20}, {nome: 'PJE', duracao: 20},
-    {nome: 'Tebas improbidade', duracao: 20}, {nome: 'Vídeo-conferência', duracao: 20}
+    {nome: 'Tebas improbidade', duracao: 20}, {nome: 'Vídeoconferência', duracao: 20}
   ];
 
-  constructor(private agendamentoService: AgendamentoService,
-      private snackBar: MatSnackBar,
-      private errorHandlerService: ErrorHandlerService,
-      private router: Router, private route: ActivatedRoute) {
+  constructor(private agendamentoService: AgendamentoService, private route: ActivatedRoute,
+      private snackBar: MatSnackBar, private router: Router,
+      private errorHandlerService: ErrorHandlerService) {
 
     const codigoAgendamento = this.route.snapshot.params['codigo'];
 
     if (codigoAgendamento){
       this.carregarAgendamento(codigoAgendamento);
+      this.isEdicao = true;
     }
 
     const dadosPartesInteressadas: ParteInteressada[] = [
@@ -73,6 +74,7 @@ export class AgendamentoCadastroComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.campoData = new FormControl('', [Validators.required]);
     this.campoHora = new FormControl('', [Validators.required]);
     this.campoDataLembrete = new FormControl();
@@ -84,21 +86,27 @@ export class AgendamentoCadastroComponent implements OnInit {
 
     this.campoQuantidadeOitivas = new FormControl('', [Validators.required]);
     this.campoTempoDuracao = new FormControl('', [Validators.required]);
-    this.campoTipoSessao = new FormControl('', [Validators.required]);
-
-    this.campoTipoAudiencia = new FormControl('', [Validators.required]);
     this.campoNomeConciliador = new FormControl('', [Validators.required]);
+    this.campoTipoSessao = new FormControl({value: 'Audiência', disabled: this.isEdicao}, [Validators.required]);
 
-    const codigoAgendamento = this.route.snapshot.params['codigo'];
-
-    if (codigoAgendamento) {
-      this.carregarAgendamento(codigoAgendamento);
-      this.isEdicao = true;
-    }
+    // this.tipoAudienciaEscolhido = 'Ação civíl';
+    // this.campoTipoAudiencia = new FormControl({value: 'Ação civíl', disabled: false}, [Validators.required]);
   }
 
   setTempoDuracao(duracaoAudiencia: number, oitivas: number) {
-    if (this.campoTipoSessao.value !== 'Conciliação') {
+
+    // console.log('setTempoDuração');
+
+    if (duracaoAudiencia === 0){
+      const audienciaFiltrada = this.tiposAudiencias.filter(resultado =>
+        resultado.nome === this.tipoAudiencia);
+
+      // console.log('audienciaFiltrada: ' + audienciaFiltrada[0].nome);
+      duracaoAudiencia = audienciaFiltrada[0].duracao;
+      this.tempoDuracao = (duracaoAudiencia * oitivas); // / 60
+    }
+
+    else if (this.campoTipoSessao.value !== 'Audiência') {
       this.tempoDuracao = (duracaoAudiencia * oitivas); // / 60
     }
     else{
@@ -107,18 +115,39 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.tempoDuracaoAudienciaEscolhida = duracaoAudiencia;
   }
 
-  // chamado quando o usuário muda a quantidade de oitivas, após escolher o tipo de audiência
-  recalcularTempoDuracao(oitivas: number) {
-    if (this.tempoDuracaoAudienciaEscolhida !== 0 && this.campoTipoSessao.value !== 'Conciliação'){
-      this.tempoDuracao = (this.tempoDuracaoAudienciaEscolhida * oitivas); // / 60
-    }
-    else{
-      this.tempoDuracao = (20 * oitivas);
-    }
+  teste(){
+    // console.log(this.tipoAudiencia);
+    console.log('testando event bindig do select... FUNFOU');
   }
 
-  limparOitivas() {
+  // chamado quando o usuário muda a quantidade de oitivas, após escolher o tipo de audiência
+  recalcularTempoDuracao(oitivas: number) {
+
+    // console.log('recalcularTempoDuração');
+
+    let tempoDuracao;
+
+    if (this.campoTipoSessao.value !== 'Conciliação'){ // this.tempoDuracaoAudienciaEscolhida !== 0 &&
+      tempoDuracao = (this.tempoDuracaoAudienciaEscolhida * oitivas); // / 60
+    }
+    else{
+      tempoDuracao = (20 * oitivas);
+    }
+
+    this.campoTempoDuracao.setValue(tempoDuracao);
+  }
+
+  limparCampos() {
+    this.campoQuantidadeOitivas.setValue('');
+
+
+    // TESTAR ISSO AQUI ---------------------------------------------------
+    this.tipoAudiencia = '';
+
+
+    this.campoNomeConciliador.setValue('');
     this.campoTempoDuracao.setValue('');
+    this.tempoDuracaoAudienciaEscolhida = 0;
   }
 
   cadastrar(){
@@ -132,33 +161,13 @@ export class AgendamentoCadastroComponent implements OnInit {
       this.audiencia.observacao = this.campoObservacao.value;
       this.audiencia.quantidadeOitivas = this.campoQuantidadeOitivas.value;
 
-      if (this.campoTipoAudiencia.value === 'Ação civíl'){
-        this.audiencia.tipoAudiencia = 'ACAO_CIVIL';
-      }
-      else if (this.campoTipoAudiencia.value === 'Improbidade'){
-        this.audiencia.tipoAudiencia = 'IMPROBIDADE';
-      }
-      else if (this.campoTipoAudiencia.value === 'Instrução do creta'){
-        this.audiencia.tipoAudiencia = 'INSTRUCAO_CRETA';
-      }
-      else if (this.campoTipoAudiencia.value === 'Leilão'){
-        this.audiencia.tipoAudiencia = 'LEILAO';
-      }
-      else if (this.campoTipoAudiencia.value === 'Outros'){
-        this.audiencia.tipoAudiencia = 'OUTROS';
-      }
-      else if (this.campoTipoAudiencia.value === 'Penal'){
-        this.audiencia.tipoAudiencia = 'PENAL';
-      }
-      else if (this.campoTipoAudiencia.value === 'PJE'){
-        this.audiencia.tipoAudiencia = 'PJE';
-      }
-      else if (this.campoTipoAudiencia.value === 'Tebas improbidade'){
-        this.audiencia.tipoAudiencia = 'TEBAS_IMPROBIDADE';
-      }
-      else {
-        this.audiencia.tipoAudiencia = 'VIDEOCONFERENCIA';
-      }
+
+
+      // TESTAR ISSO AQUI ------------------------------------------------------------------
+      this.audiencia.tipoAudiencia =
+          this.converterTipoAudienciaLabelParaEnum(this.tipoAudiencia);
+
+      console.log(this.tipoAudiencia);
 
       if (!this.isEdicao) {
         this.agendamentoService.cadastrarAudiencia(this.audiencia)
@@ -205,7 +214,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.audiencia.processo.nomeDaParte = this.campoNomeParte.value;
     this.audiencia.processo.numeroProcesso = this.campoNumeroProcesso.value;
     this.audiencia.quantidadeOitivas = this.campoQuantidadeOitivas.value;
-    this.audiencia.tipoAudiencia = this.campoTipoAudiencia.value;
+    this.audiencia.tipoAudiencia = this.converterTipoAudienciaLabelParaEnum(this.tipoAudiencia);
+        // this.converterTipoAudienciaLabelParaEnum(this.campoTipoAudiencia.value.nome);
 
     this.agendamentoService.atualizarAudiencia(this.audiencia)
       .then(audiencia => {
@@ -254,7 +264,19 @@ export class AgendamentoCadastroComponent implements OnInit {
           this.campoTempoDuracao.setValue(this.audiencia.duracaoEstimada);
           this.campoObservacao.setValue(this.audiencia.observacao);
           this.campoQuantidadeOitivas.setValue(this.audiencia.quantidadeOitivas);
-          this.campoTipoAudiencia.setValue(this.audiencia.tipoAudiencia);
+
+          const valorTipoAudiencia = this.converterTipoAudienciaEnumParaLabel(this.audiencia.tipoAudiencia);
+
+          this.tipoAudiencia = valorTipoAudiencia;
+
+          console.log(this.tipoAudiencia);
+
+          const audienciaFiltrada2 = this.tiposAudiencias.filter(resultado =>
+            resultado.nome === this.tipoAudiencia);
+
+          // console.log(audienciaFiltrada[0].nome);
+
+          this.tempoDuracaoAudienciaEscolhida = audienciaFiltrada2[0].duracao;
         })
         .catch(erro => this.errorHandlerService.handle(erro));
     }
@@ -264,6 +286,8 @@ export class AgendamentoCadastroComponent implements OnInit {
         .then(conciliacao => {
           this.conciliacao = conciliacao;
 
+          this.campoTipoSessao.setValue('Conciliação');
+
           this.campoNumeroProcesso.setValue(this.conciliacao.processo.numeroProcesso);
           this.campoNomeParte.setValue(this.conciliacao.processo.nomeDaParte);
           this.campoTempoDuracao.setValue(this.conciliacao.duracaoEstimada);
@@ -272,6 +296,78 @@ export class AgendamentoCadastroComponent implements OnInit {
           this.campoNomeConciliador.setValue(this.conciliacao.nomeConciliador);
         })
         .catch(erro => this.errorHandlerService.handle(erro));
+    }
+  }
+
+  // isFormValido(): boolean{
+
+  //   if(this.campo)
+  // }
+
+  isAudiencia(): boolean{
+    if (this.campoTipoSessao.value === 'Audiência'){ // this.tipoSessaoEscolhido === 'Audiência' ||
+      return true;
+    }
+    return false;
+  }
+
+  private converterTipoAudienciaLabelParaEnum(tipoAudiencia: any): string{
+    if (tipoAudiencia === 'Ação civíl'){
+      return 'ACAO_CIVIL';
+    }
+    else if (tipoAudiencia === 'Improbidade'){
+      return 'IMPROBIDADE';
+    }
+    else if (tipoAudiencia === 'Instrução do creta'){
+      return 'INSTRUCAO_CRETA';
+    }
+    else if (tipoAudiencia === 'Leilão'){
+      return 'LEILAO';
+    }
+    else if (tipoAudiencia === 'Outros'){
+      return 'OUTROS';
+    }
+    else if (tipoAudiencia === 'Penal'){
+      return 'PENAL';
+    }
+    else if (tipoAudiencia === 'PJE'){
+      return 'PJE';
+    }
+    else if (tipoAudiencia === 'Tebas improbidade'){
+      return 'TEBAS_IMPROBIDADE';
+    }
+    else {
+      return 'VIDEOCONFERENCIA';
+    }
+  }
+
+  private converterTipoAudienciaEnumParaLabel(tipoAudiencia: string): string{
+    if (tipoAudiencia === 'ACAO_CIVIL'){
+      return 'Ação civíl';
+    }
+    else if (tipoAudiencia === 'IMPROBIDADE'){
+      return 'Improbidade';
+    }
+    else if (tipoAudiencia === 'INSTRUCAO_CRETA'){
+      return 'Instrução do creta';
+    }
+    else if (tipoAudiencia === 'LEILAO'){
+      return 'Leilão';
+    }
+    else if (tipoAudiencia === 'OUTROS'){
+      return 'Outros';
+    }
+    else if (tipoAudiencia === 'PENAL'){
+      return 'Penal';
+    }
+    else if (tipoAudiencia === 'PJE'){
+      return 'PJE';
+    }
+    else if (tipoAudiencia === 'TEBAS_IMPROBIDADE'){
+      return 'Tebas improbidade';
+    }
+    else {
+      return 'Videoconferência';
     }
   }
 

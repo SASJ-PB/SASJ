@@ -16,10 +16,48 @@ export class AgendamentoDetalhesComponent implements OnInit {
 
   constructor(public dialog: MatDialog) { }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  private formatarLabelTipoAudiencia(){
+    if (this.audiencia.tipoAudiencia === 'ACAO_CIVIL'
+        || this.audiencia.tipoAudiencia.toLowerCase() === 'ação civíl'){
+      this.audiencia.tipoAudiencia = 'Ação civíl';
+    }
+    else if (this.audiencia.tipoAudiencia === 'IMPROBIDADE'
+        || this.audiencia.tipoAudiencia.toLowerCase() === 'improbidade'){
+      this.audiencia.tipoAudiencia = 'Improbidade';
+    }
+    else if (this.audiencia.tipoAudiencia === 'INSTRUCAO_CRETA'
+        || this.audiencia.tipoAudiencia.toLowerCase() === 'instrução do creta'){
+      this.audiencia.tipoAudiencia = 'Instrução do creta';
+    }
+    else if (this.audiencia.tipoAudiencia === 'LEILAO'
+        || this.audiencia.tipoAudiencia.toLowerCase() === 'leilão'){
+      this.audiencia.tipoAudiencia = 'Leilão';
+    }
+    else if (this.audiencia.tipoAudiencia === 'OUTROS'
+        || this.audiencia.tipoAudiencia.toLowerCase() === 'outros'){
+      this.audiencia.tipoAudiencia = 'Outros';
+    }
+    else if (this.audiencia.tipoAudiencia === 'PENAL'
+        || this.audiencia.tipoAudiencia.toLowerCase() === 'penal'){
+      this.audiencia.tipoAudiencia = 'Penal';
+    }
+    else if (this.audiencia.tipoAudiencia === 'TEBAS_IMPROBIDADE'
+        || this.audiencia.tipoAudiencia.toLowerCase() === 'tebas improbidade'){
+      this.audiencia.tipoAudiencia = 'Tebas improbidade';
+    }
+    else {
+      this.audiencia.tipoAudiencia = 'Videoconferência';
+    }
   }
 
   openDialog() {
+
+    if (this.audiencia != null){
+      this.formatarLabelTipoAudiencia();
+    }
+
     const dialogRef = this.dialog.open(AgendamentoDetalhesDialogComponent, {
       height: '85%',
       data: {
@@ -50,9 +88,6 @@ export class AgendamentoDetalhesDialogComponent implements OnInit {
     this.audiencia = this.data.audiencia;
     this.conciliacao = this.data.conciliacao;
     this.isAudiencia = this.data.isAudiencia;
-
-    console.log(this.audiencia);
-    console.log(this.conciliacao);
   }
 
   ngOnInit() {}
