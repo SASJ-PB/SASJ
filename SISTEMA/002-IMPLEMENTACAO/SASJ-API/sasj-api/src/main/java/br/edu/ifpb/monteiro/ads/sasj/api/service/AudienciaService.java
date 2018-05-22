@@ -11,6 +11,7 @@ import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Processo;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.AudienciaRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ProcessoRepository;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoInvalidoException;
 
 @Service
 public class AudienciaService {
@@ -22,6 +23,11 @@ public class AudienciaService {
 	private ProcessoRepository processoRepository;
 
 	public Audiencia criar(Audiencia audiencia) {
+
+		if (audiencia.getProcesso().getNumeroProcesso().trim().isEmpty()
+				|| audiencia.getProcesso().getNomeDaParte().trim().isEmpty()) {
+			throw new ProcessoInvalidoException();
+		}
 
 		Processo processo = processoRepository.findByNumeroProcesso(audiencia.getProcesso().getNumeroProcesso());
 
@@ -40,7 +46,6 @@ public class AudienciaService {
 
 	public Audiencia atualizar(Long codigo, Audiencia audiencia) {
 		Audiencia audienciaSalva = buscarAudienciaPeloCodigo(codigo);
-
 		BeanUtils.copyProperties(audiencia, audienciaSalva, "codigo", "processo");
 
 		return audienciaRepository.save(audienciaSalva);

@@ -41,7 +41,13 @@ public class ConciliacaoService {
 	public Conciliacao atualizar(Long codigo, Conciliacao conciliacao) {
 		Conciliacao conciliacaoSalva = buscarConciliacaoPeloCodigo(codigo);
 
-		BeanUtils.copyProperties(conciliacao, conciliacaoSalva, "codigo", "processo");
+		BeanUtils.copyProperties(conciliacao, conciliacaoSalva, "codigo");
+		
+		Processo processo = processoRepository.findByNumeroProcesso(conciliacao.getProcesso().getNumeroProcesso());
+
+		if (processo != null) {
+			conciliacao.setProcesso(processo);
+		}
 
 		return conciliacaoRepository.save(conciliacaoSalva);
 	}

@@ -30,6 +30,7 @@ import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailNaoCadastradoExc
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaInvalidaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaJaCadastradaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.NomeInvalidoException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.TokenInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.UsuarioInexistenteOuInativoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.UsuarioJaInativoException;
@@ -165,9 +166,10 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
-	
+
 	@ExceptionHandler({ MatriculaJaCadastradaException.class })
-	public ResponseEntity<Object> handleMatriculaJaCadastradaException(MatriculaJaCadastradaException ex, WebRequest request) {
+	public ResponseEntity<Object> handleMatriculaJaCadastradaException(MatriculaJaCadastradaException ex,
+			WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("matricula.ja-cadastrada-usuario", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = messageSource.getMessage("matricula.ja-cadastrada-desenvolvedor", null,
@@ -189,7 +191,7 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
-	
+
 	@ExceptionHandler({ UsuarioJaInativoException.class })
 	public ResponseEntity<Object> handleUsuarioJaInativoException(UsuarioJaInativoException ex, WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("usuario.ja.inativo-usuario", null,
@@ -201,7 +203,7 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
-	
+
 	@ExceptionHandler({ PersistentObjectException.class })
 	public ResponseEntity<Object> handlePersistentObjectException(PersistentObjectException ex, WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("Ocorreu um erro ao tentar salvar os dados", null,
@@ -212,7 +214,19 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
-	
+
+	@ExceptionHandler({ ProcessoInvalidoException.class })
+	public ResponseEntity<Object> handleProcessoInvalidoException(ProcessoInvalidoException ex, WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("processo.invalido-usuario", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = messageSource.getMessage("processo.invalido-desenvolvedor", null,
+				LocaleContextHolder.getLocale());
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+
 	private List<Erro> criarListaErros(BindingResult bindingResult) {
 
 		List<Erro> erros = new ArrayList<>();

@@ -1,5 +1,5 @@
 CREATE TABLE processo (
 	codigo BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-	numero_processo VARCHAR(50) NOT NULL,
+	numero_processo VARCHAR(50) UNIQUE NOT NULL,
     nome_parte VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
