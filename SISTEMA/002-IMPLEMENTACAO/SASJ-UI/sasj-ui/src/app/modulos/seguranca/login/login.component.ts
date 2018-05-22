@@ -65,13 +65,13 @@ export class RecuperacaoSenhaDialogComponent implements OnInit {
   }
 
   recuperar() {
-    this.authService.login('public', 'admin')
+    this.authService.login('PP-1234', 'public')
     .then(() => {
       this.usuarioService.recuperarSenha(this.campoEmailRecuperacao.value)
         .then(() => {
           this.authService.limparAccessToken();
           this.dialog.closeAll();
-          this.snackBar.open('E-mail de recuperação de senha enviado', '', { duration: 5500});
+          this.snackBar.open('E-mail de recuperação de senha enviado', '', { duration: 4500});
         })
         .catch(erro => {
           this.errorHandlerService.handle(erro);
@@ -126,7 +126,7 @@ export class RedefinicaoSenhaComponent implements OnInit {
   }
 
   buscarUsuarioPorToken(tokenRecuperação: string) {
-    this.authService.login('public', 'admin')
+    this.authService.login('PP-1234', 'public')
       .then(() => {
         this.usuarioService.buscarUsuarioPorToken(tokenRecuperação)
           .then(usuario => {
@@ -149,14 +149,14 @@ export class RedefinicaoSenhaComponent implements OnInit {
   }
 
   redefinir() {
-    this.authService.login('public', 'admin')
+    this.authService.login('PP-1234', 'public')
       .then(() => {
         this.usuario.senha = this.campoNovaSenha.value;
         this.usuarioService.atualizarSenha(this.usuario)
           .then(() => {
             this.authService.limparAccessToken();
-            this.snackBar.open('Senha alterada com sucesso!', '', { duration: 5500});
             this.router.navigate(['/login']);
+            this.snackBar.open('Senha alterada com sucesso!', '', { duration: 4500});
           })
           .catch(erro => {
             this.errorHandlerService.handle(erro);
