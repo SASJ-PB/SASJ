@@ -50,7 +50,7 @@ export class AgendamentoCadastroComponent implements OnInit {
     {nome: 'Ação civíl', duracao: 20}, {nome: 'Improbidade', duracao: 20},
     {nome: 'Instrução do creta', duracao: 7}, {nome: 'Leilão', duracao: 60},
     {nome: 'Outros', duracao: 20}, {nome: 'Penal', duracao: 20}, {nome: 'PJE', duracao: 20},
-    {nome: 'Tebas improbidade', duracao: 20}, {nome: 'Vídeoconferência', duracao: 20}
+    {nome: 'Tebas improbidade', duracao: 20}, {nome: 'Videoconferência', duracao: 20}
   ];
 
   constructor(private agendamentoService: AgendamentoService, private route: ActivatedRoute,
@@ -88,20 +88,14 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.campoTempoDuracao = new FormControl('', [Validators.required]);
     this.campoNomeConciliador = new FormControl('', [Validators.required]);
     this.campoTipoSessao = new FormControl({value: 'Audiência', disabled: this.isEdicao}, [Validators.required]);
-
-    // this.tipoAudienciaEscolhido = 'Ação civíl';
-    // this.campoTipoAudiencia = new FormControl({value: 'Ação civíl', disabled: false}, [Validators.required]);
   }
 
   setTempoDuracao(duracaoAudiencia: number, oitivas: number) {
-
-    // console.log('setTempoDuração');
 
     if (duracaoAudiencia === 0){
       const audienciaFiltrada = this.tiposAudiencias.filter(resultado =>
         resultado.nome === this.tipoAudiencia);
 
-      // console.log('audienciaFiltrada: ' + audienciaFiltrada[0].nome);
       duracaoAudiencia = audienciaFiltrada[0].duracao;
       this.tempoDuracao = (duracaoAudiencia * oitivas); // / 60
     }
@@ -115,20 +109,13 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.tempoDuracaoAudienciaEscolhida = duracaoAudiencia;
   }
 
-  teste(){
-    // console.log(this.tipoAudiencia);
-    console.log('testando event bindig do select... FUNFOU');
-  }
-
   // chamado quando o usuário muda a quantidade de oitivas, após escolher o tipo de audiência
   recalcularTempoDuracao(oitivas: number) {
 
-    // console.log('recalcularTempoDuração');
-
     let tempoDuracao;
 
-    if (this.campoTipoSessao.value !== 'Conciliação'){ // this.tempoDuracaoAudienciaEscolhida !== 0 &&
-      tempoDuracao = (this.tempoDuracaoAudienciaEscolhida * oitivas); // / 60
+    if (this.campoTipoSessao.value !== 'Conciliação'){
+      tempoDuracao = (this.tempoDuracaoAudienciaEscolhida * oitivas);
     }
     else{
       tempoDuracao = (20 * oitivas);
@@ -139,12 +126,7 @@ export class AgendamentoCadastroComponent implements OnInit {
 
   limparCampos() {
     this.campoQuantidadeOitivas.setValue('');
-
-
-    // TESTAR ISSO AQUI ---------------------------------------------------
     this.tipoAudiencia = '';
-
-
     this.campoNomeConciliador.setValue('');
     this.campoTempoDuracao.setValue('');
     this.tempoDuracaoAudienciaEscolhida = 0;
@@ -161,13 +143,8 @@ export class AgendamentoCadastroComponent implements OnInit {
       this.audiencia.observacao = this.campoObservacao.value;
       this.audiencia.quantidadeOitivas = this.campoQuantidadeOitivas.value;
 
-
-
-      // TESTAR ISSO AQUI ------------------------------------------------------------------
       this.audiencia.tipoAudiencia =
           this.converterTipoAudienciaLabelParaEnum(this.tipoAudiencia);
-
-      console.log(this.tipoAudiencia);
 
       if (!this.isEdicao) {
         this.agendamentoService.cadastrarAudiencia(this.audiencia)
@@ -269,14 +246,10 @@ export class AgendamentoCadastroComponent implements OnInit {
 
           this.tipoAudiencia = valorTipoAudiencia;
 
-          console.log(this.tipoAudiencia);
-
-          const audienciaFiltrada2 = this.tiposAudiencias.filter(resultado =>
+          const audienciaFiltrada = this.tiposAudiencias.filter(resultado =>
             resultado.nome === this.tipoAudiencia);
 
-          // console.log(audienciaFiltrada[0].nome);
-
-          this.tempoDuracaoAudienciaEscolhida = audienciaFiltrada2[0].duracao;
+          this.tempoDuracaoAudienciaEscolhida = audienciaFiltrada[0].duracao;
         })
         .catch(erro => this.errorHandlerService.handle(erro));
     }
