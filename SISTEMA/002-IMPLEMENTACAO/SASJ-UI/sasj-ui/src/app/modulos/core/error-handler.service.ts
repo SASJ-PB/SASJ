@@ -46,7 +46,7 @@ export class ErrorHandlerService {
       console.error('Ocorreu um erro', errorResponse);
     }
 
-    this.snackBar.open(msg, '', {panelClass: ['snack-bar-error'], duration: 5500});
+    this.snackBar.open(msg, '', {panelClass: ['snack-bar-error'], duration: 4000});
   }
 
 }
