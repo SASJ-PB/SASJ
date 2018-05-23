@@ -21,10 +21,14 @@ export class ToolbarComponent implements OnInit {
 
   private _mobileQueryListener: () => void;
 
-  opcoesMenuLateral = [
-    {label: 'Início', icone: 'home'},
-    {label: 'Agendamentos', icone: 'calendar_today'},
-    {label: 'Relatórios', icone: 'description'}
+  // {label: 'Relatórios', icone: 'description'} {label: 'Início', icone: 'home'},
+  opcoesMenuLateralAdmin = [
+    {label: 'Usuários', icone: 'supervisor_account', url: '/usuarios'},
+    {label: 'Agendamentos', icone: 'calendar_today', url: '/agendamentos'},
+  ];
+
+  opcoesMenuLateralPadrao = [
+    {label: 'Agendamentos', icone: 'calendar_today', url: '[/agendamentos]'}
   ];
 
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
@@ -45,7 +49,9 @@ export class ToolbarComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.router.url !== '/login'){
+    // console.log(this.router.url);
+
+    if (this.router.url !== '/'){ // /login
       if (this.mobileQuery.matches) {
         this.sidenavRef.close();
       }
@@ -56,8 +62,13 @@ export class ToolbarComponent implements OnInit {
 
   }
 
+  redirecionar(url: string){
+    this.router.navigate([url]);
+  }
+
   ocultarToolbar() {
-    return this.router.url !== '/login';
+    // console.log(!this.router.url.includes('/recuperacao/senha/'));
+    return this.router.url !== '/login' && !this.router.url.includes('/recuperacao/senha/');
   }
 
   logout() {

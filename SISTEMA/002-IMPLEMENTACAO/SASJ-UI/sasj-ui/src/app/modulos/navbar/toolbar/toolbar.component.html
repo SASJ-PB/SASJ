@@ -38,10 +38,19 @@
                          [style.marginTop.px]="mobileQuery.matches && ocultarToolbar() ? 56 : 0">
     <mat-sidenav #sidenavRef [mode]="mobileQuery.matches ? 'over' : 'side'" *ngIf="ocultarToolbar()"
                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" id="sidebar">
-      <mat-nav-list>
-        <mat-list-item *ngFor="let opcao of opcoesMenuLateral">
+      <mat-nav-list *ngIf="authService.temPermissao('ROLE_CADASTRAR_USUARIO')">
+        <mat-list-item *ngFor="let opcao of opcoesMenuLateralAdmin"
+            (click)="redirecionar(opcao.url)">
           <mat-icon mat-list-icon>{{opcao.icone}}</mat-icon>
-          <a routerLink="#" matLine>{{opcao.label}}</a>
+          <a matLine>{{opcao.label}}</a>
+        </mat-list-item>
+      </mat-nav-list>
+
+      <mat-nav-list *ngIf="!authService.temPermissao('ROLE_CADASTRAR_USUARIO')">
+        <mat-list-item *ngFor="let opcao of opcoesMenuLateralPadrao"
+            (click)="redirecionar(opcao.url)">
+          <mat-icon mat-list-icon>{{opcao.icone}}</mat-icon>
+          <a matLine>{{opcao.label}}</a>
         </mat-list-item>
       </mat-nav-list>
     </mat-sidenav>
