@@ -11,6 +11,8 @@ import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Processo;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ConciliacaoRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ProcessoRepository;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoInvalidoException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.SessaoJuridicaInvalidaException;
 
 @Service
 public class ConciliacaoService {
@@ -23,6 +25,15 @@ public class ConciliacaoService {
 
 	public Conciliacao criar(Conciliacao conciliacao) {
 
+		if (conciliacao.getProcesso().getNumeroProcesso().trim().isEmpty()
+				|| conciliacao.getProcesso().getNomeDaParte().trim().isEmpty()) {
+			throw new ProcessoInvalidoException();
+		}
+		
+		if(conciliacao.getDuracaoEstimada() <= 0 || conciliacao.getQuantidadeOitivas() <=0) {
+			throw new SessaoJuridicaInvalidaException();
+		}
+		
 		Processo processo = processoRepository.findByNumeroProcesso(conciliacao.getProcesso().getNumeroProcesso());
 
 		if (processo != null) {
@@ -40,15 +51,8 @@ public class ConciliacaoService {
 
 	public Conciliacao atualizar(Long codigo, Conciliacao conciliacao) {
 		Conciliacao conciliacaoSalva = buscarConciliacaoPeloCodigo(codigo);
-
-		BeanUtils.copyProperties(conciliacao, conciliacaoSalva, "codigo");
+		BeanUtils.copyProperties(conciliacao, conciliacaoSalva, "codigo", "processo");
 		
-		Processo processo = processoRepository.findByNumeroProcesso(conciliacao.getProcesso().getNumeroProcesso());
-
-		if (processo != null) {
-			conciliacao.setProcesso(processo);
-		}
-
 		return conciliacaoRepository.save(conciliacaoSalva);
 	}
 

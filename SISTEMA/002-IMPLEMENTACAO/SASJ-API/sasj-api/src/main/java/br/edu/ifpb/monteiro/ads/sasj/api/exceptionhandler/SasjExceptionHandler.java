@@ -31,6 +31,7 @@ import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaInvalidaExce
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaJaCadastradaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.NomeInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoInvalidoException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.SessaoJuridicaInvalidaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.TokenInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.UsuarioInexistenteOuInativoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.UsuarioJaInativoException;
@@ -227,6 +228,18 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 
+	@ExceptionHandler({ SessaoJuridicaInvalidaException.class })
+	public ResponseEntity<Object> handleSessaoJuridicaInvalidaException(SessaoJuridicaInvalidaException ex, WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("sessao.juridica.invalida-usuario", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = messageSource.getMessage("sessao.juridica.invalida-desenvolvedor", null,
+				LocaleContextHolder.getLocale());
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	private List<Erro> criarListaErros(BindingResult bindingResult) {
 
 		List<Erro> erros = new ArrayList<>();

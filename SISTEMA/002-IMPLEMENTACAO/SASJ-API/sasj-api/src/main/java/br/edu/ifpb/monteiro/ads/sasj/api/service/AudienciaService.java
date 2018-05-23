@@ -12,6 +12,7 @@ import br.edu.ifpb.monteiro.ads.sasj.api.model.Processo;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.AudienciaRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ProcessoRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoInvalidoException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.SessaoJuridicaInvalidaException;
 
 @Service
 public class AudienciaService {
@@ -27,6 +28,10 @@ public class AudienciaService {
 		if (audiencia.getProcesso().getNumeroProcesso().trim().isEmpty()
 				|| audiencia.getProcesso().getNomeDaParte().trim().isEmpty()) {
 			throw new ProcessoInvalidoException();
+		}
+		
+		if(audiencia.getDuracaoEstimada() <= 0 || audiencia.getQuantidadeOitivas() <=0) {
+			throw new SessaoJuridicaInvalidaException();
 		}
 
 		Processo processo = processoRepository.findByNumeroProcesso(audiencia.getProcesso().getNumeroProcesso());
