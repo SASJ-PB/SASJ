@@ -32,6 +32,7 @@ export class AgendamentoCadastroComponent implements OnInit {
   campoHoraLembrete: FormControl;
   campoObservacao: FormControl;
 
+  mascaraCamposNumericos = [/[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/];
 
   public mascaraData = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public mascaraHora = [/\d/, /\d/, ':', /\d/, /\d/];
@@ -81,13 +82,16 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.campoHoraLembrete = new FormControl();
 
     this.campoObservacao = new FormControl();
-    this.campoNumeroProcesso = new FormControl('', [Validators.required]);
-    this.campoNomeParte = new FormControl('', [Validators.required]);
+    this.campoNumeroProcesso = new FormControl({value: '', disabled: this.isEdicao}, [Validators.required]);
+    this.campoNomeParte = new FormControl({value: '', disabled: this.isEdicao}, [Validators.required]);
 
-    this.campoQuantidadeOitivas = new FormControl('', [Validators.required]);
+    this.campoQuantidadeOitivas = new FormControl(1, [Validators.required]);
     this.campoTempoDuracao = new FormControl('', [Validators.required]);
     this.campoNomeConciliador = new FormControl('', [Validators.required]);
     this.campoTipoSessao = new FormControl({value: 'Audiência', disabled: this.isEdicao}, [Validators.required]);
+
+    this.setTempoDuracao(20, 1);
+    this.recalcularTempoDuracao(1);
   }
 
   setTempoDuracao(duracaoAudiencia: number, oitivas: number) {

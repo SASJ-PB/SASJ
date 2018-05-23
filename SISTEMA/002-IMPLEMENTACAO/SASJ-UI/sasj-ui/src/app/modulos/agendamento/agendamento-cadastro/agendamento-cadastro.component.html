@@ -78,7 +78,8 @@
 
         <mat-form-field appearance="outline">
           <mat-label>Quantidade de oitivas</mat-label>
-          <input [formControl]="campoQuantidadeOitivas" type="number" min="1"
+          <input [formControl]="campoQuantidadeOitivas" min="1" type="number"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"
               matInput placeholder="Quantas oitivas participarão?" required
               (click)="recalcularTempoDuracao(campoQuantidadeOitivas.value);
               setTempoDuracao(0, campoQuantidadeOitivas.value)"
@@ -122,9 +123,10 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Tempo de duração (em minutos)</mat-label> <!-- [(value)]="tempoDuracao" -->
-          <input matInput placeholder="Minutos"
-            [formControl]="campoTempoDuracao" required type="number" min="1">
+          <mat-label>Duração estimada (em minutos)</mat-label> <!-- [(value)]="tempoDuracao" type="number"-->
+          <input matInput placeholder="Minutos" type="number"
+              [formControl]="campoTempoDuracao" required min="1"
+              onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57">
 
           <mat-error *ngIf="campoTempoDuracao.hasError('required')">
             O tempo de duração deve ser informado
@@ -230,7 +232,8 @@
 
     <div style="text-align: right">
       <a mat-raised-button style="margin: 0 10px" [routerLink]="['/agendamentos']">CANCELAR</a>
-      <button mat-raised-button color="accent" [disabled]="agendamentoForm.invalid" (click)="cadastrar()">CADASTRAR</button>
+      <button mat-raised-button color="accent" [disabled]="agendamentoForm.invalid"
+          (click)="cadastrar()">{{isEdicao ? 'ATUALIZAR' : 'CADASTRAR'}}</button>
     </div>
   </div>
 </form>

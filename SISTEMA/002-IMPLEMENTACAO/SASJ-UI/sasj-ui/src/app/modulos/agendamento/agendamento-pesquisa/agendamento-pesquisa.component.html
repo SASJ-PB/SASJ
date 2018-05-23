@@ -5,14 +5,16 @@
   </div>
 
   <div style="margin-top: 15px">
-    <mat-tab-group>
-      <mat-tab label="AUDIÊNCIAS" >
-        <app-agendamento-tabela [isAudiencia]="true"></app-agendamento-tabela>
-      </mat-tab>
+    <mat-card style="margin: 10px 0">
+      <mat-tab-group>
+        <mat-tab label="AUDIÊNCIAS" >
+          <app-agendamento-tabela [isAudiencia]="true"></app-agendamento-tabela>
+        </mat-tab>
 
-      <mat-tab label="CONCILIAÇÕES">
-        <app-agendamento-tabela [isAudiencia]="false"></app-agendamento-tabela>
-      </mat-tab>
-    </mat-tab-group>
+        <mat-tab label="CONCILIAÇÕES">
+          <app-agendamento-tabela [isAudiencia]="false"></app-agendamento-tabela>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
   </div>
 </div>
