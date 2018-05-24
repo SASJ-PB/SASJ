@@ -1,0 +1,13 @@
+.container-usuarios {
+  display: flow-root;
+  padding: 10px;
+}
+
+.container-usuarios > * {
+  width: 100%;
+}
+
+.div-filtro {
+  max-height: 50px;
+  padding: 20px 10px 0;
+}

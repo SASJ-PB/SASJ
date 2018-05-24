@@ -1,3 +1,4 @@
+import { UsuarioPesquisaComponent } from './usuario-pesquisa/usuario-pesquisa.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -9,7 +10,20 @@ const routes: Routes = [
     path: 'usuarios/novo',
     component: UsuarioCadastroComponent,
     canActivate: [AuthGuard],
-    data: {roles: ['ROLE_CADASTRAR_USUARIO']}}
+    data: {roles: ['ROLE_CADASTRAR_USUARIO']}
+  },
+  {
+    path: 'usuarios',
+    component: UsuarioPesquisaComponent,
+    canActivate: [AuthGuard],
+    data: {roles: ['ROLE_CADASTRAR_USUARIO']}
+  },
+  {
+    path: 'perfil/:codigo',
+    component: UsuarioCadastroComponent,
+    canActivate: [AuthGuard],
+    data: {roles: ['ROLE_ATUALIZAR_USUARIO']}
+  }
 ];
 
 @NgModule({

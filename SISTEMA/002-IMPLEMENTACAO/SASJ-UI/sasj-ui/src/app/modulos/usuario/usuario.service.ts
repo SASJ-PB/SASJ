@@ -34,4 +34,44 @@ export class UsuarioService {
         return usuario;
       });
   }
+
+  cadastrar(usuario: Usuario): Promise<Usuario> {
+    return this.http.post('http://localhost:8080/usuarios', JSON.stringify(usuario))
+      .toPromise()
+      .then(response => response.json());
+  }
+
+  buscarPorCodigo(codigo: number): Promise<Usuario> {
+    return this.http.get(`http://localhost:8080/usuarios/${codigo}`)
+      .toPromise()
+      .then(response => {
+
+        const usuario = response.json() as Usuario;
+
+        return usuario;
+      });
+  }
+
+  atualizar(usuario: Usuario): Promise<Usuario> {
+    return this.http.put(`http://localhost:8080/usuarios/${usuario.codigo}`,
+        JSON.stringify(usuario))
+      .toPromise()
+      .then(response => {
+        const usuarioAlterado = response.json() as Usuario;
+        return usuarioAlterado;
+      });
+  }
+
+  listarTodos(): Promise<any> {
+    return this.http.get(`http://localhost:8080/usuarios/`)
+      .toPromise()
+      .then(response => {
+
+        const resultado = {
+          usuarios: response.json(),
+        };
+
+        return resultado;
+      });
+  }
 }

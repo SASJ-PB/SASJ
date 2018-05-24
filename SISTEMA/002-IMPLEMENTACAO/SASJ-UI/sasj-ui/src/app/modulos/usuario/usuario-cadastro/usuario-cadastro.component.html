@@ -14,7 +14,7 @@
 
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>Cargo</mat-label>
-        <input matInput placeholder="Nome do cargo do usuário" [formControl]="campoCargo"
+        <input matInput placeholder="Cargo do usuário" [formControl]="campoCargo"
             required>
 
         <mat-error *ngIf="campoCargo.hasError('required')">
@@ -25,7 +25,7 @@
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>Matrícula</mat-label>
         <input matInput placeholder="Matrícula do usuário" [formControl]="campoMatricula"
-            [textMask]="{mask: mascaraMatricula}" required>
+            [textMask]="{mask: mascaraMatricula, guide: false}" required>
 
         <mat-error *ngIf="campoMatricula.hasError('required')">
           A matrícula deve ser informada
@@ -60,8 +60,8 @@
       </mat-form-field>
 
       <div>
-        <button class="spacer-button" color="accent" mat-raised-button> SALVAR </button>
-        <a class="spacer-button" mat-raised-button> CANCELAR </a>
+        <button class="spacer-button" color="accent" mat-raised-button (click)="salvar()"> SALVAR </button>
+        <a class="spacer-button" [routerLink]="['/usuarios']" mat-raised-button> CANCELAR </a>
       </div>
 
     </div>

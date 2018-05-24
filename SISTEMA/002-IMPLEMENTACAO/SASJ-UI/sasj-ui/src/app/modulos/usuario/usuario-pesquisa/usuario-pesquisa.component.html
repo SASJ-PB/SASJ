@@ -1,0 +1,61 @@
+<div class="container-usuarios">
+    <div style="display: flow-root;">
+      <a mat-raised-button color="accent" style="float:right"
+          [routerLink]="['/usuarios/novo']">NOVO USUÁRIO</a>
+    </div>
+
+    <div style="margin-top: 15px">
+      <mat-card style="margin: 10px 0">
+
+        <div class="div-filtro" *ngIf="false">
+          <mat-form-field style="width: 40%" floatLabel="always">
+            <mat-label>Filtrar</mat-label>
+            <input matInput placeholder="Faça uma busca"> <!-- (keyup)="aplicarFiltro($event.target.value)" -->
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div style="margin: 15px 0px">
+
+          <table mat-table [dataSource]="dataSource"
+              style="width: 100%;"> <!-- matSort -->
+
+            <ng-container matColumnDef="nome">
+              <th mat-header-cell *matHeaderCellDef > NOME </th> <!-- mat-sort-header -->
+              <td mat-cell *matCellDef="let row"> {{row.nome}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="cargo">
+              <th mat-header-cell *matHeaderCellDef > CARGO </th> <!-- mat-sort-header -->
+              <td mat-cell *matCellDef="let row"> {{row.cargo}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tipo" >
+              <th mat-header-cell *matHeaderCellDef > TIPO </th> <!-- mat-sort-header -->
+              <td mat-cell *matCellDef="let row"> {{row.tipoUsuario}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status" >
+              <th mat-header-cell *matHeaderCellDef> STATUS </th> <!-- mat-sort-header -->
+              <td mat-cell *matCellDef="let row" >
+                <mat-button-toggle color="accent" value="row.ativo">{{row.ativo}}</mat-button-toggle>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acoes">
+              <th mat-header-cell *matHeaderCellDef> AÇÕES </th>
+              <td mat-cell *matCellDef="let row" >
+                <app-usuario-detalhes [usuario]="row"></app-usuario-detalhes>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="colunasExibidas"></tr><!-- Determina quais colunas serão renderizadas -->
+            <tr mat-row *matRowDef="let row; columns: colunasExibidas;"></tr>
+          </table>
+
+          <mat-paginator #paginatorRef [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+
+      </mat-card>
+    </div>
+  </div>
