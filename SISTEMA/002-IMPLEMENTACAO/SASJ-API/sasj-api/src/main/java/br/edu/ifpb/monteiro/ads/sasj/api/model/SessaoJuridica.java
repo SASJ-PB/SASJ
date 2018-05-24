@@ -35,7 +35,8 @@ public abstract class SessaoJuridica {
 	private Integer duracaoEstimada;
 
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "codigo_processo")
+	@JoinColumn(name = "codigo_processo", nullable = false)
+	@NotNull
 	private Processo processo;
 
 	public Processo getProcesso() {

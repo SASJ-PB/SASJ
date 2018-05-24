@@ -70,6 +70,10 @@ public class Processo {
 				return false;
 		} else if (!codigo.equals(other.codigo))
 			return false;
+		else if (!numeroProcesso.equals(other.getNumeroProcesso()))
+			return false;
+		else if (!nomeDaParte.equals(other.getNomeDaParte()))
+			return false;
 		return true;
 	}
 

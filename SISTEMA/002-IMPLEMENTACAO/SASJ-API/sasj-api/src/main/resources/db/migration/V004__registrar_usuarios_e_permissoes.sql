@@ -19,6 +19,10 @@ INSERT INTO permissao (codigo, descricao) VALUES (9, 'ROLE_CADASTRAR_CONCILIACAO
 INSERT INTO permissao (codigo, descricao) VALUES (10, 'ROLE_PESQUISAR_CONCILIACAO');
 INSERT INTO permissao (codigo, descricao) VALUES (11, 'ROLE_ATUALIZAR_CONCILIACAO');
 INSERT INTO permissao (codigo, descricao) VALUES (12, 'ROLE_REMOVER_CONCILIACAO');
+INSERT INTO permissao (codigo, descricao) VALUES (13, 'ROLE_CADASTRAR_PROCESSO');
+INSERT INTO permissao (codigo, descricao) VALUES (14, 'ROLE_PESQUISAR_PROCESSO');
+INSERT INTO permissao (codigo, descricao) VALUES (15, 'ROLE_ATUALIZAR_PROCESSO');
+INSERT INTO permissao (codigo, descricao) VALUES (16, 'ROLE_REMOVER_PROCESSO');
 
 -- admin
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 1);
@@ -33,6 +37,10 @@ INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 9);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 10);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 11);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 12);
+INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 13);
+INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 14);
+INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 15);
+INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (1, 16);
 
 -- padrao
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 2);
@@ -45,5 +53,9 @@ INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 9);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 10);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 11);
 INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 12);
+INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 13);
+INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 14);
+INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 15);
+INSERT INTO usuario_permissao (codigo_usuario, codigo_permissao) values (2, 16);
 
 
