@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Processo;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ProcessoRepository;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoDuplicadoException;
 
 @Service
 public class ProcessoService {
@@ -22,6 +23,14 @@ public class ProcessoService {
 
 	public Processo atualizar(Long codigo, Processo processo) {
 		Processo processoSalvo = buscarProcessoPeloCodigo(codigo);
+		
+		if(!processo.getNumeroProcesso().equals(processoSalvo.getNumeroProcesso())) {
+			Processo processoComNumero = processoRepository.findByNumeroProcesso(processo.getNumeroProcesso());
+			
+			if(processoComNumero != null) {
+				throw new ProcessoDuplicadoException();
+			}
+		}
 
 		BeanUtils.copyProperties(processo, processoSalvo, "codigo");
 

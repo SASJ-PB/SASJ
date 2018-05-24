@@ -30,6 +30,7 @@ import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailNaoCadastradoExc
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaInvalidaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaJaCadastradaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.NomeInvalidoException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoDuplicadoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.SessaoJuridicaInvalidaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.TokenInvalidoException;
@@ -233,6 +234,18 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 		String mensagemUsuario = messageSource.getMessage("sessao.juridica.invalida-usuario", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = messageSource.getMessage("sessao.juridica.invalida-desenvolvedor", null,
+				LocaleContextHolder.getLocale());
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ ProcessoDuplicadoException.class })
+	public ResponseEntity<Object> handleProcessoDuplicadoException(ProcessoDuplicadoException ex, WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("processo.duplicado-usuario", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = messageSource.getMessage("processo.duplicado-desenvolvedor", null,
 				LocaleContextHolder.getLocale());
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
