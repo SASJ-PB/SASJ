@@ -28,7 +28,7 @@ export class ToolbarComponent implements OnInit {
   ];
 
   opcoesMenuLateralPadrao = [
-    {label: 'Agendamentos', icone: 'calendar_today', url: '[/agendamentos]'}
+    {label: 'Agendamentos', icone: 'calendar_today', url: '/agendamentos'}
   ];
 
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,

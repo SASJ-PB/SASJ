@@ -21,7 +21,7 @@
           <span>Bem-vindo(a) {{ authService.jwtPayload?.nome }}</span>
         </div>
         <mat-divider></mat-divider>
-        <button mat-menu-item>
+        <button mat-menu-item (click)="redirecionar('/perfil')">
           <span>Perfil</span>
         </button>
         <mat-divider></mat-divider>
