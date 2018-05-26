@@ -57,7 +57,6 @@ import { UsuarioPerfilComponent } from './usuario-perfil/usuario-perfil.componen
     UsuarioPesquisaComponent,
     UsuarioDetalhesComponent,
     UsuarioDetalhesDialogComponent,
-    UsuarioPerfilComponent,
     EmailEnviadoDialogComponent,
     DesativacaoContaDialogComponent
   ],
