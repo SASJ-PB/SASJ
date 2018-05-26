@@ -34,7 +34,7 @@ export class UsuarioPesquisaComponent implements OnInit {
 
     this.usuarioService.atualizarAcesso(usuario)
       .then(usuarioAlterado => {
-        // this.dataSource = null;
+        this.dataSource._updateChangeSubscription();
         // this.listarAudiencias();
 
       })

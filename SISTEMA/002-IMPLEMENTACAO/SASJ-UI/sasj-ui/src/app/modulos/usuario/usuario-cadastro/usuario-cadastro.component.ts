@@ -120,7 +120,10 @@ export class UsuarioCadastroComponent implements OnInit {
 
   openDialogDesativacao() {
     const dialogRef = this.dialog.open(DesativacaoContaDialogComponent, {
-      height: '40%'
+      height: '40%',
+      data: {
+        usuario: this.usuario
+      }
     });
   }
 
@@ -221,25 +224,10 @@ export class DesativacaoContaDialogComponent {
       private errorHandlerService: ErrorHandlerService, private router: Router) { }
 
     desativar() {
-
-      // this.authService.limparAccessToken();
-      // this.router.navigate(['/login']);
-
-      /* this.authService.login('PP-1234', 'public')
-      .then(() => {
-        this.usuarioService.recuperarSenha(this.data.email)
-          .then(() => {
-          })
-          .catch(erro => {
-            this.errorHandlerService.handle(erro);
-            this.authService.limparAccessToken();
-          });
-      })
-      .catch(erro => {
-        this.errorHandlerService.handle(erro);
-        this.authService.limparAccessToken();
-
-      }); */
+      this.usuarioService.atualizarAcesso(this.data.usuario);
+      this.dialogRef.close();
+      this.authService.limparAccessToken();
+      this.router.navigate(['/login']);
     }
 
     cancelar() {

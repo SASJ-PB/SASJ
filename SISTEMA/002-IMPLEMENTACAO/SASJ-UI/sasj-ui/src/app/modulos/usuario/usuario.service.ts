@@ -63,13 +63,9 @@ export class UsuarioService {
   }
 
   atualizarAcesso(usuario: Usuario): Promise<Usuario> {
-    return this.http.put(`http://localhost:8080/usuarios/${usuario.codigo}/ativo`,
-        JSON.stringify(usuario))
-      .toPromise()
-      .then(response => {
-        const usuarioAlterado = response.json() as Usuario;
-        return usuarioAlterado;
-      });
+    // console.log(usuario.ativo);
+    return this.http.put(`http://localhost:8080/usuarios/${usuario.codigo}/ativo`, !usuario.ativo)
+      .toPromise().then(() => null);
   }
 
   listarTodos(): Promise<any> {
