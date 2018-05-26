@@ -1,5 +1,5 @@
 .spacer-button {
-  margin: 0px 0px 0px 10px;
+  margin: 0px 0px 10px 10px;
   float:right;
 }
 
@@ -19,4 +19,24 @@
 
 .campo-tipo-usuario{
   margin-bottom: 25px;
+}
+
+/* DIALOG DE REDEFINIÇÃO DE SENHA */
+
+#titulo-dialog{
+  text-align: center;
+}
+
+.espacamento-card{
+  margin: 10px 0px;
+}
+
+.titulo-card{
+  font-size: 13px;
+}
+
+/* DIALOG DESATIVAÇÃO DE CONTA */
+
+.espacamento-botoes-desativacao {
+  margin: 0px 10px 10px 0px;
 }

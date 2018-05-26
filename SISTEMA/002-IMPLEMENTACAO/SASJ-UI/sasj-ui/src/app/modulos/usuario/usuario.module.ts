@@ -1,8 +1,10 @@
+import { RecuperacaoSenhaDialogComponent, RedefinicaoSenhaComponent } from './../seguranca/login/login.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { UsuarioCadastroComponent } from './usuario-cadastro/usuario-cadastro.component';
+import { SegurancaModule } from './../seguranca/seguranca.module';
+import { UsuarioCadastroComponent, EmailEnviadoDialogComponent, DesativacaoContaDialogComponent } from './usuario-cadastro/usuario-cadastro.component';
 import { UsuarioRoutingModule } from './usuario-routing.module';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,6 +19,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { TextMaskModule } from 'angular2-text-mask';
 import { UsuarioPesquisaComponent } from './usuario-pesquisa/usuario-pesquisa.component';
@@ -41,8 +44,11 @@ import { UsuarioPerfilComponent } from './usuario-perfil/usuario-perfil.componen
     MatPaginatorModule,
     MatSortModule,
     MatButtonToggleModule,
+    MatCheckboxModule,
 
     TextMaskModule,
+
+    SegurancaModule,
 
     UsuarioRoutingModule
   ],
@@ -51,11 +57,13 @@ import { UsuarioPerfilComponent } from './usuario-perfil/usuario-perfil.componen
     UsuarioPesquisaComponent,
     UsuarioDetalhesComponent,
     UsuarioDetalhesDialogComponent,
-    UsuarioPerfilComponent
+    UsuarioPerfilComponent,
+    EmailEnviadoDialogComponent,
+    DesativacaoContaDialogComponent
   ],
   exports: [ UsuarioCadastroComponent ],
   entryComponents: [
-    UsuarioDetalhesDialogComponent
+    UsuarioDetalhesDialogComponent, EmailEnviadoDialogComponent, DesativacaoContaDialogComponent
   ],
 })
 export class UsuarioModule { }

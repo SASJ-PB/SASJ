@@ -16,10 +16,10 @@
         <span> <strong>E-mail:</strong> {{usuario.email}} </span>
       </p>
       <p>
-        <span> <strong>Tipo de conta:</strong> {{usuario.tipoUsuario}} </span>
+        <span> <strong>Tipo de conta:</strong> {{usuario.tipoUsuario === 'ADMIN' ? 'Administrador' : 'Padrão'}} </span>
       </p>
       <p>
-        <span> <strong>Status:</strong> {{usuario.ativo}} </span>
+        <span> <strong>Status:</strong> {{usuario.ativo ? 'Conta ativada' : 'Conta desativada'}} </span>
       </p>
     </mat-card-content>
   </mat-card>
