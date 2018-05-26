@@ -8,8 +8,10 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
+import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Processo;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.AudienciaRepository;
+import br.edu.ifpb.monteiro.ads.sasj.api.repository.ConciliacaoRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ProcessoRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.SessaoJuridicaInvalidaException;
@@ -21,6 +23,9 @@ public class AudienciaService {
 	private AudienciaRepository audienciaRepository;
 
 	@Autowired
+	private ConciliacaoRepository conciliacaoRepository;
+
+	@Autowired
 	private ProcessoRepository processoRepository;
 
 	public Audiencia criar(Audiencia audiencia) {
@@ -29,8 +34,8 @@ public class AudienciaService {
 				|| audiencia.getProcesso().getNomeDaParte().trim().isEmpty()) {
 			throw new ProcessoInvalidoException();
 		}
-		
-		if(audiencia.getDuracaoEstimada() <= 0 || audiencia.getQuantidadeOitivas() <=0) {
+
+		if (audiencia.getDuracaoEstimada() <= 0 || audiencia.getQuantidadeOitivas() <= 0) {
 			throw new SessaoJuridicaInvalidaException();
 		}
 
@@ -65,7 +70,17 @@ public class AudienciaService {
 	}
 
 	public void remover(Long codigo) {
+		Processo processo = buscarAudienciaPeloCodigo(codigo).getProcesso();
+
 		audienciaRepository.delete(codigo);
+
+		List<Audiencia> audiencias = audienciaRepository.findByProcesso(processo);
+		List<Conciliacao> concialicoes = conciliacaoRepository.findByProcesso(processo);
+
+		if (audiencias.size() == 0 && concialicoes.size() == 0) {
+			processoRepository.delete(processo.getCodigo());
+		}
+
 	}
 
 }

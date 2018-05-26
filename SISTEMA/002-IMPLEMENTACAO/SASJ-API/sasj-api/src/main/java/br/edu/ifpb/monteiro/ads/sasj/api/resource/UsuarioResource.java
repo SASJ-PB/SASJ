@@ -72,8 +72,8 @@ public class UsuarioResource {
 	@PutMapping("/{codigo}/ativo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@PreAuthorize("hasAuthority('ROLE_ATUALIZAR_USUARIO') and #oauth2.hasScope('write')")
-	public void atualizarPropriedadeAtivo(@PathVariable Long id, @RequestBody Boolean ativo) {
-		usuarioService.atualizarPropriedadeAtivo(id, ativo);
+	public void atualizarPropriedadeAtivo(@PathVariable Long codigo, @RequestBody Boolean ativo) {
+		usuarioService.atualizarPropriedadeAtivo(codigo, ativo);
 	}
 	
 }
