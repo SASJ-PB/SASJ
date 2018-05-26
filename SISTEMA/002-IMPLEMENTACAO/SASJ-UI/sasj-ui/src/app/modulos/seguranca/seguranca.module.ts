@@ -47,7 +47,7 @@ export function authHttpServiceFactory(authService: AuthService, http: Http, opt
     TextMaskModule
   ],
   declarations: [LoginComponent, RecuperacaoSenhaDialogComponent, RedefinicaoSenhaComponent],
-  exports: [LoginComponent],
+  exports: [LoginComponent, RecuperacaoSenhaDialogComponent, RedefinicaoSenhaComponent],
   providers: [
     {
       provide: AuthHttp,

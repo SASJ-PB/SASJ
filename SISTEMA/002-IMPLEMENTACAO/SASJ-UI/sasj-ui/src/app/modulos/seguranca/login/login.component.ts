@@ -71,7 +71,7 @@ export class RecuperacaoSenhaDialogComponent implements OnInit {
         .then(() => {
           this.authService.limparAccessToken();
           this.dialog.closeAll();
-          this.snackBar.open('E-mail de recuperação de senha enviado', '', { duration: 4500});
+          this.snackBar.open('E-mail de redefinição de senha enviado', '', { duration: 4500});
         })
         .catch(erro => {
           this.errorHandlerService.handle(erro);
