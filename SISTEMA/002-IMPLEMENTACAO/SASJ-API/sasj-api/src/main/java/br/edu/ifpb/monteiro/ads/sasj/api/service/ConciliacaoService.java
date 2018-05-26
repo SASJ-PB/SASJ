@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Processo;
+import br.edu.ifpb.monteiro.ads.sasj.api.repository.AudienciaRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ConciliacaoRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ProcessoRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoInvalidoException;
@@ -19,6 +21,9 @@ public class ConciliacaoService {
 
 	@Autowired
 	private ConciliacaoRepository conciliacaoRepository;
+	
+	@Autowired
+	private AudienciaRepository audienciaRepository;
 
 	@Autowired
 	private ProcessoRepository processoRepository;
@@ -65,7 +70,17 @@ public class ConciliacaoService {
 	}
 
 	public void remover(Long codigo) {
+		Processo processo = buscarConciliacaoPeloCodigo(codigo).getProcesso();
+
 		conciliacaoRepository.delete(codigo);
+
+		List<Audiencia> audiencias = audienciaRepository.findByProcesso(processo);
+		List<Conciliacao> concialicoes = conciliacaoRepository.findByProcesso(processo);
+
+		if (audiencias.size() == 0 && concialicoes.size() == 0) {
+			processoRepository.delete(processo.getCodigo());
+		}
+		
 	}
 
 }
