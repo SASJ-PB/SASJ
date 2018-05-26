@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifpb.monteiro.ads.sasj.api.event.RecursoCriadoEvent;
@@ -67,4 +68,12 @@ public class UsuarioResource {
 		Usuario usuario = usuarioService.remover(codigo);
 		return usuario != null ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
 	}
+	
+	@PutMapping("/{codigo}/ativo")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ROLE_ATUALIZAR_USUARIO') and #oauth2.hasScope('write')")
+	public void atualizarPropriedadeAtivo(@PathVariable Long id, @RequestBody Boolean ativo) {
+		usuarioService.atualizarPropriedadeAtivo(id, ativo);
+	}
+	
 }
