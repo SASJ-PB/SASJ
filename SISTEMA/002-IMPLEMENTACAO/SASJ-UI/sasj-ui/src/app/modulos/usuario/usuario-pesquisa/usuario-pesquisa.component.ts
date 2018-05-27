@@ -14,7 +14,7 @@ import { ErrorHandlerService } from '../../core/error-handler.service';
 })
 export class UsuarioPesquisaComponent implements OnInit {
 
-  dataSource;
+  dataSource: MatTableDataSource<Usuario>;
   checkboxStatus: FormControl;
   colunasExibidas = ['nome', 'tipo', 'status', 'acoes'];
 
@@ -22,7 +22,7 @@ export class UsuarioPesquisaComponent implements OnInit {
       private errorHandlerService: ErrorHandlerService, private authService: AuthService) { }
 
   ngOnInit() {
-    this.listarAudiencias();
+    this.listarUsuarios();
   }
 
   atualizarAcesso(indiceLinha: number) {
@@ -43,11 +43,25 @@ export class UsuarioPesquisaComponent implements OnInit {
       });
   }
 
-  listarAudiencias() {
+  listarUsuarios() {
     this.usuarioService.listarTodos()
       .then(resultado => {
 
-        this.dataSource = new MatTableDataSource(resultado.usuarios);
+        const usuarios: Usuario[] = resultado.usuarios;
+
+        // Removendo usuário publico
+        const usuarioPublico: Usuario = usuarios.filter(usuarioFiltrado =>
+            usuarioFiltrado.nome === 'Public')[0];
+
+        usuarios.splice(usuarios.indexOf(usuarioPublico), 1);
+
+        // Removendo usuário logado
+        const usuarioLogado: Usuario = usuarios.filter(usuarioFiltrado =>
+          usuarioFiltrado.email === this.authService.jwtPayload.user_name)[0];
+
+        usuarios.splice(usuarios.indexOf(usuarioLogado), 1);
+
+        this.dataSource = new MatTableDataSource(usuarios);
       });
   }
 }
