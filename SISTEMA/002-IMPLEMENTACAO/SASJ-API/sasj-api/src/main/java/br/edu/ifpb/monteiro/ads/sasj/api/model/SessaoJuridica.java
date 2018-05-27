@@ -1,5 +1,7 @@
 package br.edu.ifpb.monteiro.ads.sasj.api.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,6 +26,10 @@ public abstract class SessaoJuridica {
 	private Long codigo;
 
 	@NotNull
+	@Column(name = "data_hora_agendamento")
+	private LocalDateTime dataHoraAgendamento;
+	
+	@NotNull
 	@Column(name = "quantidade_oitivas")
 	private Integer quantidadeOitivas;
 
@@ -39,20 +45,20 @@ public abstract class SessaoJuridica {
 	@NotNull
 	private Processo processo;
 
-	public Processo getProcesso() {
-		return processo;
-	}
-
-	public void setProcesso(Processo processo) {
-		this.processo = processo;
-	}
-
 	public Long getCodigo() {
 		return codigo;
 	}
 
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
+	}
+
+	public LocalDateTime getDataHoraAgendamento() {
+		return dataHoraAgendamento;
+	}
+
+	public void setDataHoraAgendamento(LocalDateTime dataHoraAgendamento) {
+		this.dataHoraAgendamento = dataHoraAgendamento;
 	}
 
 	public Integer getQuantidadeOitivas() {
@@ -79,6 +85,14 @@ public abstract class SessaoJuridica {
 		this.duracaoEstimada = duracaoEstimada;
 	}
 
+	public Processo getProcesso() {
+		return processo;
+	}
+
+	public void setProcesso(Processo processo) {
+		this.processo = processo;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
