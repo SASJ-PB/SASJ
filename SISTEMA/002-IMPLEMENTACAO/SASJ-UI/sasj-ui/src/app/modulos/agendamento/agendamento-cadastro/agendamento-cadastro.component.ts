@@ -82,8 +82,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.campoHoraLembrete = new FormControl();
 
     this.campoObservacao = new FormControl();
-    this.campoNumeroProcesso = new FormControl({value: '', disabled: this.isEdicao}, [Validators.required]);
-    this.campoNomeParte = new FormControl({value: '', disabled: this.isEdicao}, [Validators.required]);
+    this.campoNumeroProcesso = new FormControl('', [Validators.required]); // {value: '', disabled: this.isEdicao}
+    this.campoNomeParte = new FormControl('', [Validators.required]); // {value: '', disabled: this.isEdicao}
 
     this.campoQuantidadeOitivas = new FormControl(1, [Validators.required]);
     this.campoTempoDuracao = new FormControl('', [Validators.required]);
@@ -198,6 +198,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.audiencia.tipoAudiencia = this.converterTipoAudienciaLabelParaEnum(this.tipoAudiencia);
         // this.converterTipoAudienciaLabelParaEnum(this.campoTipoAudiencia.value.nome);
 
+    this.atualizarProcesso();
+
     this.agendamentoService.atualizarAudiencia(this.audiencia)
       .then(audiencia => {
         this.audiencia = audiencia;
@@ -218,12 +220,27 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.conciliacao.quantidadeOitivas = this.campoQuantidadeOitivas.value;
     this.conciliacao.nomeConciliador = this.campoNomeConciliador.value;
 
+    this.atualizarProcesso();
+
     this.agendamentoService.atualizarConciliacao(this.conciliacao)
       .then(conciliacao => {
         this.conciliacao = conciliacao;
 
         this.router.navigate(['/agendamentos']);
         this.snackBar.open('Conciliacao atualizada com sucesso!', '', {duration: 4500});
+      })
+      .catch(erro => {
+        this.errorHandlerService.handle(erro);
+      });
+  }
+
+  private atualizarProcesso() {
+    this.processo.numeroProcesso = this.campoNumeroProcesso.value;
+    this.processo.nomeDaParte = this.campoNomeParte.value;
+
+    this.agendamentoService.atualizarProcesso(this.processo)
+      .then(processo => {
+        this.processo = processo;
       })
       .catch(erro => {
         this.errorHandlerService.handle(erro);
@@ -237,6 +254,7 @@ export class AgendamentoCadastroComponent implements OnInit {
       this.agendamentoService.buscarAudienciaPorCodigo(codigo)
         .then(audiencia => {
           this.audiencia = audiencia;
+          this.processo = audiencia.processo;
 
           this.campoTipoSessao.setValue('Audiência');
 
@@ -262,6 +280,7 @@ export class AgendamentoCadastroComponent implements OnInit {
       this.agendamentoService.buscarConciliacaoPorCodigo(codigo)
         .then(conciliacao => {
           this.conciliacao = conciliacao;
+          this.processo = conciliacao.processo;
 
           this.campoTipoSessao.setValue('Conciliação');
 

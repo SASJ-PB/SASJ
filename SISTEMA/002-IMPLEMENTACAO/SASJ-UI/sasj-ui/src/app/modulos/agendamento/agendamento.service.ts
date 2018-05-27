@@ -1,5 +1,5 @@
 import { AuthHttp } from 'angular2-jwt';
-import { Audiencia, Conciliacao } from './../core/model';
+import { Audiencia, Conciliacao, Processo } from './../core/model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -29,7 +29,7 @@ export class AgendamentoService {
       .then(response => {
 
         const resultado = {
-          audiencias: response.json(),
+          audiencias: response.json()
         };
 
         return resultado;
@@ -42,7 +42,7 @@ export class AgendamentoService {
       .then(response => {
 
         const resultado = {
-          conciliacoes: response.json(),
+          conciliacoes: response.json()
         };
 
         return resultado;
@@ -101,6 +101,16 @@ export class AgendamentoService {
       .then(response => {
         const conciliacaoAlterada = response.json() as Conciliacao;
         return conciliacaoAlterada;
+      });
+  }
+
+  atualizarProcesso(processo: Processo): Promise<Processo> {
+    return this.http.put(`http://localhost:8080/processos/${processo.codigo}`,
+        JSON.stringify(processo))
+      .toPromise()
+      .then(response => {
+        const processoAlterado = response.json() as Processo;
+        return processoAlterado;
       });
   }
 
