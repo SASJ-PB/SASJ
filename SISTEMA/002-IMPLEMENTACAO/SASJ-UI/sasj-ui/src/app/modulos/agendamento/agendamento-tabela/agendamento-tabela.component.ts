@@ -4,7 +4,7 @@ import { Audiencia, Conciliacao } from './../../core/model';
 import { AgendamentoService } from './../agendamento.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { Observable } from 'rxjs';
 
@@ -13,53 +13,36 @@ import { Observable } from 'rxjs';
   templateUrl: './agendamento-tabela.component.html',
   styleUrls: ['./agendamento-tabela.component.css']
 })
-export class AgendamentoTabelaComponent implements OnInit {
+export class AgendamentoTabelaComponent implements OnInit, AfterViewInit {
 
   @Input() isAudiencia: boolean;
-  @ViewChild('paginator') paginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('sort') sort: MatSort;
 
-  dataSourceAudiencias;
-  dataSourceConciliacoes;
+  dataSourceAudiencias: MatTableDataSource<Audiencia> = new MatTableDataSource();
+  dataSourceConciliacoes: MatTableDataSource<Conciliacao> = new MatTableDataSource();
 
-  colunasExibidas = ['processo', 'nomeParte', 'acoes']; // 'dataAudiencia', 'status'
+  // displayedColumns = ['agendamento', 'acoes']; // 'status',
+  displayedColumns = ['tipoAudiencia', 'quantidadeOitivas', 'acoes'];
+  displayedColumnsConciliacoes = ['nomeConciliador', 'duracaoEstimada', 'acoes'];
 
   constructor(private agendamentoService: AgendamentoService,
       private authService: AuthService, private router: Router) {
-
-    // if (this.isAudiencia){
-      this.listarAudiencias();
-    // }
-    // else{
-      this.listarConciliacoes();
-    // }
   }
 
-  ngOnInit() {
+  ngOnInit() {}
 
-  }
-
-  aplicarFiltro(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
-    // this.dataSource.filter = filterValue;
+  ngAfterViewInit() {
+    this.listarAudiencias();
+    this.listarConciliacoes();
   }
 
   listarAudiencias() {
     this.agendamentoService.listarAudiencias()
       .then(resultado => {
 
-        // this.audiencias = resultado.audiencias;
+        this.dataSourceAudiencias.data = resultado.audiencias;
 
-        this.dataSourceAudiencias = new MatTableDataSource(resultado.audiencias);
-
-        // this.dataSourceAudiencias.paginator = this.paginator;
-
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
-
-        // const teste = this.audiencias.data;
-
+        this.dataSourceAudiencias.sort = this.sort;
       });
   }
 
@@ -67,16 +50,9 @@ export class AgendamentoTabelaComponent implements OnInit {
     this.agendamentoService.listarConciliacoes()
       .then(resultado => {
 
-        // this.audiencias = resultado.audiencias;
+        this.dataSourceConciliacoes.data = resultado.conciliacoes;
 
-        this.dataSourceConciliacoes = new MatTableDataSource(resultado.conciliacoes);
-
-        // this.dataSourceConciliacoes.paginator = this.paginator;
-
-        // this.dataSource.paginator = this.paginator;
-        // this.dataSource.sort = this.sort;
-
-        // const teste = this.audiencias.data;
+        this.dataSourceConciliacoes.sort = this.sort;
       });
   }
 
@@ -90,4 +66,3 @@ export class AgendamentoTabelaComponent implements OnInit {
   }
 
 }
-
