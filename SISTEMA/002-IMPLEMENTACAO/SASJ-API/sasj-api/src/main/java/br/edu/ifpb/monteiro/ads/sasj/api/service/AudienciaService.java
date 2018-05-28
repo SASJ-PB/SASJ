@@ -27,6 +27,9 @@ public class AudienciaService {
 
 	@Autowired
 	private ProcessoRepository processoRepository;
+	
+	@Autowired
+	private AgendamentoService agendamentoService;
 
 	public Audiencia criar(Audiencia audiencia) {
 
@@ -38,13 +41,15 @@ public class AudienciaService {
 		if (audiencia.getDuracaoEstimada() <= 0 || audiencia.getQuantidadeOitivas() <= 0) {
 			throw new SessaoJuridicaInvalidaException();
 		}
+		
+		agendamentoService.validarAgendamento(audiencia);
 
 		Processo processo = processoRepository.findByNumeroProcesso(audiencia.getProcesso().getNumeroProcesso());
 
 		if (processo != null) {
 			audiencia.setProcesso(processo);
 		}
-
+		
 		Audiencia audienciaSalva = audienciaRepository.save(audiencia);
 
 		return audienciaSalva;

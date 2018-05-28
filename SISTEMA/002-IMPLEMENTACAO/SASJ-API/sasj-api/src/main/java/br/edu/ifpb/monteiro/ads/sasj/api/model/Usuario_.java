@@ -1,10 +1,11 @@
 package br.edu.ifpb.monteiro.ads.sasj.api.model;
 
-import br.edu.ifpb.monteiro.ads.sasj.api.enums.TipoUsuario;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
+
+import br.edu.ifpb.monteiro.ads.sasj.api.enums.TipoUsuario;
 
 @Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
 @StaticMetamodel(Usuario.class)

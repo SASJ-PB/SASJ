@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.AudienciaComHorarioJaOcupadoException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ConciliacaoComHorarioJaOcupadoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailJaCadastradoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailJaVerificadoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailNaoCadastradoException;
@@ -230,7 +232,8 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler({ SessaoJuridicaInvalidaException.class })
-	public ResponseEntity<Object> handleSessaoJuridicaInvalidaException(SessaoJuridicaInvalidaException ex, WebRequest request) {
+	public ResponseEntity<Object> handleSessaoJuridicaInvalidaException(SessaoJuridicaInvalidaException ex,
+			WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("sessao.juridica.invalida-usuario", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = messageSource.getMessage("sessao.juridica.invalida-desenvolvedor", null,
@@ -240,7 +243,7 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
-	
+
 	@ExceptionHandler({ ProcessoDuplicadoException.class })
 	public ResponseEntity<Object> handleProcessoDuplicadoException(ProcessoDuplicadoException ex, WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("processo.duplicado-usuario", null,
@@ -252,7 +255,33 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
-	
+
+	@ExceptionHandler({ ConciliacaoComHorarioJaOcupadoException.class })
+	public ResponseEntity<Object> handleConciliacaoComHorarioJaOcupadoException(
+			ConciliacaoComHorarioJaOcupadoException ex, WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("conciliacao.horario.ocupado-usuario", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = messageSource.getMessage("conciliacao.horario.ocupado-desenvolvedor", null,
+				LocaleContextHolder.getLocale());
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+
+	@ExceptionHandler({ AudienciaComHorarioJaOcupadoException.class })
+	public ResponseEntity<Object> handleAudienciaComHorarioJaOcupadoException(AudienciaComHorarioJaOcupadoException ex,
+			WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("audiencia.horario.ocupado-usuario", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = messageSource.getMessage("audiencia.horario.ocupado-desenvolvedor", null,
+				LocaleContextHolder.getLocale());
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+
 	private List<Erro> criarListaErros(BindingResult bindingResult) {
 
 		List<Erro> erros = new ArrayList<>();
