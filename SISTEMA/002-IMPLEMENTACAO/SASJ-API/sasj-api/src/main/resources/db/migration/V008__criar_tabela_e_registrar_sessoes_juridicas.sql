@@ -4,6 +4,7 @@ CREATE TABLE sessao_juridica (
     observacao VARCHAR(150),
     duracao_estimada INT(8) NOT NULL,
     codigo_processo BIGINT(20),
+    data_hora_agendamento DATETIME NOT NULL,
     FOREIGN KEY (codigo_processo) REFERENCES processo(codigo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -16,6 +16,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "sessao_juridica")
@@ -27,8 +29,9 @@ public abstract class SessaoJuridica {
 
 	@NotNull
 	@Column(name = "data_hora_agendamento")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime dataHoraAgendamento;
-	
+
 	@NotNull
 	@Column(name = "quantidade_oitivas")
 	private Integer quantidadeOitivas;
@@ -92,7 +95,7 @@ public abstract class SessaoJuridica {
 	public void setProcesso(Processo processo) {
 		this.processo = processo;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
