@@ -1,7 +1,7 @@
 package br.edu.ifpb.monteiro.ads.sasj.api.service.util;
 
-import java.util.regex.Pattern;
 import java.util.StringJoiner;
+import java.util.regex.Pattern;
 
 public class RegexNomeValidator {
 

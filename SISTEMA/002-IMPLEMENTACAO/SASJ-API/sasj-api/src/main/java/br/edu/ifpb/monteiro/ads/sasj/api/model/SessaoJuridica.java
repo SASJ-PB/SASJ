@@ -1,5 +1,7 @@
 package br.edu.ifpb.monteiro.ads.sasj.api.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "sessao_juridica")
@@ -22,6 +26,11 @@ public abstract class SessaoJuridica {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
+
+	@NotNull
+	@Column(name = "agendamento")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+	private LocalDateTime agendamento;
 
 	@NotNull
 	@Column(name = "quantidade_oitivas")
@@ -39,20 +48,20 @@ public abstract class SessaoJuridica {
 	@NotNull
 	private Processo processo;
 
-	public Processo getProcesso() {
-		return processo;
-	}
-
-	public void setProcesso(Processo processo) {
-		this.processo = processo;
-	}
-
 	public Long getCodigo() {
 		return codigo;
 	}
 
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
+	}
+
+	public LocalDateTime getAgendamento() {
+		return agendamento;
+	}
+
+	public void setAgendamento(LocalDateTime agendamento) {
+		this.agendamento = agendamento;
 	}
 
 	public Integer getQuantidadeOitivas() {
@@ -77,6 +86,14 @@ public abstract class SessaoJuridica {
 
 	public void setDuracaoEstimada(Integer duracaoEstimada) {
 		this.duracaoEstimada = duracaoEstimada;
+	}
+
+	public Processo getProcesso() {
+		return processo;
+	}
+
+	public void setProcesso(Processo processo) {
+		this.processo = processo;
 	}
 
 	@Override

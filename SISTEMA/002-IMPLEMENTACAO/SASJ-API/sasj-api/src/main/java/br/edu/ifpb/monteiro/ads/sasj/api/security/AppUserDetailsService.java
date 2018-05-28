@@ -3,6 +3,7 @@ package br.edu.ifpb.monteiro.ads.sasj.api.security;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

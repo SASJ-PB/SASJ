@@ -27,6 +27,9 @@ public class ConciliacaoService {
 
 	@Autowired
 	private ProcessoRepository processoRepository;
+	
+	@Autowired
+	private AgendamentoService agendamentoService;
 
 	public Conciliacao criar(Conciliacao conciliacao) {
 
@@ -38,6 +41,8 @@ public class ConciliacaoService {
 		if(conciliacao.getDuracaoEstimada() <= 0 || conciliacao.getQuantidadeOitivas() <=0) {
 			throw new SessaoJuridicaInvalidaException();
 		}
+		
+		agendamentoService.validarAgendamento(conciliacao);
 		
 		Processo processo = processoRepository.findByNumeroProcesso(conciliacao.getProcesso().getNumeroProcesso());
 
