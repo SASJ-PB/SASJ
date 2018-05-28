@@ -28,9 +28,9 @@ public abstract class SessaoJuridica {
 	private Long codigo;
 
 	@NotNull
-	@Column(name = "data_hora_agendamento")
+	@Column(name = "agendamento")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	private LocalDateTime dataHoraAgendamento;
+	private LocalDateTime agendamento;
 
 	@NotNull
 	@Column(name = "quantidade_oitivas")
@@ -56,12 +56,12 @@ public abstract class SessaoJuridica {
 		this.codigo = codigo;
 	}
 
-	public LocalDateTime getDataHoraAgendamento() {
-		return dataHoraAgendamento;
+	public LocalDateTime getAgendamento() {
+		return agendamento;
 	}
 
-	public void setDataHoraAgendamento(LocalDateTime dataHoraAgendamento) {
-		this.dataHoraAgendamento = dataHoraAgendamento;
+	public void setAgendamento(LocalDateTime agendamento) {
+		this.agendamento = agendamento;
 	}
 
 	public Integer getQuantidadeOitivas() {
