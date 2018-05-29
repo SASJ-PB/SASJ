@@ -83,7 +83,7 @@ public class AgendamentoService {
 		Interval intervaloPretendido = Interval.of(ldtPretendido.atZone(fusoHorarioRecifeNordeste).toInstant(),
 				ldtPretendido.plusMinutes(duracaoPretendida).atZone(fusoHorarioRecifeNordeste).toInstant());
 
-		if (intervaloCadastrado.encloses(intervaloPretendido)) {
+		if (intervaloCadastrado.isConnected(intervaloPretendido)) {
 			throw new AgendamentoConclituosoException();
 		}
 
