@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +20,8 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.edu.ifpb.monteiro.ads.sasj.api.enums.StatusAgendamento;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "sessao_juridica")
@@ -28,10 +32,14 @@ public abstract class SessaoJuridica {
 	private Long codigo;
 
 	@NotNull
-	@Column(name = "agendamento")
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime agendamento;
-
+	
+	@NotNull
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status_agendamento")
+	private StatusAgendamento statusAgendamento;
+	
 	@NotNull
 	@Column(name = "quantidade_oitivas")
 	private Integer quantidadeOitivas;
@@ -62,6 +70,14 @@ public abstract class SessaoJuridica {
 
 	public void setAgendamento(LocalDateTime agendamento) {
 		this.agendamento = agendamento;
+	}
+	
+	public StatusAgendamento getStatusAgendamento() {
+		return statusAgendamento;
+	}
+
+	public void setStatusAgendamento(StatusAgendamento statusAgendamento) {
+		this.statusAgendamento = statusAgendamento;
 	}
 
 	public Integer getQuantidadeOitivas() {

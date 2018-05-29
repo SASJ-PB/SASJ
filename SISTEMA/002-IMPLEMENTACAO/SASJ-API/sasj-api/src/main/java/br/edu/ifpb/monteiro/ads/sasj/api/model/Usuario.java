@@ -2,6 +2,7 @@ package br.edu.ifpb.monteiro.ads.sasj.api.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -46,6 +47,7 @@ public class Usuario {
 	private String email;
 
 	@Enumerated(EnumType.STRING)
+	@Column(name = "tipo_usuario")
 	@NotNull
 	private TipoUsuario tipoUsuario;
 

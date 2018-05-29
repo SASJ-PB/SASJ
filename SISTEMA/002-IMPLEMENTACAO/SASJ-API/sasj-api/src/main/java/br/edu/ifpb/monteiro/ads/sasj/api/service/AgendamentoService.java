@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.threeten.extra.Interval;
 
+import br.edu.ifpb.monteiro.ads.sasj.api.enums.StatusAgendamento;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.SessaoJuridica;
@@ -48,7 +49,9 @@ public class AgendamentoService {
 
 		try {
 			for (Audiencia audiencia : audiencias) {
-				verificarConflito(audiencia, agendamentoPretendido);
+				if(audiencia.getStatusAgendamento() == StatusAgendamento.CONFIRMADO) {
+					verificarConflito(audiencia, agendamentoPretendido);
+				}
 			}
 		} catch (AgendamentoConclituosoException ex) {
 			throw new AudienciaComHorarioJaOcupadoException();
@@ -60,7 +63,9 @@ public class AgendamentoService {
 
 		try {
 			for (Conciliacao conciliacao : conciliacoes) {
-				verificarConflito(conciliacao, agendamentoPretendido);
+				if(conciliacao.getStatusAgendamento() == StatusAgendamento.CONFIRMADO) {
+					verificarConflito(conciliacao, agendamentoPretendido);
+				}
 			}
 		} catch (AgendamentoConclituosoException ex) {
 			throw new ConciliacaoComHorarioJaOcupadoException();
@@ -84,7 +89,9 @@ public class AgendamentoService {
 				ldtPretendido.plusMinutes(duracaoPretendida).atZone(fusoHorarioRecifeNordeste).toInstant());
 
 		if (intervaloCadastrado.isConnected(intervaloPretendido)) {
-			throw new AgendamentoConclituosoException();
+			if(agendamentoCadastrado.getCodigo() != agendamentoPretendido.getCodigo()) {
+				throw new AgendamentoConclituosoException();				
+			}
 		}
 
 	}

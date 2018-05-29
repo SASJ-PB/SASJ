@@ -31,10 +31,12 @@ import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailJaVerificadoExce
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailNaoCadastradoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaInvalidaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaJaCadastradaException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MudancaDeStatusInvalidaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.NomeInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoDuplicadoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.SessaoJuridicaInvalidaException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.StatusInvalidoParaCadastroException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.TokenInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.UsuarioInexistenteOuInativoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.UsuarioJaInativoException;
@@ -275,6 +277,32 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 		String mensagemUsuario = messageSource.getMessage("audiencia.horario.ocupado-usuario", null,
 				LocaleContextHolder.getLocale());
 		String mensagemDesenvolvedor = messageSource.getMessage("audiencia.horario.ocupado-desenvolvedor", null,
+				LocaleContextHolder.getLocale());
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ StatusInvalidoParaCadastroException.class })
+	public ResponseEntity<Object> handleStatusInvalidoParaCadastroException(StatusInvalidoParaCadastroException ex,
+			WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("sessao.juridica.status.invalido-usuario", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = messageSource.getMessage("sessao.juridica.status.invalido-desenvolvedor", null,
+				LocaleContextHolder.getLocale());
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({ MudancaDeStatusInvalidaException.class })
+	public ResponseEntity<Object> handleMudancaDeStatusInvalidaException(MudancaDeStatusInvalidaException ex,
+			WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("sessao.juridica.status.mudanca.invalida-usuario", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = messageSource.getMessage("sessao.juridica.status.mudanca.invalida-desenvolvedor", null,
 				LocaleContextHolder.getLocale());
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));

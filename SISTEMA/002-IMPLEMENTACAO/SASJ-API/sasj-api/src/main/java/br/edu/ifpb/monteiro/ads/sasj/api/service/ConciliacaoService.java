@@ -7,14 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpb.monteiro.ads.sasj.api.enums.StatusAgendamento;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Processo;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.AudienciaRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ConciliacaoRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ProcessoRepository;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MudancaDeStatusInvalidaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.SessaoJuridicaInvalidaException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.StatusInvalidoParaCadastroException;
 
 @Service
 public class ConciliacaoService {
@@ -42,6 +45,11 @@ public class ConciliacaoService {
 			throw new SessaoJuridicaInvalidaException();
 		}
 		
+		if(conciliacao.getStatusAgendamento() == StatusAgendamento.ADIADO ||
+				conciliacao.getStatusAgendamento() == StatusAgendamento.CANCELADO) {
+			throw new StatusInvalidoParaCadastroException();
+		}
+		
 		agendamentoService.validarAgendamento(conciliacao);
 		
 		Processo processo = processoRepository.findByNumeroProcesso(conciliacao.getProcesso().getNumeroProcesso());
@@ -61,7 +69,16 @@ public class ConciliacaoService {
 
 	public Conciliacao atualizar(Long codigo, Conciliacao conciliacao) {
 		Conciliacao conciliacaoSalva = buscarConciliacaoPeloCodigo(codigo);
+		
+		if (conciliacaoSalva.getStatusAgendamento() == StatusAgendamento.CANCELADO) {
+			if (conciliacao.getStatusAgendamento() != StatusAgendamento.CANCELADO) {
+				 throw new MudancaDeStatusInvalidaException();
+			}
+		}
+
 		BeanUtils.copyProperties(conciliacao, conciliacaoSalva, "codigo", "processo");
+		
+		agendamentoService.validarAgendamento(conciliacaoSalva);
 		
 		return conciliacaoRepository.save(conciliacaoSalva);
 	}
