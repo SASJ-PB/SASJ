@@ -38,6 +38,7 @@ export class Audiencia{
   observacao: string;
   duracaoEstimada: number;
   processo: Processo;
+  agendamento: string;
 }
 
 export class Conciliacao {
@@ -47,4 +48,5 @@ export class Conciliacao {
   observacao: string;
   duracaoEstimada: number;
   processo: Processo;
+  agendamento: string;
 }

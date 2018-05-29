@@ -100,8 +100,10 @@ export class AgendamentoCadastroComponent implements OnInit {
       const audienciaFiltrada = this.tiposAudiencias.filter(resultado =>
         resultado.nome === this.tipoAudiencia);
 
-      duracaoAudiencia = audienciaFiltrada[0].duracao;
-      this.tempoDuracao = (duracaoAudiencia * oitivas); // / 60
+      if (audienciaFiltrada.length !== 0) {
+        duracaoAudiencia = audienciaFiltrada[0].duracao;
+        this.tempoDuracao = (duracaoAudiencia * oitivas); // / 60
+      }
     }
 
     else if (this.campoTipoSessao.value !== 'Audiência') {
@@ -146,6 +148,7 @@ export class AgendamentoCadastroComponent implements OnInit {
       this.audiencia.duracaoEstimada = this.campoTempoDuracao.value;
       this.audiencia.observacao = this.campoObservacao.value;
       this.audiencia.quantidadeOitivas = this.campoQuantidadeOitivas.value;
+      this.audiencia.agendamento = this.formatarDataHora();
 
       this.audiencia.tipoAudiencia =
           this.converterTipoAudienciaLabelParaEnum(this.tipoAudiencia);
@@ -171,6 +174,7 @@ export class AgendamentoCadastroComponent implements OnInit {
       this.conciliacao.observacao = this.campoObservacao.value;
       this.conciliacao.quantidadeOitivas = this.campoQuantidadeOitivas.value;
       this.conciliacao.nomeConciliador = this.campoNomeConciliador.value;
+      this.conciliacao.agendamento = this.formatarDataHora();
 
       if (!this.isEdicao) {
         this.agendamentoService.cadastrarConciliacao(this.conciliacao)
@@ -192,11 +196,11 @@ export class AgendamentoCadastroComponent implements OnInit {
 
     this.audiencia.duracaoEstimada = this.campoTempoDuracao.value;
     this.audiencia.observacao = this.campoObservacao.value;
-    this.audiencia.processo.nomeDaParte = this.campoNomeParte.value;
-    this.audiencia.processo.numeroProcesso = this.campoNumeroProcesso.value;
+    // this.audiencia.processo.nomeDaParte = this.campoNomeParte.value;
+    // this.audiencia.processo.numeroProcesso = this.campoNumeroProcesso.value;
     this.audiencia.quantidadeOitivas = this.campoQuantidadeOitivas.value;
     this.audiencia.tipoAudiencia = this.converterTipoAudienciaLabelParaEnum(this.tipoAudiencia);
-        // this.converterTipoAudienciaLabelParaEnum(this.campoTipoAudiencia.value.nome);
+    this.audiencia.agendamento = this.formatarDataHora();
 
     this.atualizarProcesso();
 
@@ -219,6 +223,7 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.conciliacao.observacao = this.campoObservacao.value;
     this.conciliacao.quantidadeOitivas = this.campoQuantidadeOitivas.value;
     this.conciliacao.nomeConciliador = this.campoNomeConciliador.value;
+    this.conciliacao.agendamento = this.formatarDataHora();
 
     this.atualizarProcesso();
 
@@ -257,7 +262,7 @@ export class AgendamentoCadastroComponent implements OnInit {
           this.processo = audiencia.processo;
 
           this.campoTipoSessao.setValue('Audiência');
-
+          this.preencherDataHoraAudiencia(this.audiencia);
           this.campoNumeroProcesso.setValue(this.audiencia.processo.numeroProcesso);
           this.campoNomeParte.setValue(this.audiencia.processo.nomeDaParte);
           this.campoTempoDuracao.setValue(this.audiencia.duracaoEstimada);
@@ -283,7 +288,7 @@ export class AgendamentoCadastroComponent implements OnInit {
           this.processo = conciliacao.processo;
 
           this.campoTipoSessao.setValue('Conciliação');
-
+          this.preencherDataHoraConciliacao(this.conciliacao);
           this.campoNumeroProcesso.setValue(this.conciliacao.processo.numeroProcesso);
           this.campoNomeParte.setValue(this.conciliacao.processo.nomeDaParte);
           this.campoTempoDuracao.setValue(this.conciliacao.duracaoEstimada);
@@ -294,11 +299,45 @@ export class AgendamentoCadastroComponent implements OnInit {
         .catch(erro => this.errorHandlerService.handle(erro));
     }
   }
+  //            para cadastro            [0] [1] [2]
+  private formatarDataHora(): string{ // aaaa-MM-dd HH:mm
 
-  // isFormValido(): boolean{
+    const valorCampoData: string = this.campoData.value;
 
-  //   if(this.campo)
-  // }
+    const data = valorCampoData.split('/');
+
+    return data[2] + '-' + data[1] + '-' + data[0] + ' ' + this.campoHora.value;
+  }
+
+  private preencherDataHoraAudiencia(audiencia: Audiencia) {
+
+    const dataHora = audiencia.agendamento.split(' ');
+
+    const data = dataHora[0];
+    const hora = dataHora[1];
+
+    const arrayData = data.split('-');
+
+    // const dataFormatada = arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
+
+    this.campoData.setValue(arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0]);
+    this.campoHora.setValue(hora);
+  }
+
+  private preencherDataHoraConciliacao(conciliacao: Conciliacao) {
+
+    const dataHora = conciliacao.agendamento.split(' ');
+
+    const data = dataHora[0];
+    const hora = dataHora[1];
+
+    const arrayData = data.split('-');
+
+    // const dataFormatada = arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0];
+
+    this.campoData.setValue(arrayData[2] + '/' + arrayData[1] + '/' + arrayData[0]);
+    this.campoHora.setValue(hora);
+  }
 
   isAudiencia(): boolean{
     if (this.campoTipoSessao.value === 'Audiência'){ // this.tipoSessaoEscolhido === 'Audiência' ||
