@@ -1,6 +1,6 @@
 <form #agendamentoForm="ngForm">
   <div class="container-agendamento-cadastro">
-    <mat-card class="espacamento-card" style="margin-top: 0" *ngIf="false">
+    <mat-card class="espacamento-card" style="margin-top: 0">
       <mat-card-header>
         <mat-card-title class="titulo-card"> AGENDAMENTO </mat-card-title>
       </mat-card-header>
@@ -8,8 +8,8 @@
       <mat-card-content>
         <mat-form-field appearance="outline">
           <mat-label>Data</mat-label>
-          <input matInput placeholder="Escolha uma data" [formControl]="campoData"
-              required [textMask]="{mask: mascaraData}">
+          <input matInput placeholder="dd/mm/aaaa" [formControl]="campoData"
+              required [textMask]="{mask: mascaraData, guide: false}">
 
           <mat-error *ngIf="campoData.hasError('required')">
             A data deve ser informada
@@ -21,7 +21,7 @@
         <mat-form-field appearance="outline">
           <mat-label>Hora</mat-label>
           <input matInput placeholder="HH:mm" [formControl]="campoHora"
-              required [textMask]="{mask: mascaraHora}">
+              required [textMask]="{mask: mascaraHora, guide: false}">
 
           <mat-error *ngIf="campoHora.hasError('required')">
             A hora deve ser informada
@@ -106,8 +106,6 @@
                 recalcularTempoDuracao(campoQuantidadeOitivas.value)">
               {{tipo.nome}}
             </mat-option>
-            <!--<mat-option value="teste1">Teste 1</mat-option>
-            <mat-option value="teste2">Teste 2</mat-option>-->
           </mat-select>
         </mat-form-field>
 

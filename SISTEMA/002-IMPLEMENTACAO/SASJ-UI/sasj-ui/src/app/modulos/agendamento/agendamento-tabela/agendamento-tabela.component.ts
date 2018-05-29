@@ -21,9 +21,9 @@ export class AgendamentoTabelaComponent implements OnInit, AfterViewInit {
   dataSourceAudiencias: MatTableDataSource<Audiencia> = new MatTableDataSource();
   dataSourceConciliacoes: MatTableDataSource<Conciliacao> = new MatTableDataSource();
 
-  // displayedColumns = ['agendamento', 'acoes']; // 'status',
-  displayedColumns = ['tipoAudiencia', 'quantidadeOitivas', 'acoes'];
-  displayedColumnsConciliacoes = ['nomeConciliador', 'duracaoEstimada', 'acoes'];
+  displayedColumns = ['agendamento', 'acoes']; // 'status',
+  // displayedColumns = ['tipoAudiencia', 'quantidadeOitivas', 'acoes'];
+  // displayedColumnsConciliacoes = ['nomeConciliador', 'duracaoEstimada', 'acoes'];
 
   constructor(private agendamentoService: AgendamentoService,
       private authService: AuthService, private router: Router) {
