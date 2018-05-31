@@ -76,6 +76,26 @@ public class PermissoesService {
 		removerConciliacao.setCodigo(12L);
 		removerConciliacao.setDescricao("ROLE_REMOVER_CONCILIACAO");
 		permissoesUsuario.add(removerConciliacao);
+		
+		Permissao cadastrarProcesso = new Permissao();
+		cadastrarProcesso.setCodigo(13L);
+		cadastrarProcesso.setDescricao("ROLE_CADASTRAR_PROCESSO");
+		permissoesUsuario.add(cadastrarProcesso);
+
+		Permissao pesquisarProcesso = new Permissao();
+		pesquisarProcesso.setCodigo(14L);
+		pesquisarProcesso.setDescricao("ROLE_PESQUISAR_PROCESSO");
+		permissoesUsuario.add(pesquisarProcesso);
+
+		Permissao atualizarProcesso = new Permissao();
+		atualizarProcesso.setCodigo(15L);
+		atualizarProcesso.setDescricao("ROLE_ATUALIZAR_PROCESSO");
+		permissoesUsuario.add(atualizarProcesso);
+
+		Permissao removerProcesso = new Permissao();
+		removerProcesso.setCodigo(16L);
+		removerProcesso.setDescricao("ROLE_REMOVER_PROCESSO");
+		permissoesUsuario.add(removerProcesso);
 
 		usuario.setPermissoes(permissoesUsuario);
 	}

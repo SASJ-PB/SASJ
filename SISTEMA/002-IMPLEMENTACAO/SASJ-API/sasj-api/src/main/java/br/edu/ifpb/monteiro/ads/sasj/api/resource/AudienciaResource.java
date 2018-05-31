@@ -7,6 +7,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifpb.monteiro.ads.sasj.api.event.RecursoCriadoEvent;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
+import br.edu.ifpb.monteiro.ads.sasj.api.repository.filter.AudienciaFilter;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.AudienciaService;
 
 @RestController
@@ -45,6 +48,12 @@ public class AudienciaResource {
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_AUDIENCIA') and #oauth2.hasScope('read')")
 	public List<Audiencia> listar() {
 		return audienciaService.listar();
+	}
+
+	@GetMapping("/filtrar")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_AUDIENCIA') and #oauth2.hasScope('read')")
+	public Page<Audiencia> pesquisar(AudienciaFilter audienciaFilter, Pageable pageable) {
+		return audienciaService.filtrar(audienciaFilter, pageable);
 	}
 
 	@GetMapping("/{codigo}")

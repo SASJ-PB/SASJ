@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.monteiro.ads.sasj.api.enums.StatusAgendamento;
@@ -14,6 +16,7 @@ import br.edu.ifpb.monteiro.ads.sasj.api.model.Processo;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.AudienciaRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ConciliacaoRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ProcessoRepository;
+import br.edu.ifpb.monteiro.ads.sasj.api.repository.filter.AudienciaFilter;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MudancaDeStatusInvalidaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ProcessoInvalidoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.SessaoJuridicaInvalidaException;
@@ -65,6 +68,10 @@ public class AudienciaService {
 
 	public List<Audiencia> listar() {
 		return audienciaRepository.findAll();
+	}
+	
+	public Page<Audiencia> filtrar(AudienciaFilter lancamentoFilter, Pageable pageable) {
+		return audienciaRepository.filtrar(lancamentoFilter, pageable);
 	}
 
 	public Audiencia atualizar(Long codigo, Audiencia audiencia) {
