@@ -1,5 +1,7 @@
 package br.edu.ifpb.monteiro.ads.sasj.api.resource;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -45,6 +47,12 @@ public class ConciliacaoResource {
 	}
 
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CONCILIACAO') and #oauth2.hasScope('read')")
+	public List<Conciliacao> listar() {
+		return conciliacaoService.listar();
+	}
+	
+	@GetMapping("/filtrar")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_CONCILIACAO') and #oauth2.hasScope('read')")
 	public Page<Conciliacao> pesquisar(ConciliacaoFilter concialiacaoFilter, Pageable pageable) {
 		return conciliacaoService.filtrar(concialiacaoFilter, pageable);

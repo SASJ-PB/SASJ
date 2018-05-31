@@ -1,5 +1,7 @@
 package br.edu.ifpb.monteiro.ads.sasj.api.resource;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -43,6 +45,12 @@ public class AudienciaResource {
 	}
 
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_AUDIENCIA') and #oauth2.hasScope('read')")
+	public List<Audiencia> listar() {
+		return audienciaService.listar();
+	}
+
+	@GetMapping("/filtrar")
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_AUDIENCIA') and #oauth2.hasScope('read')")
 	public Page<Audiencia> pesquisar(AudienciaFilter audienciaFilter, Pageable pageable) {
 		return audienciaService.filtrar(audienciaFilter, pageable);
