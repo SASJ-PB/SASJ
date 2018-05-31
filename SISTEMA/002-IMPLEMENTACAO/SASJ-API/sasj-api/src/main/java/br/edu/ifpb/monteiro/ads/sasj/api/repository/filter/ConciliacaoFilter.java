@@ -5,9 +5,8 @@ import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import br.edu.ifpb.monteiro.ads.sasj.api.enums.StatusAgendamento;
-import br.edu.ifpb.monteiro.ads.sasj.api.enums.TipoAudiencia;
 
-public class AudienciaFilter {
+public class ConciliacaoFilter {
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime dataAgendamentoDe;
@@ -16,15 +15,13 @@ public class AudienciaFilter {
 	private LocalDateTime dataAgendamentoAte;
 
 	private StatusAgendamento statusAgendamento;
-	
-	private TipoAudiencia tipoAudiencia;
 
 	private Integer quantidadeOitivasDe;
-	
+
 	private Integer quantidadeOitivasAte;
-	
+
 	private Integer duracaoEstimadaDe;
-	
+
 	private Integer duracaoEstimadaAte;
 
 	private String observacao;
@@ -32,6 +29,8 @@ public class AudienciaFilter {
 	private String numeroProcesso;
 
 	private String nomeDaParteProcesso;
+
+	private String nomeConciliador;
 
 	public LocalDateTime getDataAgendamentoDe() {
 		return dataAgendamentoDe;
@@ -113,12 +112,12 @@ public class AudienciaFilter {
 		this.nomeDaParteProcesso = nomeDaParteProcesso;
 	}
 
-	public TipoAudiencia getTipoAudiencia() {
-		return tipoAudiencia;
+	public String getNomeConciliador() {
+		return nomeConciliador;
 	}
 
-	public void setTipoAudiencia(TipoAudiencia tipoAudiencia) {
-		this.tipoAudiencia = tipoAudiencia;
+	public void setNomeConciliador(String nomeConciliador) {
+		this.nomeConciliador = nomeConciliador;
 	}
 
 }

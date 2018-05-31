@@ -8,8 +8,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -19,8 +17,6 @@ import org.springframework.data.domain.Pageable;
 
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia_;
-import br.edu.ifpb.monteiro.ads.sasj.api.model.Processo;
-import br.edu.ifpb.monteiro.ads.sasj.api.model.Processo_;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.filter.AudienciaFilter;
 
 public class AudienciaRepositoryImpl implements AudienciaRepositoryQuery {
@@ -61,7 +57,7 @@ public class AudienciaRepositoryImpl implements AudienciaRepositoryQuery {
 			predicates.add(builder.lessThanOrEqualTo(root.get(Audiencia_.agendamento),
 					audienciaFilter.getDataAgendamentoAte()));
 		}
-		
+
 		// Quantidade de oitivas
 		if (audienciaFilter.getQuantidadeOitivasDe() != null) {
 			predicates.add(builder.greaterThanOrEqualTo(root.get(Audiencia_.quantidadeOitivas),
@@ -72,7 +68,7 @@ public class AudienciaRepositoryImpl implements AudienciaRepositoryQuery {
 			predicates.add(builder.lessThanOrEqualTo(root.get(Audiencia_.quantidadeOitivas),
 					audienciaFilter.getQuantidadeOitivasAte()));
 		}
-		
+
 		// Duração estimada da sessão
 		if (audienciaFilter.getDuracaoEstimadaDe() != null) {
 			predicates.add(builder.greaterThanOrEqualTo(root.get(Audiencia_.duracaoEstimada),
@@ -83,20 +79,33 @@ public class AudienciaRepositoryImpl implements AudienciaRepositoryQuery {
 			predicates.add(builder.lessThanOrEqualTo(root.get(Audiencia_.duracaoEstimada),
 					audienciaFilter.getDuracaoEstimadaAte()));
 		}
-		
+
 		// Status do agendamento
 		if (audienciaFilter.getStatusAgendamento() != null) {
-			predicates.add(builder.equal(root.get(Audiencia_.statusAgendamento),
-					audienciaFilter.getStatusAgendamento()));
+			predicates
+					.add(builder.equal(root.get(Audiencia_.statusAgendamento), audienciaFilter.getStatusAgendamento()));
 		}
 
-//		if (audienciaFilter.getNumeroProcesso() != null) {
-//			Join<Audiencia, Processo> join = root.join("processo");
-//			System.out.println(join.isNull());
-//			Expression<Long> codigo = join.get(Processo_.codigo).get("numeroProcesso");
-//			predicates
-//			.add(builder.equal(codigo, audienciaFilter.getNumeroProcesso()));
-//		}
+		// Tipo audiência
+		if (audienciaFilter.getTipoAudiencia() != null) {
+			predicates.add(builder.equal(root.get(Audiencia_.tipoAudiencia), audienciaFilter.getTipoAudiencia()));
+		}
+
+		// if (audienciaFilter.getNumeroProcesso() != null) {
+		// Join<Audiencia, Processo> join = root.join("processo");
+		// System.out.println(join.isNull());
+		// Expression<Long> codigo = join.get(Processo_.codigo).get("numeroProcesso");
+		// predicates
+		// .add(builder.equal(codigo, audienciaFilter.getNumeroProcesso()));
+		// }
+
+		// if (conciliacaoFilter.getNomeDaParteProcesso() != null) {
+		// Join<Audiencia, Processo> join = root.join("processo");
+		// System.out.println(join.isNull());
+		// Expression<Long> codigo = join.get(Processo_.codigo).get("nomeDaParte");
+		// predicates.add(builder.equal(codigo,
+		// conciliacaoFilter.getNomeDaParteProcesso()));
+		// }
 
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}

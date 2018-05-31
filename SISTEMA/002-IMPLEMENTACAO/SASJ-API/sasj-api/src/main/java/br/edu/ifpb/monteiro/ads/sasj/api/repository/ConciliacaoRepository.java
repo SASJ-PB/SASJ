@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Processo;
+import br.edu.ifpb.monteiro.ads.sasj.api.repository.conciliacao.ConciliacaoRepositoryQuery;
 
-public interface ConciliacaoRepository extends JpaRepository<Conciliacao, Long> {
+public interface ConciliacaoRepository extends JpaRepository<Conciliacao, Long>, ConciliacaoRepositoryQuery {
 
 	public Conciliacao findByNomeConciliador(String nomeConciliador);
 

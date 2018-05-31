@@ -44,8 +44,8 @@ public class AudienciaResource {
 
 	@GetMapping
 	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_AUDIENCIA') and #oauth2.hasScope('read')")
-	public Page<Audiencia> pesquisar(AudienciaFilter lancamentoFilter, Pageable pageable) {
-		return audienciaService.filtrar(lancamentoFilter, pageable);
+	public Page<Audiencia> pesquisar(AudienciaFilter audienciaFilter, Pageable pageable) {
+		return audienciaService.filtrar(audienciaFilter, pageable);
 	}
 
 	@GetMapping("/{codigo}")

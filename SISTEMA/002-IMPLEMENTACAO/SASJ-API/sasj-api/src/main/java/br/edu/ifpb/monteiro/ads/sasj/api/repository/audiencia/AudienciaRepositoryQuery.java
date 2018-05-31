@@ -8,6 +8,6 @@ import br.edu.ifpb.monteiro.ads.sasj.api.repository.filter.AudienciaFilter;
 
 public interface AudienciaRepositoryQuery {
 
-	public Page<Audiencia> filtrar(AudienciaFilter lancamentoFilter, Pageable pageable);
+	public Page<Audiencia> filtrar(AudienciaFilter audienciaFilter, Pageable pageable);
 
 }
