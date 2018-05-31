@@ -11,7 +11,11 @@ import { DataSource } from '@angular/cdk/table';
 
 @Component({
   selector: 'app-agendamento-remocao',
-  templateUrl: './agendamento-remocao.component.html',
+  template: `
+  <button mat-icon-button (click)="openDialog()">
+    <mat-icon>delete_forever</mat-icon>
+  </button>
+  `,
   styleUrls: ['./agendamento-remocao.component.css']
 })
 export class AgendamentoRemocaoComponent implements OnInit {

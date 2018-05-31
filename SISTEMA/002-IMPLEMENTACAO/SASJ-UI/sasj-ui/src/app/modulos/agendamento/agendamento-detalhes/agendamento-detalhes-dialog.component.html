@@ -1,19 +1,31 @@
 <h2 mat-dialog-title id="titulo-dialog">DETALHES DO AGENDAMENTO</h2>
 <mat-dialog-content>
-  <mat-card class="espacamento-card" *ngIf="false">
+  <mat-card class="espacamento-card">
     <mat-card-header>
       <mat-card-title class="titulo-card"> AGENDAMENTO </mat-card-title>
     </mat-card-header>
 
-    <mat-card-content>
+    <!-- AUDIÊNCIAS -->
+    <mat-card-content *ngIf="isAudiencia">
       <p>
-        <span> <strong>Data:</strong> 06/06/2018 </span>
-        <span id="label-hora-desktop"> <strong>Hora:</strong> 10:44 </span>
+        <span> <strong>Data:</strong> {{audiencia.agendamento | date: "dd/MM/yyyy"}} </span>
+        <span id="label-hora-desktop"> <strong>Hora:</strong> {{audiencia.agendamento | date: "HH:mm"}} </span>
       </p>
-      <p id="label-hora-mobile"> <span> <strong>Hora:</strong> 10:44 </span> </p>
-
+      <p id="label-hora-mobile"> <span> <strong>Hora:</strong> {{audiencia.agendamento | date: "HH:mm"}} </span> </p>
       <p>
-        <span> <strong>Status:</strong> [ADIADA] Bage - devido imprevisto acontecido com o juíz </span>
+        <span> <strong>Status:</strong> {{audiencia.statusAgendamento}} </span>
+      </p>
+    </mat-card-content>
+
+    <!-- CONCILIAÇÕES -->
+    <mat-card-content *ngIf="!isAudiencia">
+      <p>
+        <span> <strong>Data:</strong> {{conciliacao.agendamento | date: "dd/MM/yyyy"}} </span>
+        <span id="label-hora-desktop"> <strong>Hora:</strong> {{conciliacao.agendamento | date: "HH:mm"}} </span>
+      </p>
+      <p id="label-hora-mobile"> <span> <strong>Hora:</strong> {{conciliacao.agendamento | date: "HH:mm"}} </span> </p>
+      <p>
+        <span> <strong>Status:</strong> {{conciliacao.statusAgendamento}} </span>
       </p>
     </mat-card-content>
   </mat-card>
