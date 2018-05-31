@@ -8,7 +8,7 @@ public enum TipoAudiencia {
 	INSTRUCAO_CRETA("Instrução Creta"),
 	LEILAO("Leilão"),
 	PJE("PJE"),
-	TEBAS_IMPROBIDADE("Tebas Impobidade"),
+	TEBAS_IMPROBIDADE("Tebas Improbidade"),
 	VIDEOCONFERENCIA("Videoconferência"),
 	OUTROS("Outros");
 	
