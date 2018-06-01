@@ -5,7 +5,10 @@ import { MatDialog, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/materia
 
 @Component({
   selector: 'app-agendamento-detalhes',
-  templateUrl: './agendamento-detalhes.component.html',
+  template: `
+    <button mat-icon-button (click)="openDialog()">
+      <mat-icon>visibility</mat-icon>
+    </button>`,
   styleUrls: ['./agendamento-detalhes.component.css']
 })
 export class AgendamentoDetalhesComponent implements OnInit {
@@ -22,6 +25,10 @@ export class AgendamentoDetalhesComponent implements OnInit {
     if (this.audiencia.tipoAudiencia === 'ACAO_CIVIL'
         || this.audiencia.tipoAudiencia.toLowerCase() === 'ação civíl'){
       this.audiencia.tipoAudiencia = 'Ação civíl';
+    }
+    else if (this.audiencia.tipoAudiencia === 'CUSTODIA'
+        || this.audiencia.tipoAudiencia.toLowerCase() === 'custódia'){
+      this.audiencia.tipoAudiencia = 'Custódia';
     }
     else if (this.audiencia.tipoAudiencia === 'IMPROBIDADE'
         || this.audiencia.tipoAudiencia.toLowerCase() === 'improbidade'){
@@ -42,6 +49,9 @@ export class AgendamentoDetalhesComponent implements OnInit {
     else if (this.audiencia.tipoAudiencia === 'PENAL'
         || this.audiencia.tipoAudiencia.toLowerCase() === 'penal'){
       this.audiencia.tipoAudiencia = 'Penal';
+    }
+    else if (this.audiencia.tipoAudiencia === 'PJE'){
+      this.audiencia.tipoAudiencia = 'PJE';
     }
     else if (this.audiencia.tipoAudiencia === 'TEBAS_IMPROBIDADE'
         || this.audiencia.tipoAudiencia.toLowerCase() === 'tebas improbidade'){

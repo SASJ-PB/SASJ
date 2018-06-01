@@ -13,11 +13,13 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatListModule } from '@angular/material/list';
 
 import { TextMaskModule } from 'angular2-text-mask';
 
 import { AgendamentoPesquisaComponent } from './agendamento-pesquisa/agendamento-pesquisa.component';
-import { AgendamentoTabelaComponent } from './agendamento-tabela/agendamento-tabela.component';
+import { AgendamentoTabelaComponent, AtualizacaoStatusAgendamentoComponent } from './agendamento-tabela/agendamento-tabela.component';
 import { AgendamentoDetalhesComponent, AgendamentoDetalhesDialogComponent } from './agendamento-detalhes/agendamento-detalhes.component';
 import { AgendamentoCadastroComponent } from './agendamento-cadastro/agendamento-cadastro.component';
 import { AgendamentoRoutingModule } from './agendamento-routing.module';
@@ -43,7 +45,9 @@ import { AgendamentoRemocaoComponent, AgendamentoRemocaoDialogComponent } from '
     MatDialogModule,
     MatCardModule,
     MatDatepickerModule,
-    MatSelectModule
+    MatSelectModule,
+    MatBottomSheetModule,
+    MatListModule
   ],
   declarations: [
     AgendamentoPesquisaComponent,
@@ -54,12 +58,14 @@ import { AgendamentoRemocaoComponent, AgendamentoRemocaoDialogComponent } from '
     AgendamentoDetalhesDialogComponent,
 
     AgendamentoRemocaoComponent,
-    AgendamentoRemocaoDialogComponent
+    AgendamentoRemocaoDialogComponent,
+    AtualizacaoStatusAgendamentoComponent
   ],
   providers: [],
   entryComponents: [
     AgendamentoDetalhesDialogComponent,
-    AgendamentoRemocaoDialogComponent
+    AgendamentoRemocaoDialogComponent,
+    AtualizacaoStatusAgendamentoComponent
   ],
 })
 export class AgendamentoModule {}

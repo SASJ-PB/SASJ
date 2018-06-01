@@ -1,11 +1,12 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
-import { AuthService } from './../../seguranca/auth.service';
 import { Router } from '@angular/router';
+import { AuthService } from './../../seguranca/auth.service';
 import { UsuarioService } from './../usuario.service';
-import { Component, OnInit } from '@angular/core';
-import { Usuario } from '../../core/model';
 import { ErrorHandlerService } from '../../core/error-handler.service';
+import { Usuario } from '../../core/model';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
   selector: 'app-usuario-pesquisa',
@@ -14,9 +15,10 @@ import { ErrorHandlerService } from '../../core/error-handler.service';
 })
 export class UsuarioPesquisaComponent implements OnInit {
 
-  dataSource: MatTableDataSource<Usuario>;
-  checkboxStatus: FormControl;
-  colunasExibidas = ['nome', 'tipo', 'status', 'acoes'];
+  @ViewChild('sortUser') sort: MatSort;
+
+  dataSource: MatTableDataSource<Usuario> = new MatTableDataSource();
+  colunasExibidas = ['nome', 'tipoUsuario', 'ativo', 'acoes'];
 
   constructor(private usuarioService: UsuarioService, private router: Router,
       private errorHandlerService: ErrorHandlerService, private authService: AuthService) { }
@@ -26,9 +28,6 @@ export class UsuarioPesquisaComponent implements OnInit {
   }
 
   atualizarAcesso(indiceLinha: number) {
-
-    // console.log(this.dataSource.filteredData[indiceLinha]);
-    // _updateChangeSubscription ATUALIZAR DADOS TABELA
 
     const usuario = this.dataSource.filteredData[indiceLinha];
 
@@ -61,7 +60,8 @@ export class UsuarioPesquisaComponent implements OnInit {
 
         usuarios.splice(usuarios.indexOf(usuarioLogado), 1);
 
-        this.dataSource = new MatTableDataSource(usuarios);
+        this.dataSource.data = usuarios;
+        this.dataSource.sort = this.sort;
       });
   }
 }

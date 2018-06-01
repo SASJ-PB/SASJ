@@ -11,7 +11,7 @@ export class Usuario {
 
 export class Processo {
   codigo: number;
-  numeroProcesso: number;
+  numeroProcesso: string;
   nomeDaParte: string;
 }
 
@@ -39,6 +39,7 @@ export class Audiencia{
   duracaoEstimada: number;
   processo: Processo;
   agendamento: string;
+  statusAgendamento: string;
 }
 
 export class Conciliacao {
@@ -49,4 +50,5 @@ export class Conciliacao {
   duracaoEstimada: number;
   processo: Processo;
   agendamento: string;
+  statusAgendamento: string;
 }

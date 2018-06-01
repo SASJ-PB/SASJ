@@ -15,6 +15,32 @@
           <app-agendamento-tabela [isAudiencia]="false"></app-agendamento-tabela>
         </mat-tab>
 
+        <!-- <mat-tab label="HORÁRIOS RESERVADOS">
+          <table mat-table [dataSource]="dataSource"
+              matSort #tabelaRef #sort="matSort" style="width: 100%;">
+
+            <ng-container matColumnDef="agendamento">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> DATA DO AGENDAMENTO </th>
+              <td mat-cell *matCellDef="let element"> {{element.agendamento | date: "dd/MM/yyyy HH:mm"}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acoes">
+              <th mat-header-cell *matHeaderCellDef> AÇÕES </th>
+              <td mat-cell *matCellDef="let element" >
+                <button mat-icon-button (click)="editarAgendamento(element.codigo)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <app-agendamento-remocao [tipoSessao]="'audiencia'"
+                    [idSessao]="element.codigo" [tabelaRef]="tabelaRef">
+                </app-agendamento-remocao>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-tab> -->
+
       </mat-tab-group>
     </mat-card>
   </div>

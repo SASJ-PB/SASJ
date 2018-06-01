@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AgendamentoService } from './../agendamento.service';
 import { ParteInteressada } from './../agendamento-detalhes/agendamento-detalhes.component';
 import { MatSort } from '@angular/material/sort';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { FormControl, Validators, FormGroup, AbstractControl } from '@angular/forms';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 
@@ -24,15 +24,12 @@ export class AgendamentoCadastroComponent implements OnInit {
   campoNumeroProcesso: FormControl;
   campoNomeParte: FormControl;
   campoQuantidadeOitivas: FormControl;
-  // campoTipoAudiencia: FormControl;
   campoNomeConciliador: FormControl;
   campoTempoDuracao: FormControl;
   campoTipoSessao: FormControl;
   campoDataLembrete: FormControl;
   campoHoraLembrete: FormControl;
   campoObservacao: FormControl;
-
-  mascaraCamposNumericos = [/[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/];
 
   public mascaraData = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public mascaraHora = [/\d/, /\d/, ':', /\d/, /\d/];
@@ -41,43 +38,51 @@ export class AgendamentoCadastroComponent implements OnInit {
   tipoAudiencia = 'Ação civíl';
   tempoDuracao = 1;
   isEdicao = false;
-  dataSource: MatTableDataSource<ParteInteressada>;
-  colunasExibidas = ['nome', 'email', 'papel']; // 'acoes'
+  isEdicaoAgendamentoReservado = false;
+  codigoAgendamentoReservado;
+
+  //  dataSource: MatTableDataSource<ParteInteressada>;
+  // colunasExibidas = ['nome', 'email', 'papel']; // 'acoes'
   conciliacao = new Conciliacao();
   audiencia = new Audiencia();
   processo = new Processo();
 
   tiposAudiencias = [
-    {nome: 'Ação civíl', duracao: 20}, {nome: 'Improbidade', duracao: 20},
+    {nome: 'Ação civíl', duracao: 20}, {nome: 'Custódia', duracao: 20}, {nome: 'Improbidade', duracao: 20},
     {nome: 'Instrução do creta', duracao: 7}, {nome: 'Leilão', duracao: 60},
     {nome: 'Outros', duracao: 20}, {nome: 'Penal', duracao: 20}, {nome: 'PJE', duracao: 20},
     {nome: 'Tebas improbidade', duracao: 20}, {nome: 'Videoconferência', duracao: 20}
   ];
 
-  constructor(private agendamentoService: AgendamentoService, private route: ActivatedRoute,
+  constructor(private agendamentoService: AgendamentoService, private activatedRoute: ActivatedRoute,
       private snackBar: MatSnackBar, private router: Router,
       private errorHandlerService: ErrorHandlerService) {
 
-    const codigoAgendamento = this.route.snapshot.params['codigo'];
+    const codigoAgendamento = this.activatedRoute.snapshot.params['codigo'];
+    const agendamentoReservado = this.activatedRoute.snapshot.data.tipo === 'reservado';
 
-    if (codigoAgendamento){
-      this.carregarAgendamento(codigoAgendamento);
+    if (codigoAgendamento) {
       this.isEdicao = true;
+      this.carregarAgendamento(codigoAgendamento);
+
+      // if (agendamentoReservado) {
+      //   this.isEdicaoReserva = true;
+      // }
     }
 
-    const dadosPartesInteressadas: ParteInteressada[] = [
+    /*const dadosPartesInteressadas: ParteInteressada[] = [
       {nome: 'João', email: 'joao@gmail.com', papel: 'Juíz'},
       {nome: 'Maria', email: 'maria@outlook.com', papel: 'Advogada de defesa'},
       {nome: 'Rita', email: 'rita@yahoo.com', papel: 'Ré'},
     ];
 
-    this.dataSource = new MatTableDataSource(dadosPartesInteressadas);
+    this.dataSource = new MatTableDataSource(dadosPartesInteressadas);*/
   }
 
   ngOnInit() {
 
-    this.campoData = new FormControl('', [Validators.required]);
-    this.campoHora = new FormControl('', [Validators.required]);
+    this.campoData = new FormControl('', [Validators.required, Validators.minLength(10), ValidateDate]);
+    this.campoHora = new FormControl('', [Validators.minLength(5), ValidateHour]);
     this.campoDataLembrete = new FormControl();
     this.campoHoraLembrete = new FormControl();
 
@@ -110,7 +115,7 @@ export class AgendamentoCadastroComponent implements OnInit {
       this.tempoDuracao = (duracaoAudiencia * oitivas); // / 60
     }
     else{
-      this.tempoDuracao = (20 * oitivas);
+      this.tempoDuracao = (5 * oitivas);
     }
     this.tempoDuracaoAudienciaEscolhida = duracaoAudiencia;
   }
@@ -124,7 +129,7 @@ export class AgendamentoCadastroComponent implements OnInit {
       tempoDuracao = (this.tempoDuracaoAudienciaEscolhida * oitivas);
     }
     else{
-      tempoDuracao = (20 * oitivas);
+      tempoDuracao = (5 * oitivas);
     }
 
     this.campoTempoDuracao.setValue(tempoDuracao);
@@ -138,20 +143,88 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.tempoDuracaoAudienciaEscolhida = 0;
   }
 
+  private setDadosReserva() {
+    this.campoNumeroProcesso.setValue(' ');
+    this.campoNomeParte.setValue(' ');
+    this.campoQuantidadeOitivas.setValue(1);
+    // this.campoHora.setValue('00:00');
+
+    if (this.campoTipoSessao.value === 'Audiência') {
+      this.tipoAudiencia = 'Ação civíl';
+      this.campoTempoDuracao.setValue(20); // 1440
+    }
+    else {
+      this.campoNomeConciliador.setValue(' ');
+      this.campoTempoDuracao.setValue(5); // 1440
+    }
+  }
+
+  private isCadastroReserva(): boolean {
+    if ((this.campoNumeroProcesso.value === '' && this.campoNomeParte.value === '') ||
+        (this.campoNumeroProcesso.value === ' ' && this.campoNomeParte.value === ' ')) {
+
+      return true;
+    }
+
+    return false;
+  }
+
   cadastrar(){
 
-    this.processo.numeroProcesso = this.campoNumeroProcesso.value;
-    this.processo.nomeDaParte = this.campoNomeParte.value;
+    // if (this.campoNumeroProcesso.value === '' && this.campoNomeParte.value === '') {
+    //   this.campoNumeroProcesso.setValue(' ');
+    //   this.campoNomeParte.setValue(' ');
+    //   this.campoQuantidadeOitivas.setValue(1);
+    //   this.campoTempoDuracao.setValue(1440);
+    //   this.campoHora.setValue('00:00');
+
+    //   if (this.campoTipoSessao.value === 'Audiência') {
+    //     this.tipoAudiencia = 'Ação civíl';
+    //   }
+    //   else {
+    //     this.campoNomeConciliador.setValue(' ');
+    //   }
+    // }
+
+    if (this.isCadastroReserva()) {
+      this.setDadosReserva();
+      this.processo.numeroProcesso = '-';
+      this.processo.nomeDaParte = '-';
+    }
+    else{
+      this.processo.numeroProcesso = this.campoNumeroProcesso.value;
+      this.processo.nomeDaParte = this.campoNomeParte.value;
+    }
 
     if (this.campoTipoSessao.value === 'Audiência'){
-      this.audiencia.processo = this.processo;
-      this.audiencia.duracaoEstimada = this.campoTempoDuracao.value;
-      this.audiencia.observacao = this.campoObservacao.value;
-      this.audiencia.quantidadeOitivas = this.campoQuantidadeOitivas.value;
-      this.audiencia.agendamento = this.formatarDataHora();
+      if (this.tipoAudiencia !== '') {
+        this.audiencia.tipoAudiencia =
+            this.converterTipoAudienciaLabelParaEnum(this.tipoAudiencia);
+      }
+      else{
+        this.audiencia.tipoAudiencia = null;
+      }
 
-      this.audiencia.tipoAudiencia =
-          this.converterTipoAudienciaLabelParaEnum(this.tipoAudiencia);
+      this.audiencia.processo = this.processo;
+
+      if (!this.isCadastroReserva()) {
+        this.audiencia.duracaoEstimada = this.campoTempoDuracao.value;
+        this.audiencia.observacao = this.campoObservacao.value;
+        this.audiencia.quantidadeOitivas = this.campoQuantidadeOitivas.value;
+        this.audiencia.agendamento = this.formatarDataHora();
+        this.audiencia.statusAgendamento = 'CONFIRMADO';
+      }
+      else {
+        this.audiencia.duracaoEstimada = 1440;
+        this.audiencia.quantidadeOitivas = 1;
+
+        const valueFieldDate: string = this.campoData.value;
+        const arrayDate = valueFieldDate.split('/');
+        const date = arrayDate[2] + '-' + arrayDate[1] + '-' + arrayDate[0] + ' ' + '00:00';
+
+        this.audiencia.agendamento = date;
+        this.audiencia.statusAgendamento = 'CONFIRMADO';
+      }
 
       if (!this.isEdicao) {
         this.agendamentoService.cadastrarAudiencia(this.audiencia)
@@ -164,30 +237,81 @@ export class AgendamentoCadastroComponent implements OnInit {
         });
       }
       else{
-        this.atualizarAudiencia();
-      }
+        if (this.isEdicaoAgendamentoReservado) {
+          this.agendamentoService.excluirAudiencia(this.codigoAgendamentoReservado).then(() => {
 
+            this.agendamentoService.cadastrarAudiencia(this.audiencia)
+              .then((audienciaAdicionada) => {
+
+                this.router.navigate(['/agendamentos']);
+                this.snackBar.open('Audiência cadastrada com sucesso', '', { duration: 4500});
+              })
+              .catch(erro => {
+                this.errorHandlerService.handle(erro);
+              }
+            );
+          });
+        }
+        else {
+          this.atualizarAudiencia();
+        }
+      }
     }
     else{
+
       this.conciliacao.processo = this.processo;
-      this.conciliacao.duracaoEstimada = this.campoTempoDuracao.value;
-      this.conciliacao.observacao = this.campoObservacao.value;
-      this.conciliacao.quantidadeOitivas = this.campoQuantidadeOitivas.value;
-      this.conciliacao.nomeConciliador = this.campoNomeConciliador.value;
-      this.conciliacao.agendamento = this.formatarDataHora();
+
+      if (!this.isCadastroReserva()) {
+        this.conciliacao.duracaoEstimada = this.campoTempoDuracao.value;
+        this.conciliacao.observacao = this.campoObservacao.value;
+        this.conciliacao.quantidadeOitivas = this.campoQuantidadeOitivas.value;
+        this.conciliacao.nomeConciliador = this.campoNomeConciliador.value;
+        this.conciliacao.agendamento = this.formatarDataHora();
+        this.conciliacao.statusAgendamento = 'CONFIRMADO';
+      }
+      else{
+        this.conciliacao.duracaoEstimada = 1440;
+        this.conciliacao.quantidadeOitivas = 1;
+        this.conciliacao.nomeConciliador = '-';
+
+        const valueFieldDate: string = this.campoData.value;
+        const arrayDate = valueFieldDate.split('/');
+        const date = arrayDate[2] + '-' + arrayDate[1] + '-' + arrayDate[0] + ' ' + '00:00';
+
+        this.conciliacao.agendamento = date;
+        this.conciliacao.statusAgendamento = 'CONFIRMADO';
+      }
 
       if (!this.isEdicao) {
         this.agendamentoService.cadastrarConciliacao(this.conciliacao)
-        .then((conciliacaoAdicionada) => {
-          this.router.navigate(['/agendamentos']);
-          this.snackBar.open('Conciliação cadastrada com sucesso', '', { duration: 4500});
-        })
-        .catch(erro => {
-          this.errorHandlerService.handle(erro);
-        });
+          .then((conciliacaoAdicionada) => {
+            this.router.navigate(['/agendamentos']);
+            this.snackBar.open('Conciliação cadastrada com sucesso', '', { duration: 4500});
+          })
+          .catch(erro => {
+            this.errorHandlerService.handle(erro);
+          }
+        );
       }
       else{
-        this.atualizarConciliacao();
+        if (this.isEdicaoAgendamentoReservado) {
+          this.agendamentoService.excluirConciliacao(this.codigoAgendamentoReservado).then(() => {
+
+            this.agendamentoService.cadastrarConciliacao(this.conciliacao)
+              .then((conciliacaoAdicionada) => {
+
+                this.router.navigate(['/agendamentos']);
+                this.snackBar.open('Conciliação cadastrada com sucesso', '', { duration: 4500});
+              })
+              .catch(erro => {
+                this.errorHandlerService.handle(erro);
+              }
+            );
+          });
+        }
+        else{
+          this.atualizarConciliacao();
+        }
       }
     }
   }
@@ -214,7 +338,8 @@ export class AgendamentoCadastroComponent implements OnInit {
       })
       .catch(erro => {
         this.errorHandlerService.handle(erro);
-      });
+      }
+    );
   }
 
   atualizarConciliacao() {
@@ -236,7 +361,8 @@ export class AgendamentoCadastroComponent implements OnInit {
       })
       .catch(erro => {
         this.errorHandlerService.handle(erro);
-      });
+      }
+    );
   }
 
   private atualizarProcesso() {
@@ -254,47 +380,84 @@ export class AgendamentoCadastroComponent implements OnInit {
 
   carregarAgendamento(codigo: number) {
 
-    if (this.route.snapshot.data.tipo === 'audiencia') {
-
+    if (this.activatedRoute.snapshot.data.tipo === 'audiencia') {
       this.agendamentoService.buscarAudienciaPorCodigo(codigo)
         .then(audiencia => {
-          this.audiencia = audiencia;
-          this.processo = audiencia.processo;
 
           this.campoTipoSessao.setValue('Audiência');
-          this.preencherDataHoraAudiencia(this.audiencia);
-          this.campoNumeroProcesso.setValue(this.audiencia.processo.numeroProcesso);
-          this.campoNomeParte.setValue(this.audiencia.processo.nomeDaParte);
-          this.campoTempoDuracao.setValue(this.audiencia.duracaoEstimada);
-          this.campoObservacao.setValue(this.audiencia.observacao);
-          this.campoQuantidadeOitivas.setValue(this.audiencia.quantidadeOitivas);
 
-          const valorTipoAudiencia = this.converterTipoAudienciaEnumParaLabel(this.audiencia.tipoAudiencia);
+          if (audiencia.processo.numeroProcesso !== '-') {
 
-          this.tipoAudiencia = valorTipoAudiencia;
+            this.audiencia = audiencia;
+            this.processo = audiencia.processo;
 
-          const audienciaFiltrada = this.tiposAudiencias.filter(resultado =>
-            resultado.nome === this.tipoAudiencia);
+            this.preencherDataHoraAudiencia(this.audiencia);
+            this.campoNumeroProcesso.setValue(this.audiencia.processo.numeroProcesso);
+            this.campoNomeParte.setValue(this.audiencia.processo.nomeDaParte);
+            this.campoTempoDuracao.setValue(this.audiencia.duracaoEstimada);
+            this.campoObservacao.setValue(this.audiencia.observacao);
+            this.campoQuantidadeOitivas.setValue(this.audiencia.quantidadeOitivas);
 
-          this.tempoDuracaoAudienciaEscolhida = audienciaFiltrada[0].duracao;
+            const valorTipoAudiencia = this.converterTipoAudienciaEnumParaLabel(this.audiencia.tipoAudiencia);
+
+            this.tipoAudiencia = valorTipoAudiencia;
+
+            const audienciaFiltrada = this.tiposAudiencias.filter(resultado =>
+              resultado.nome === this.tipoAudiencia);
+
+            this.tempoDuracaoAudienciaEscolhida = audienciaFiltrada[0].duracao;
+          }
+          else{ // edição de um agendamento reservado
+            this.isEdicaoAgendamentoReservado = true;
+
+            this.agendamentoService.buscarAudienciaPorCodigo(codigo)
+            .then(audienciaReservada => {
+
+              this.codigoAgendamentoReservado = audienciaReservada.codigo;
+
+              // const agendamentoReservado: Audiencia = audienciaReservada;
+
+              this.preencherDataHoraAudiencia(audienciaReservada);
+            })
+            .catch(erro => this.errorHandlerService.handle(erro));
+          }
         })
         .catch(erro => this.errorHandlerService.handle(erro));
     }
-    else{
-
+    else if (this.activatedRoute.snapshot.data.tipo === 'conciliacao') {
       this.agendamentoService.buscarConciliacaoPorCodigo(codigo)
         .then(conciliacao => {
-          this.conciliacao = conciliacao;
-          this.processo = conciliacao.processo;
 
           this.campoTipoSessao.setValue('Conciliação');
-          this.preencherDataHoraConciliacao(this.conciliacao);
-          this.campoNumeroProcesso.setValue(this.conciliacao.processo.numeroProcesso);
-          this.campoNomeParte.setValue(this.conciliacao.processo.nomeDaParte);
-          this.campoTempoDuracao.setValue(this.conciliacao.duracaoEstimada);
-          this.campoObservacao.setValue(this.conciliacao.observacao);
-          this.campoQuantidadeOitivas.setValue(this.conciliacao.quantidadeOitivas);
-          this.campoNomeConciliador.setValue(this.conciliacao.nomeConciliador);
+
+          if (conciliacao.processo.numeroProcesso !== '-') {
+
+            this.processo = conciliacao.processo;
+            this.conciliacao = conciliacao;
+
+            this.preencherDataHoraConciliacao(this.conciliacao);
+            this.campoNumeroProcesso.setValue(this.conciliacao.processo.numeroProcesso);
+            this.campoNomeParte.setValue(this.conciliacao.processo.nomeDaParte);
+            this.campoTempoDuracao.setValue(this.conciliacao.duracaoEstimada);
+            this.campoObservacao.setValue(this.conciliacao.observacao);
+            this.campoQuantidadeOitivas.setValue(this.conciliacao.quantidadeOitivas);
+            this.campoNomeConciliador.setValue(this.conciliacao.nomeConciliador);
+          }
+          else{ // edição de um agendamento reservado
+
+            this.isEdicaoAgendamentoReservado = true;
+
+            this.agendamentoService.buscarConciliacaoPorCodigo(codigo)
+            .then(conciliacaoReservada => {
+
+              this.codigoAgendamentoReservado = conciliacaoReservada.codigo;
+
+              // const agendamentoReservado: Audiencia = audienciaReservada;
+
+              this.preencherDataHoraConciliacao(conciliacaoReservada);
+            })
+            .catch(erro => this.errorHandlerService.handle(erro));
+          }
         })
         .catch(erro => this.errorHandlerService.handle(erro));
     }
@@ -349,6 +512,9 @@ export class AgendamentoCadastroComponent implements OnInit {
   private converterTipoAudienciaLabelParaEnum(tipoAudiencia: any): string{
     if (tipoAudiencia === 'Ação civíl'){
       return 'ACAO_CIVIL';
+    }
+    else if (tipoAudiencia === 'Custódia'){
+      return 'CUSTODIA';
     }
     else if (tipoAudiencia === 'Improbidade'){
       return 'IMPROBIDADE';
@@ -407,3 +573,57 @@ export class AgendamentoCadastroComponent implements OnInit {
   }
 
 }
+
+export function ValidateDate(control: AbstractControl){
+  // TENTAR CADASTRAR UM AGENDAMENTO NO MES 12
+  const valorCampoData = control.value;
+
+  const data = valorCampoData.split('/');
+
+  const dia: number = data[0];
+  const mes: number = data[1];
+  const ano: number = data[2];
+
+  if (dia > 31 || dia < 1){
+    return { validDate: true};
+  }
+  if (mes > 12 || mes < 1){
+    return { validDate: true};
+  }
+  if (ano < 2000) { // Number(new Date().getFullYear() - 1);
+    return { validDate: true};
+  }
+  if ((mes === 4 || mes === 6 || mes === 9 || mes === 11) && dia === 31) {
+    return { validDate: true};
+  }
+  if (mes === 2) { // check for february 29th
+
+    const isleap = (ano % 4 === 0 && (ano % 100 !== 0 || ano % 400 === 0));
+
+    if (dia > 29 || (dia === 29 && !isleap)) {
+        return { validDate: true};
+    }
+  }
+
+  return null;
+}
+
+export function ValidateHour(control: AbstractControl){
+
+  const valorCampoHora = control.value;
+
+  const time = valorCampoHora.split(':');
+
+  const hour: number = time[0];
+  const minutes: number = time[1];
+
+  if (hour > 23) {
+    return { validHour: true};
+  }
+  if (minutes > 59){
+    return { validHour: true};
+  }
+
+  return null;
+}
+
