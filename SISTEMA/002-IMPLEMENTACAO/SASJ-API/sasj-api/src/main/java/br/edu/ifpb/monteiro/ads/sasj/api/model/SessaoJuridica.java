@@ -31,6 +31,11 @@ public abstract class SessaoJuridica {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "codigo_processo", nullable = false)
+	@NotNull
+	private Processo processo;
+	
 	@NotNull
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime agendamento;
@@ -44,17 +49,12 @@ public abstract class SessaoJuridica {
 	@Column(name = "quantidade_oitivas")
 	private Integer quantidadeOitivas;
 
-	private String observacao;
-
 	// Duracao em minutos
 	@NotNull
 	@Column(name = "duracao_estimada")
 	private Integer duracaoEstimada;
 
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "codigo_processo", nullable = false)
-	@NotNull
-	private Processo processo;
+	private String observacao;
 
 	public Long getCodigo() {
 		return codigo;
