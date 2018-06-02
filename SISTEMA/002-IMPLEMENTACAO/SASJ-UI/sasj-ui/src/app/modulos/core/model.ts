@@ -42,6 +42,20 @@ export class Audiencia{
   statusAgendamento: string;
 }
 
+export class AudienciaFilter{
+  dataAgendamentoDe: string;
+  dataAgendamentoAte: string;
+  statusAgendamento: string;
+  tipoAudiencia: string;
+  quantidadeOitivasDe: string;
+  quantidadeOitivasAte: string;
+  duracaoEstimadaDe: string;
+  duracaoEstimadaAte: string;
+  observacao: string;
+  numeroProcesso: string;
+  nomeDaParteProcesso: string;
+}
+
 export class Conciliacao {
   nomeConciliador: string;
   codigo: number;
@@ -51,4 +65,18 @@ export class Conciliacao {
   processo: Processo;
   agendamento: string;
   statusAgendamento: string;
+}
+
+export class ConciliacaoFilter{
+  dataAgendamentoDe: string;
+  dataAgendamentoAte: string;
+  statusAgendamento: string;
+  nomeConciliador: string;
+  quantidadeOitivasDe: string;
+  quantidadeOitivasAte: string;
+  duracaoEstimadaDe: string;
+  duracaoEstimadaAte: string;
+  observacao: string;
+  numeroProcesso: string;
+  nomeDaParteProcesso: string;
 }
