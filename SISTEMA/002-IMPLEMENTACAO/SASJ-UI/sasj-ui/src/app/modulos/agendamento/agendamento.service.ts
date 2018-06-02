@@ -1,7 +1,9 @@
 import { AuthHttp } from 'angular2-jwt';
-import { Audiencia, Conciliacao, Processo } from './../core/model';
+import { Audiencia, Conciliacao, Processo, AudienciaFilter, ConciliacaoFilter } from './../core/model';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Headers, URLSearchParams } from '@angular/http';
+import * as moment from 'moment';
 
 @Injectable()
 export class AgendamentoService {
@@ -111,6 +113,128 @@ export class AgendamentoService {
       .then(response => {
         const processoAlterado = response.json() as Processo;
         return processoAlterado;
+      });
+  }
+
+  filtrarAudiencia(audienciafilter: AudienciaFilter): Promise<any> {
+
+    const params = new URLSearchParams();
+
+    if (audienciafilter.dataAgendamentoDe) {
+      params.set('dataAgendamentoDe', audienciafilter.dataAgendamentoDe);
+    }
+
+    if (audienciafilter.dataAgendamentoAte) {
+      params.set('dataAgendamentoAte', audienciafilter.dataAgendamentoAte);
+    }
+
+    if (audienciafilter.statusAgendamento) {
+      params.set('statusAgendamento', audienciafilter.statusAgendamento);
+    }
+
+    if (audienciafilter.tipoAudiencia) {
+      params.set('tipoAudiencia', audienciafilter.tipoAudiencia);
+    }
+
+    if (audienciafilter.quantidadeOitivasDe) {
+      params.set('quantidadeOitivasDe', audienciafilter.quantidadeOitivasDe);
+    }
+
+    if (audienciafilter.quantidadeOitivasAte) {
+      params.set('quantidadeOitivasAte', audienciafilter.quantidadeOitivasAte);
+    }
+
+    if (audienciafilter.duracaoEstimadaDe) {
+      params.set('duracaoEstimadaDe', audienciafilter.duracaoEstimadaDe);
+    }
+
+    if (audienciafilter.duracaoEstimadaAte) {
+      params.set('duracaoEstimadaAte', audienciafilter.duracaoEstimadaAte);
+    }
+
+    if (audienciafilter.observacao) {
+      params.set('observacao', audienciafilter.observacao);
+    }
+
+    if (audienciafilter.numeroProcesso) {
+      params.set('numeroProcesso', audienciafilter.numeroProcesso);
+    }
+
+    if (audienciafilter.nomeDaParteProcesso) {
+      params.set('nomeDaParteProcesso', audienciafilter.nomeDaParteProcesso);
+    }
+
+    return this.http.get(`${this.audienciasUrl}/filtrar`,
+        { search: params }).toPromise().then(response => {
+          const responseJson = response.json();
+          const audiencias = responseJson.content;
+
+          const resultado = {
+            audiencias: audiencias,
+        };
+
+        return resultado;
+      });
+  }
+
+  filtrarConciliacao(conciliacaoFilter: ConciliacaoFilter): Promise<any> {
+
+    const params = new URLSearchParams();
+
+    if (conciliacaoFilter.dataAgendamentoDe) {
+      params.set('dataAgendamentoDe', conciliacaoFilter.dataAgendamentoDe);
+    }
+
+    if (conciliacaoFilter.dataAgendamentoAte) {
+      params.set('dataAgendamentoAte', conciliacaoFilter.dataAgendamentoAte);
+    }
+
+    if (conciliacaoFilter.statusAgendamento) {
+      params.set('statusAgendamento', conciliacaoFilter.statusAgendamento);
+    }
+
+    if (conciliacaoFilter.nomeConciliador) {
+      params.set('nomeConciliador', conciliacaoFilter.nomeConciliador);
+    }
+
+    if (conciliacaoFilter.quantidadeOitivasDe) {
+      params.set('quantidadeOitivasDe', conciliacaoFilter.quantidadeOitivasDe);
+    }
+
+    if (conciliacaoFilter.quantidadeOitivasAte) {
+      params.set('quantidadeOitivasAte', conciliacaoFilter.quantidadeOitivasAte);
+    }
+
+    if (conciliacaoFilter.duracaoEstimadaDe) {
+      params.set('duracaoEstimadaDe', conciliacaoFilter.duracaoEstimadaDe);
+    }
+
+    if (conciliacaoFilter.duracaoEstimadaAte) {
+      params.set('duracaoEstimadaAte', conciliacaoFilter.duracaoEstimadaAte);
+    }
+
+    if (conciliacaoFilter.observacao) {
+      params.set('observacao', conciliacaoFilter.observacao);
+    }
+
+    if (conciliacaoFilter.numeroProcesso) {
+      params.set('numeroProcesso', conciliacaoFilter.numeroProcesso);
+    }
+
+    if (conciliacaoFilter.nomeDaParteProcesso) {
+      params.set('nomeDaParteProcesso', conciliacaoFilter.nomeDaParteProcesso);
+    }
+
+    return this.http.get(`${this.conciliacoesUrl}/filtrar`,
+        { search: params }).toPromise().then(response => {
+          const responseJson = response.json();
+          const conciliacoes = responseJson.content;
+
+          const resultado = {
+            conciliacoes: conciliacoes,
+        };
+
+        return resultado;
       });
   }
 

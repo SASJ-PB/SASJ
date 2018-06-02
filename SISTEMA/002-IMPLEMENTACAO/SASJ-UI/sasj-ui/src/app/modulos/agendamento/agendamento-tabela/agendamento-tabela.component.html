@@ -1,12 +1,23 @@
-<div class="div-filtro" *ngIf="false">
-  <mat-form-field style="width: 40%" floatLabel="always">
+<button mat-raised-button
+    (click)="openDialog()" class="botao-busca-avancada">
+  <mat-icon>search</mat-icon>
+  PESQUISA AVANÇADA
+</button>
+
+<button *ngIf="storageDataService.isFiltragemConcluida()" mat-raised-button
+    (click)="isAudiencia ? listarAudiencias() : listarConciliacoes()"
+    class="botao-busca-avancada">
+  <mat-icon>undo</mat-icon>
+  EXIBIR TUDO
+</button>
+
+<div class="div-filtro">
+  <mat-form-field style="width: 40%" floatLabel="always" *ngIf="false">
     <mat-label>Filtrar</mat-label>
     <input matInput placeholder="Faça uma busca"
         (keyup)="aplicarFiltro($event.target.value)">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
-
-  <a mat-button class="botao-busca-avancada">BUSCA AVANÇADA</a>
 </div>
 
 <div style="margin: 15px 0px">

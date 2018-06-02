@@ -15,11 +15,15 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { TextMaskModule } from 'angular2-text-mask';
 
-import { AgendamentoPesquisaComponent } from './agendamento-pesquisa/agendamento-pesquisa.component';
-import { AgendamentoTabelaComponent, AtualizacaoStatusAgendamentoComponent } from './agendamento-tabela/agendamento-tabela.component';
+import { AgendamentoPesquisaComponent} from './agendamento-pesquisa/agendamento-pesquisa.component';
+
+import { AgendamentoTabelaComponent, AtualizacaoStatusAgendamentoComponent,
+    AgendamentoPesquisaAvancadaComponent} from './agendamento-tabela/agendamento-tabela.component';
 import { AgendamentoDetalhesComponent, AgendamentoDetalhesDialogComponent } from './agendamento-detalhes/agendamento-detalhes.component';
 import { AgendamentoCadastroComponent } from './agendamento-cadastro/agendamento-cadastro.component';
 import { AgendamentoRoutingModule } from './agendamento-routing.module';
@@ -47,7 +51,9 @@ import { AgendamentoRemocaoComponent, AgendamentoRemocaoDialogComponent } from '
     MatDatepickerModule,
     MatSelectModule,
     MatBottomSheetModule,
-    MatListModule
+    MatListModule,
+    MatRadioModule,
+    MatCheckboxModule
   ],
   declarations: [
     AgendamentoPesquisaComponent,
@@ -59,13 +65,16 @@ import { AgendamentoRemocaoComponent, AgendamentoRemocaoDialogComponent } from '
 
     AgendamentoRemocaoComponent,
     AgendamentoRemocaoDialogComponent,
-    AtualizacaoStatusAgendamentoComponent
+    AtualizacaoStatusAgendamentoComponent,
+    AgendamentoPesquisaAvancadaComponent
   ],
-  providers: [],
+  providers: [
+  ],
   entryComponents: [
     AgendamentoDetalhesDialogComponent,
     AgendamentoRemocaoDialogComponent,
-    AtualizacaoStatusAgendamentoComponent
+    AtualizacaoStatusAgendamentoComponent,
+    AgendamentoPesquisaAvancadaComponent
   ],
 })
 export class AgendamentoModule {}
