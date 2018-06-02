@@ -4,6 +4,7 @@ public enum TipoAudiencia {
 
 	PENAL("Penal"),
 	ACAO_CIVIL("Ação Civil"),
+	CUSTODIA("Custódia"),
 	IMPROBIDADE("Improbidade"),
 	INSTRUCAO_CRETA("Instrução Creta"),
 	LEILAO("Leilão"),
