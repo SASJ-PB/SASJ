@@ -48,7 +48,7 @@ export class AgendamentoCadastroComponent implements OnInit {
   processo = new Processo();
 
   tiposAudiencias = [
-    {nome: 'Ação civíl', duracao: 20}, {nome: 'Custódia', duracao: 20}, {nome: 'Improbidade', duracao: 20},
+    {nome: 'Ação civil', duracao: 20}, {nome: 'Custódia', duracao: 20}, {nome: 'Improbidade', duracao: 20},
     {nome: 'Instrução do creta', duracao: 7}, {nome: 'Leilão', duracao: 60},
     {nome: 'Outros', duracao: 20}, {nome: 'Penal', duracao: 20}, {nome: 'PJE', duracao: 20},
     {nome: 'Tebas improbidade', duracao: 20}, {nome: 'Videoconferência', duracao: 20}

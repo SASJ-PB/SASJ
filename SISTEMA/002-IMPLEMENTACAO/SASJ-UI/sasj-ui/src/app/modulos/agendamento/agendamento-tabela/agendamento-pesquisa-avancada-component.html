@@ -161,7 +161,7 @@
       <span style="padding: 2%"></span>
       <span style="margin-right: 10px;"></span>
       <mat-form-field class="spacer-field" style="width: 15%">
-        <mat-label>Entre</mat-label>
+        <mat-label>De</mat-label>
         <input matInput required type="number" min="1" [formControl]="campoDuracaoA"
             onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57">
 
@@ -173,7 +173,7 @@
       <span style="margin: 0px 10px;"></span>
 
       <mat-form-field class="spacer-field" style="width: 15%">
-        <mat-label>e</mat-label>
+        <mat-label>até</mat-label>
         <input matInput required type="number" min="1" [formControl]="campoDuracaoB"
             onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57">
 
@@ -183,7 +183,7 @@
       </mat-form-field>
     </div>
 
-    <div>
+    <div *ngIf="false">
       <mat-checkbox [(ngModel)]="isObservacaoChecked" name="checkObservacao"
           (click)="setEnable(campoObservacao, isObservacaoChecked)"></mat-checkbox>
       <span style="padding: 5px"></span>
@@ -192,7 +192,7 @@
         <input matInput required [formControl]="campoObservacao">
 
         <mat-error *ngIf="campoObservacao.hasError('required')">
-          O nome do conciliador deve ser informado
+          A observação deve ser informada
         </mat-error>
       </mat-form-field>
     </div>

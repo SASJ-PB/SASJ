@@ -9,7 +9,7 @@
 
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>Matrícula</mat-label>
-        <input matInput placeholder="Matrícula"
+        <input id="campo-matricula" matInput placeholder="Matrícula"
             required [textMask]="{mask: mascaraMatricula}" [formControl]="campoMatricula"
             ngModel name="campoMatricula">
 
@@ -20,7 +20,7 @@
 
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>Senha</mat-label>
-        <input matInput placeholder="Senha" required type="password"
+        <input id="campo-senha" matInput placeholder="Senha" required type="password"
             [formControl]="campoSenha" ngModel name="campoSenha" #campoSenhaRef>
 
         <mat-error *ngIf="campoSenha.hasError('required')">
