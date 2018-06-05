@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { Usuario } from './../core/model';
 import { Injectable } from '@angular/core';
 import { AuthHttp } from 'angular2-jwt';
@@ -6,10 +7,17 @@ import { AuthService } from './../seguranca/auth.service';
 @Injectable()
 export class UsuarioService {
 
-  constructor(private http: AuthHttp, private authService: AuthService) { }
+  usuariosUrl: string;
+  recuperacaoUrl: string;
+
+  constructor(private http: AuthHttp, private authService: AuthService) {
+
+    this.usuariosUrl = `${environment.apiUrl}/usuarios`;
+    this.recuperacaoUrl = `${environment.apiUrl}/recuperacao`;
+  }
 
   recuperarSenha(email: string): Promise<any> {
-    return this.http.put(`http://localhost:8080/recuperacao/senha/?email=${email}`, {})
+    return this.http.put(`${this.recuperacaoUrl}/senha/?email=${email}`, {})
       .toPromise()
       .then(response => {
 
@@ -17,7 +25,7 @@ export class UsuarioService {
   }
 
   atualizarSenha(usuario: Usuario): Promise<Usuario> {
-    return this.http.put(`http://localhost:8080/recuperacao/usuario/${usuario.codigo}`,
+    return this.http.put(`${this.recuperacaoUrl}/usuario/${usuario.codigo}`,
       JSON.stringify(usuario))
       .toPromise()
       .then(response => {
@@ -27,7 +35,7 @@ export class UsuarioService {
   }
 
   buscarUsuarioPorToken(token: string): Promise<Usuario> {
-    return this.http.get(`http://localhost:8080/recuperacao/${token}`)
+    return this.http.get(`${this.recuperacaoUrl}/${token}`)
       .toPromise()
       .then(response => {
         const usuario = response.json() as Usuario;
@@ -36,13 +44,13 @@ export class UsuarioService {
   }
 
   cadastrar(usuario: Usuario): Promise<Usuario> {
-    return this.http.post('http://localhost:8080/usuarios', JSON.stringify(usuario))
+    return this.http.post(this.usuariosUrl, JSON.stringify(usuario))
       .toPromise()
       .then(response => response.json());
   }
 
   buscarPorCodigo(codigo: number): Promise<Usuario> {
-    return this.http.get(`http://localhost:8080/usuarios/${codigo}`)
+    return this.http.get(`${this.usuariosUrl}/${codigo}`)
       .toPromise()
       .then(response => {
 
@@ -53,7 +61,7 @@ export class UsuarioService {
   }
 
   atualizar(usuario: Usuario): Promise<Usuario> {
-    return this.http.put(`http://localhost:8080/usuarios/${usuario.codigo}`,
+    return this.http.put(`${this.usuariosUrl}/${usuario.codigo}`,
         JSON.stringify(usuario))
       .toPromise()
       .then(response => {
@@ -63,13 +71,12 @@ export class UsuarioService {
   }
 
   atualizarAcesso(usuario: Usuario): Promise<Usuario> {
-    // console.log(usuario.ativo);
-    return this.http.put(`http://localhost:8080/usuarios/${usuario.codigo}/ativo`, !usuario.ativo)
+    return this.http.put(`${this.usuariosUrl}/${usuario.codigo}/ativo`, !usuario.ativo)
       .toPromise().then(() => null);
   }
 
   listarTodos(): Promise<any> {
-    return this.http.get(`http://localhost:8080/usuarios/`)
+    return this.http.get(`${this.usuariosUrl}/`)
       .toPromise()
       .then(response => {
 

@@ -16,8 +16,8 @@ import { UsuarioService } from './../../usuario/usuario.service';
 })
 export class LoginComponent implements OnInit{
 
-  protected campoMatricula: FormControl;
-  protected campoSenha: FormControl;
+  campoMatricula: FormControl;
+  campoSenha: FormControl;
 
   public mascaraMatricula = [/[a-zA-Z]/, /[a-zA-Z]/, '-', /\d/, /\d/, /\d/, /\d/];
 
@@ -93,8 +93,8 @@ export class RecuperacaoSenhaDialogComponent implements OnInit {
 })
 export class RedefinicaoSenhaComponent implements OnInit {
 
-  protected campoNovaSenha: FormControl;
-  protected campoConfirmacaoNovaSenha: FormControl;
+  campoNovaSenha: FormControl;
+  campoConfirmacaoNovaSenha: FormControl;
   usuario = new Usuario();
 
   constructor(private authService: AuthService, private errorHandlerService: ErrorHandlerService,

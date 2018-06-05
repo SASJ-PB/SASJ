@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { AuthHttp } from 'angular2-jwt';
 import { Audiencia, Conciliacao, Processo, AudienciaFilter, ConciliacaoFilter } from './../core/model';
 import { Injectable } from '@angular/core';
@@ -8,10 +9,15 @@ import * as moment from 'moment';
 @Injectable()
 export class AgendamentoService {
 
-  audienciasUrl = 'http://localhost:8080/audiencias';
-  conciliacoesUrl = 'http://localhost:8080/conciliacoes';
+  audienciasUrl: string;
+  conciliacoesUrl: string;
+  processosUrl: string;
 
-  constructor(private http: AuthHttp) { }
+  constructor(private http: AuthHttp) {
+    this.audienciasUrl = `${environment.apiUrl}/audiencias`;
+    this.conciliacoesUrl = `${environment.apiUrl}/conciliacoes`;
+    this.processosUrl = `${environment.apiUrl}/processos`;
+  }
 
   cadastrarAudiencia(audiencia: Audiencia): Promise<Audiencia>{
     return this.http.post(this.audienciasUrl, JSON.stringify(audiencia))
@@ -107,7 +113,7 @@ export class AgendamentoService {
   }
 
   atualizarProcesso(processo: Processo): Promise<Processo> {
-    return this.http.put(`http://localhost:8080/processos/${processo.codigo}`,
+    return this.http.put(`${this.processosUrl}/${processo.codigo}`,
         JSON.stringify(processo))
       .toPromise()
       .then(response => {

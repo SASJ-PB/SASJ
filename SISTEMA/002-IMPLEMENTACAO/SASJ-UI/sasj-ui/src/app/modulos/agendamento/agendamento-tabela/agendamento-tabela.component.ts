@@ -32,7 +32,7 @@ export class AgendamentoTabelaComponent implements OnInit, AfterViewInit {
   displayedColumns = ['numeroProcesso', 'agendamento', 'statusAgendamento', 'acoes']; // 'status',
 
   constructor(private agendamentoService: AgendamentoService,
-      private storageDataService: StorageDataService,
+      public storageDataService: StorageDataService,
       private authService: AuthService, private router: Router,
       private bottomSheet: MatBottomSheet, private dialog: MatDialog) {
   }
