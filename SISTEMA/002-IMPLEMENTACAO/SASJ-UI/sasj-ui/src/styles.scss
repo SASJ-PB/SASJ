@@ -13,3 +13,9 @@ $style-theme: mat-light-theme($style-primary, $style-accent, $style-warn);
 .snack-bar-error{
   background: #F44336;
 }
+
+.imagem-login {
+  background-image: url(assets/scales-of-justice.png);
+  background-size: 172px;
+  background-position: -11px -11px;
+}
