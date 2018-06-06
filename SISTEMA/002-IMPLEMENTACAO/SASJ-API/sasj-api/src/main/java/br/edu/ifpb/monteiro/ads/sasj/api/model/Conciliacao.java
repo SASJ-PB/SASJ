@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.NotBlank;
 @Table(name = "conciliacao")
 public class Conciliacao extends SessaoJuridica {
 
-	@NotBlank
+	@NotBlank(message = "O nome do conciliador não pode ser vazio")
 	@Column(name = "nome_conciliador")
 	private String nomeConciliador;
 
