@@ -30,12 +30,13 @@ export class AgendamentoCadastroComponent implements OnInit {
   campoDataLembrete: FormControl;
   campoHoraLembrete: FormControl;
   campoObservacao: FormControl;
+  campoTipoAudiencia: FormControl;
 
   public mascaraData = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public mascaraHora = [/\d/, /\d/, ':', /\d/, /\d/];
 
   tempoDuracaoAudienciaEscolhida = 0;
-  tipoAudiencia = 'Ação civíl';
+  tipoAudiencia = 'Ação civil';
   tempoDuracao = 1;
   isEdicao = false;
   isEdicaoAgendamentoReservado = false;
@@ -94,6 +95,7 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.campoTempoDuracao = new FormControl('', [Validators.required]);
     this.campoNomeConciliador = new FormControl('', [Validators.required]);
     this.campoTipoSessao = new FormControl({value: 'Audiência', disabled: this.isEdicao}, [Validators.required]);
+    this.campoTipoAudiencia = new FormControl('', [Validators.required]);
 
     this.setTempoDuracao(20, 1);
     this.recalcularTempoDuracao(1);
@@ -211,8 +213,15 @@ export class AgendamentoCadastroComponent implements OnInit {
         this.audiencia.duracaoEstimada = this.campoTempoDuracao.value;
         this.audiencia.observacao = this.campoObservacao.value;
         this.audiencia.quantidadeOitivas = this.campoQuantidadeOitivas.value;
-        this.audiencia.agendamento = this.formatarDataHora();
-        this.audiencia.statusAgendamento = 'CONFIRMADO';
+
+        if (this.campoHora.value === ''){
+          return this.snackBar.open('Você esqueceu de informar a hora', '',
+              {panelClass: ['snack-bar-error'], duration: 4500});
+        }
+        else{
+          this.audiencia.agendamento = this.formatarDataHora();
+          this.audiencia.statusAgendamento = 'CONFIRMADO';
+        }
       }
       else {
         this.audiencia.duracaoEstimada = 1440;
@@ -266,8 +275,15 @@ export class AgendamentoCadastroComponent implements OnInit {
         this.conciliacao.observacao = this.campoObservacao.value;
         this.conciliacao.quantidadeOitivas = this.campoQuantidadeOitivas.value;
         this.conciliacao.nomeConciliador = this.campoNomeConciliador.value;
-        this.conciliacao.agendamento = this.formatarDataHora();
-        this.conciliacao.statusAgendamento = 'CONFIRMADO';
+
+        if (this.campoHora.value === ''){
+          return this.snackBar.open('Você esqueceu de informar a hora', '',
+              {panelClass: ['snack-bar-error'], duration: 4500});
+        }
+        else{
+          this.conciliacao.agendamento = this.formatarDataHora();
+          this.conciliacao.statusAgendamento = 'CONFIRMADO';
+        }
       }
       else{
         this.conciliacao.duracaoEstimada = 1440;
@@ -588,9 +604,6 @@ export function ValidateDate(control: AbstractControl){
     return { validDate: true};
   }
   if (mes > 12 || mes < 1){
-    return { validDate: true};
-  }
-  if (ano < 2000) { // Number(new Date().getFullYear() - 1);
     return { validDate: true};
   }
   if ((mes === 4 || mes === 6 || mes === 9 || mes === 11) && dia === 31) {

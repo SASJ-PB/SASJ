@@ -12,7 +12,7 @@ import { DataSource } from '@angular/cdk/table';
 @Component({
   selector: 'app-agendamento-remocao',
   template: `
-  <button mat-icon-button (click)="openDialog()">
+  <button [id]="agendamento.processo.numeroProcesso" mat-icon-button (click)="openDialog()">
     <mat-icon>delete_forever</mat-icon>
   </button>
   `,
@@ -21,7 +21,7 @@ import { DataSource } from '@angular/cdk/table';
 export class AgendamentoRemocaoComponent implements OnInit {
 
   @Input() tipoSessao: string;
-  @Input() idSessao: number;
+  @Input() agendamento: any;
   @Input() tabelaRef: TemplateRef<MatTableDataSource<any>>;
 
   constructor(public dialog: MatDialog) { }
@@ -34,7 +34,7 @@ export class AgendamentoRemocaoComponent implements OnInit {
       height: '45%',
       data: {
           tipoSessao: this.tipoSessao,
-          idSessao: this.idSessao,
+          idSessao: this.agendamento.codigo,
           tabelaRef: this.tabelaRef
         }
     });

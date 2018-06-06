@@ -45,7 +45,7 @@
               required>
 
           <mat-error *ngIf="campoNumeroProcesso.hasError('required')">
-            O processo deve ser informado
+            O número do processo deve ser informado
           </mat-error>
         </mat-form-field>
 
@@ -98,7 +98,7 @@
 
         <mat-form-field appearance="outline" *ngIf="isAudiencia()">
           <mat-label>Tipo de Audiência</mat-label>
-          <mat-select id="campo-tipo-audiencia" [(value)]="tipoAudiencia" required
+          <mat-select [formControl]="campoTipoAudiencia" id="campo-tipo-audiencia" [(value)]="tipoAudiencia" required
               (keyup)="setTempoDuracao(0, campoQuantidadeOitivas.value);
               recalcularTempoDuracao(campoQuantidadeOitivas.value)">
             <mat-option *ngFor="let tipo of tiposAudiencias" [value]="tipo.nome"
@@ -109,6 +109,10 @@
               {{tipo.nome}}
             </mat-option>
           </mat-select>
+
+          <mat-error *ngIf="campoTipoAudiencia.hasError('required')">
+            O tipo de audiência é obrigatório
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline"
