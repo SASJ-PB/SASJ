@@ -41,7 +41,7 @@ public class CadastroConciliacaoCampoNomeConciliadorVazio extends TestCase{
         driver.findElement(By.id("campo-oitivas")).sendKeys("3");
         driver.findElement(By.id("botao-cadastrar-agendamento")).click();
         try {
-            assertEquals("may not be empty", driver.findElement(By.xpath("//simple-snack-bar")).getText());
+            assertEquals("O nome do conciliador não pode ser vazio", driver.findElement(By.xpath("//simple-snack-bar")).getText());
         } catch (Error e) {
             verificationErrors.append(e.toString());
         }
