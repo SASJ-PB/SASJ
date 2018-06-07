@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import junit.framework.TestCase;
 
@@ -19,7 +21,7 @@ public class AcessoNaoPermitido extends TestCase{
 	  "./src/main/java/br/edu/ifpb/monteiro/ads/sasj/tests/libs/geckodriver");
 	  
     driver = new FirefoxDriver();
-    baseUrl = "http://localhost:4200/";
+    baseUrl = "http://localhost:4200";
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
@@ -32,6 +34,7 @@ public class AcessoNaoPermitido extends TestCase{
         driver.findElement(By.xpath("//button[@type='submit']")).click();
         driver.get(baseUrl + "/usuarios");
         try {
+        	new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//app-nao-autorizado/div/h1")));
             assertEquals("Acesso negado!", driver.findElement(By.xpath("//app-nao-autorizado/div/h1")).getText());
         } catch (Error e) {
             verificationErrors.append(e.toString());

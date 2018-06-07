@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://sasj-api.herokuapp.com'
+  apiUrl: 'http://localhost:8080'
 };
+
+// apiUrl: 'https://sasj-api.herokuapp.com'
