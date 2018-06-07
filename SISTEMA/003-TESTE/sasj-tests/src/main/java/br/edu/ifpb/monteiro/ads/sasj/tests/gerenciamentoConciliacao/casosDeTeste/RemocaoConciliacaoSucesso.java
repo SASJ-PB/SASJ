@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import junit.framework.TestCase;
 
@@ -30,7 +32,7 @@ public class RemocaoConciliacaoSucesso extends TestCase{
         driver.findElement(By.xpath("//mat-form-field[2]/div/div/div")).click();
         driver.findElement(By.id("campo-senha")).sendKeys("admin");
         driver.findElement(By.xpath("//button[@type='submit']")).click();
-        driver.findElement(By.xpath("//a/span")).click();
+        driver.findElement(By.id("botao-novo-agendamento")).click();
         driver.findElement(By.id("campo-data")).sendKeys("30/03/2017");
         driver.findElement(By.id("campo-hora")).sendKeys("09:00");
         driver.findElement(By.id("campo-numero-processo")).sendKeys("0500096-15.2017.4.05.8203T");
@@ -41,6 +43,9 @@ public class RemocaoConciliacaoSucesso extends TestCase{
         driver.findElement(By.id("campo-nome-conciliador")).sendKeys("Daniele");
         driver.findElement(By.id("botao-cadastrar-agendamento")).click();
         driver.findElement(By.cssSelector("#mat-tab-label-1-1 > div.mat-tab-label-content")).click();
+        
+        new WebDriverWait(driver, 5).until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//simple-snack-bar")));//.until(ExpectedConditions.visibilityOfElementLocated(By.id("cboMenu")));
+        
         driver.findElement(By.id("0500096-15.2017.4.05.8203T")).click();
         driver.findElement(By.id("botao-excluir-agendamento")).click();
         try {

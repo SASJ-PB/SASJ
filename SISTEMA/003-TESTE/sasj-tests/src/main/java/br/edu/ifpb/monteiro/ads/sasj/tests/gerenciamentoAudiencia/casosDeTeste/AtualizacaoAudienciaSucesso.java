@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import junit.framework.TestCase;
 
@@ -30,7 +32,8 @@ public class AtualizacaoAudienciaSucesso extends TestCase{
         driver.findElement(By.xpath("//mat-form-field[2]/div/div/div")).click();
         driver.findElement(By.id("campo-senha")).sendKeys("admin");
         driver.findElement(By.xpath("//button[@type='submit']")).click();
-        driver.findElement(By.xpath("//a/span")).click();
+        
+        driver.findElement(By.id("botao-novo-agendamento")).click();
         driver.findElement(By.id("campo-data")).sendKeys("06/06/2018");
         driver.findElement(By.id("campo-hora")).sendKeys("15:00");
         driver.findElement(By.id("campo-numero-processo")).sendKeys("999.999.9999-99999.9999.99999");
@@ -40,6 +43,9 @@ public class AtualizacaoAudienciaSucesso extends TestCase{
         driver.findElement(By.id("campo-oitivas")).sendKeys("6");
         driver.findElement(By.id("campo-tipo-audiencia")).sendKeys("Tebas");
         driver.findElement(By.id("botao-cadastrar-agendamento")).click();
+        
+        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(By.id("botao-novo-agendamento")));
+
         driver.findElement(By.id("06/06/2018 15:00")).click();
         driver.findElement(By.id("campo-hora")).clear();
         driver.findElement(By.id("campo-hora")).sendKeys("");
@@ -52,6 +58,9 @@ public class AtualizacaoAudienciaSucesso extends TestCase{
         } catch (Error e) {
             verificationErrors.append(e.toString());
         }
+        
+        driver.findElement(By.id("999.999.9999-99999.9999.99999")).click();
+        driver.findElement(By.id("botao-excluir-agendamento")).click();
   }
 
   @After
