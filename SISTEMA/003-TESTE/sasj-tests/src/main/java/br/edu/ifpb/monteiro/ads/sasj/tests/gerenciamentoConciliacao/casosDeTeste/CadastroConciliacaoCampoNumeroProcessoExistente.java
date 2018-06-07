@@ -21,7 +21,7 @@ public class CadastroConciliacaoCampoNumeroProcessoExistente extends TestCase {
 	  "./src/main/java/br/edu/ifpb/monteiro/ads/sasj/tests/libs/geckodriver");
 	  
     driver = new FirefoxDriver();
-    baseUrl = "http://localhost:4200/";
+    baseUrl = "http://localhost:4200";
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
@@ -44,6 +44,8 @@ public class CadastroConciliacaoCampoNumeroProcessoExistente extends TestCase {
     driver.findElement(By.id("campo-nome-conciliador")).sendKeys("Rayana");
     driver.findElement(By.id("botao-cadastrar-agendamento")).click();
     
+    new WebDriverWait(driver, 5).until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//simple-snack-bar")));
+    
     driver.findElement(By.id("botao-novo-agendamento")).click();
     driver.findElement(By.id("campo-data")).sendKeys("18/04/2017");
     driver.findElement(By.id("campo-hora")).sendKeys("09:10");
@@ -55,7 +57,7 @@ public class CadastroConciliacaoCampoNumeroProcessoExistente extends TestCase {
     driver.findElement(By.id("campo-nome-conciliador")).sendKeys("Rayana");
     driver.findElement(By.id("botao-cadastrar-agendamento")).click();
     
-    new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//simple-snack-bar")));
+    // new WebDriverWait(driver, 2).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//simple-snack-bar")));
     
     try {
         assertEquals("Conciliação cadastrada com sucesso", driver.findElement(By.xpath("//simple-snack-bar")).getText());

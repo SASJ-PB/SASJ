@@ -21,7 +21,7 @@ public class AtualizacaoAudienciaSucesso extends TestCase{
 	  "./src/main/java/br/edu/ifpb/monteiro/ads/sasj/tests/libs/geckodriver");
 
     driver = new FirefoxDriver();
-    baseUrl = "http://localhost:4200/";
+    baseUrl = "http://localhost:4200";
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
@@ -44,7 +44,7 @@ public class AtualizacaoAudienciaSucesso extends TestCase{
         driver.findElement(By.id("campo-tipo-audiencia")).sendKeys("Tebas");
         driver.findElement(By.id("botao-cadastrar-agendamento")).click();
         
-        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(By.id("botao-novo-agendamento")));
+        new WebDriverWait(driver, 5).until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//simple-snack-bar")));
 
         driver.findElement(By.id("06/06/2018 15:00")).click();
         driver.findElement(By.id("campo-hora")).clear();

@@ -18,7 +18,7 @@ public class CadastroAudienciaCampoNumeroProcessoExistente extends TestCase{
 	  "./src/main/java/br/edu/ifpb/monteiro/ads/sasj/tests/libs/geckodriver");
 
     driver = new FirefoxDriver();
-    baseUrl = "http://localhost:4200/";
+    baseUrl = "http://localhost:4200";
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
