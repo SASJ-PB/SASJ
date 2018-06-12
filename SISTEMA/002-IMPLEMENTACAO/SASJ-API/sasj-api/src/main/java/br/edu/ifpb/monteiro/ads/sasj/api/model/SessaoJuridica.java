@@ -21,6 +21,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.edu.ifpb.monteiro.ads.sasj.api.enums.StatusAgendamento;
@@ -52,6 +55,12 @@ public abstract class SessaoJuridica {
 	@JoinTable(name = "sessao_pendencia", joinColumns = @JoinColumn(name = "codigo_sessao"),
 	inverseJoinColumns = @JoinColumn(name = "codigo_pendencia"))
 	private List<Pendencia> pendencias;
+	
+	@OneToMany(cascade = { CascadeType.ALL })
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@JoinTable(name = "sessao_parte_interessada", joinColumns = @JoinColumn(name = "codigo_sessao"),
+	inverseJoinColumns = @JoinColumn(name = "codigo_parte_interessada"))
+	private List<ParteInteressada> partesInteressadas;
 	
 	@NotNull
 	@Column(name = "quantidade_oitivas")
@@ -127,6 +136,15 @@ public abstract class SessaoJuridica {
 	public void setPendencias(List<Pendencia> pendencias) {
 		this.pendencias = pendencias;
 	}
+	
+	public List<ParteInteressada> getPartesInteressadas() {
+		return partesInteressadas;
+	}
+
+	public void setPartesInteressadas(List<ParteInteressada> partesInteressadas) {
+		this.partesInteressadas = partesInteressadas;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

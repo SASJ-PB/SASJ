@@ -13,6 +13,7 @@ public abstract class SessaoJuridica_ {
 
 	public static volatile SingularAttribute<SessaoJuridica, Long> codigo;
 	public static volatile SingularAttribute<SessaoJuridica, String> observacao;
+	public static volatile ListAttribute<SessaoJuridica, ParteInteressada> partesInteressadas;
 	public static volatile SingularAttribute<SessaoJuridica, Integer> duracaoEstimada;
 	public static volatile SingularAttribute<SessaoJuridica, Processo> processo;
 	public static volatile ListAttribute<SessaoJuridica, Pendencia> pendencias;

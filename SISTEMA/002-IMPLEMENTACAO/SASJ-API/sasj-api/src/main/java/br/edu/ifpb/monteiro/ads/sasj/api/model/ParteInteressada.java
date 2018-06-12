@@ -5,27 +5,28 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-@Table(name = "pendencia")
-public class Pendencia {
+@Table(name = "parte_interessada")
+public class ParteInteressada {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
-	
-	@NotEmpty
-	private String descricao;
-	
-	@NotEmpty
-	private String responsavel;
 
-	@NotNull
-	private Boolean resolvida;
-	
+	@NotEmpty
+	private String nome;
+
+	@NotEmpty
+	@Email
+	private String email;
+
+	@NotEmpty
+	private String funcao;
+
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -34,28 +35,28 @@ public class Pendencia {
 		this.codigo = codigo;
 	}
 
-	public Boolean getResolvida() {
-		return resolvida;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setResolvida(Boolean resolvida) {
-		this.resolvida = resolvida;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
-	public String getResponsavel() {
-		return responsavel;
+	public String getFuncao() {
+		return funcao;
 	}
 
-	public void setResponsavel(String responsavel) {
-		this.responsavel = responsavel;
+	public void setFuncao(String funcao) {
+		this.funcao = funcao;
 	}
 
 	@Override
@@ -74,7 +75,7 @@ public class Pendencia {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pendencia other = (Pendencia) obj;
+		ParteInteressada other = (ParteInteressada) obj;
 		if (codigo == null) {
 			if (other.codigo != null)
 				return false;
@@ -82,5 +83,5 @@ public class Pendencia {
 			return false;
 		return true;
 	}
-	
+
 }
