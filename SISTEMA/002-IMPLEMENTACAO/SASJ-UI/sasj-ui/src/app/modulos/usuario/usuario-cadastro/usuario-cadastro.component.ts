@@ -8,6 +8,7 @@ import { UsuarioService } from './../usuario.service';
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { StorageDataService } from '../../core/storage-data.service';
 
 @Component({
   selector: 'app-usuario-cadastro',
@@ -33,7 +34,7 @@ export class UsuarioCadastroComponent implements OnInit {
   constructor(private usuarioService: UsuarioService, private router: Router,
       private snackBar: MatSnackBar, private errorHandlerService: ErrorHandlerService,
       private activatedRoute: ActivatedRoute, private authService: AuthService,
-      public dialog: MatDialog) {
+      public dialog: MatDialog, private storageDataService: StorageDataService) {
   }
 
   ngOnInit() {
@@ -103,10 +104,12 @@ export class UsuarioCadastroComponent implements OnInit {
         this.router.navigate(['/perfil']);
 
         this.snackBar.open('Perfil atualizado com sucesso!', '', {duration: 4500});
+        this.storageDataService.atualizarUsuarioLogado();
       })
       .catch(erro => {
         this.errorHandlerService.handle(erro);
       });
+
   }
 
   openDialog() {

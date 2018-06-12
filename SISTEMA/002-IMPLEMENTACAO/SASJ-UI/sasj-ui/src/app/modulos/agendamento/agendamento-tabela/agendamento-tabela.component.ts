@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from './../../seguranca/auth.service';
 import { Audiencia, Conciliacao } from './../../core/model';
 import { AgendamentoService } from './../agendamento.service';
-import { StorageDataService } from './storage-data.service';
+import { StorageDataService } from './../../core/storage-data.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Component, OnInit, ViewChild, Input, AfterViewInit, Inject, Injectable } from '@angular/core';
@@ -552,9 +552,6 @@ export function ValidateDate(control: AbstractControl){
       return { validDate: true};
     }
     if (mes > 12 || mes < 1){
-      return { validDate: true};
-    }
-    if (ano < 2000) { // Number(new Date().getFullYear() - 1);
       return { validDate: true};
     }
     if ((mes === 4 || mes === 6 || mes === 9 || mes === 11) && dia === 31) {

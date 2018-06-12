@@ -73,4 +73,9 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
+  <div style="text-align: center; margin-top: 10px;"
+      *ngIf="isAudiencia ? dataSourceAudiencias.data.length === 0 : dataSourceConciliacoes.data.length === 0">
+    <span>Não existem dados para exibição</span>
+  </div>
+
 </div>

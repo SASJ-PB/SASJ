@@ -42,8 +42,9 @@ export class AgendamentoCadastroComponent implements OnInit {
   isEdicaoAgendamentoReservado = false;
   codigoAgendamentoReservado;
 
-  //  dataSource: MatTableDataSource<ParteInteressada>;
-  // colunasExibidas = ['nome', 'email', 'papel']; // 'acoes'
+  dataSourcePartesInteressadas: MatTableDataSource<ParteInteressada>;
+  colunasPartesInteressadas = ['nome', 'email', 'papel', 'acoes']; // 'acoes'
+
   conciliacao = new Conciliacao();
   audiencia = new Audiencia();
   processo = new Processo();
@@ -71,13 +72,13 @@ export class AgendamentoCadastroComponent implements OnInit {
       // }
     }
 
-    /*const dadosPartesInteressadas: ParteInteressada[] = [
+    const dadosPartesInteressadas: ParteInteressada[] = [
       {nome: 'João', email: 'joao@gmail.com', papel: 'Juíz'},
       {nome: 'Maria', email: 'maria@outlook.com', papel: 'Advogada de defesa'},
       {nome: 'Rita', email: 'rita@yahoo.com', papel: 'Ré'},
     ];
 
-    this.dataSource = new MatTableDataSource(dadosPartesInteressadas);*/
+    this.dataSourcePartesInteressadas = new MatTableDataSource(dadosPartesInteressadas);
   }
 
   ngOnInit() {
@@ -99,6 +100,10 @@ export class AgendamentoCadastroComponent implements OnInit {
 
     this.setTempoDuracao(20, 1);
     this.recalcularTempoDuracao(1);
+  }
+
+  removerParte(parteInteressada: ParteInteressada) {
+
   }
 
   setTempoDuracao(duracaoAudiencia: number, oitivas: number) {
