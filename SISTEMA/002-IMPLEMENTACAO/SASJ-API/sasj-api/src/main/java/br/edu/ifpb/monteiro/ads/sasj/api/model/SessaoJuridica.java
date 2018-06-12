@@ -1,6 +1,7 @@
 package br.edu.ifpb.monteiro.ads.sasj.api.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -31,9 +34,9 @@ public abstract class SessaoJuridica {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 
+	@NotNull
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "codigo_processo", nullable = false)
-	@NotNull
 	private Processo processo;
 	
 	@NotNull
@@ -44,6 +47,11 @@ public abstract class SessaoJuridica {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status_agendamento")
 	private StatusAgendamento statusAgendamento;
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	@JoinTable(name = "sessao_pendencia", joinColumns = @JoinColumn(name = "codigo_sessao"),
+	inverseJoinColumns = @JoinColumn(name = "codigo_pendencia"))
+	private List<Pendencia> pendencias;
 	
 	@NotNull
 	@Column(name = "quantidade_oitivas")
@@ -111,7 +119,14 @@ public abstract class SessaoJuridica {
 	public void setProcesso(Processo processo) {
 		this.processo = processo;
 	}
+	
+	public List<Pendencia> getPendencias() {
+		return pendencias;
+	}
 
+	public void setPendencias(List<Pendencia> pendencias) {
+		this.pendencias = pendencias;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

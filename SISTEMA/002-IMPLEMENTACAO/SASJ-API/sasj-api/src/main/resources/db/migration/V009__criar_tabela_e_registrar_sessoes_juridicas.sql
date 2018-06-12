@@ -4,9 +4,11 @@ CREATE TABLE sessao_juridica (
     observacao VARCHAR(150),
     duracao_estimada INT(8) NOT NULL,
     codigo_processo BIGINT(20),
+    codigo_pendencia BIGINT(20),
     agendamento DATETIME NOT NULL,
     status_agendamento VARCHAR(20) NOT NULL,
-    FOREIGN KEY (codigo_processo) REFERENCES processo(codigo)
+    FOREIGN KEY (codigo_processo) REFERENCES processo(codigo),
+    FOREIGN KEY (codigo_pendencia) REFERENCES pendencia(codigo)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE audiencia (
