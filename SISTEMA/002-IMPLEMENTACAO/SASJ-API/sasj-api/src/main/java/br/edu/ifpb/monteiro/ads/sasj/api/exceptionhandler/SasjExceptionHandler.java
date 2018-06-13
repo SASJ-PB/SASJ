@@ -29,6 +29,7 @@ import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.ConciliacaoComHorario
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailJaCadastradoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailJaVerificadoException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.EmailNaoCadastradoException;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.FalhaNoEnvioDoEmailException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaInvalidaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MatriculaJaCadastradaException;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.MudancaDeStatusInvalidaException;
@@ -283,7 +284,7 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
-	
+
 	@ExceptionHandler({ StatusInvalidoParaCadastroException.class })
 	public ResponseEntity<Object> handleStatusInvalidoParaCadastroException(StatusInvalidoParaCadastroException ex,
 			WebRequest request) {
@@ -296,13 +297,26 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
-	
+
 	@ExceptionHandler({ MudancaDeStatusInvalidaException.class })
 	public ResponseEntity<Object> handleMudancaDeStatusInvalidaException(MudancaDeStatusInvalidaException ex,
 			WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage("sessao.juridica.status.mudanca.invalida-usuario", null,
 				LocaleContextHolder.getLocale());
-		String mensagemDesenvolvedor = messageSource.getMessage("sessao.juridica.status.mudanca.invalida-desenvolvedor", null,
+		String mensagemDesenvolvedor = messageSource.getMessage("sessao.juridica.status.mudanca.invalida-desenvolvedor",
+				null, LocaleContextHolder.getLocale());
+
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+
+	@ExceptionHandler({ FalhaNoEnvioDoEmailException.class })
+	public ResponseEntity<Object> handleFalhaNoEnvioDoEmailException(FalhaNoEnvioDoEmailException ex,
+			WebRequest request) {
+		String mensagemUsuario = messageSource.getMessage("Erro ao enviar e-mail para a parte interessada", null,
+				LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = messageSource.getMessage(ex.getCause().getMessage(), null,
 				LocaleContextHolder.getLocale());
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));

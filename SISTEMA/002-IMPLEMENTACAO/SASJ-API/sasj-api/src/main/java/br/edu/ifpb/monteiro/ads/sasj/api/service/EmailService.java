@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.EmailException;
@@ -13,7 +15,10 @@ import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpb.monteiro.ads.sasj.api.model.ParteInteressada;
+import br.edu.ifpb.monteiro.ads.sasj.api.model.SessaoJuridica;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Usuario;
+import br.edu.ifpb.monteiro.ads.sasj.api.service.exception.FalhaNoEnvioDoEmailException;
 
 @Service
 public class EmailService {
@@ -27,9 +32,9 @@ public class EmailService {
 		email.setSubject("Confirmação de Cadastro");
 		email.addTo(usuario.getEmail());
 
-		email.setHtmlMsg(converterHtmlEmString("confirmacao_cadastro")
-				.replaceAll("NOMEDOUSUARIO", usuario.getNome()).replace("LINKDEVERIFICACAO",
-						originPermitida + "/verificacao/cadastro/" + tokenParaEmailDeVerificacao));
+		email.setHtmlMsg(
+				converterHtmlEmString("confirmacao_cadastro").replaceAll("NOMEDOUSUARIO", usuario.getNome()).replace(
+						"LINKDEVERIFICACAO", originPermitida + "/verificacao/cadastro/" + tokenParaEmailDeVerificacao));
 
 		email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
 		email.send();
@@ -61,6 +66,35 @@ public class EmailService {
 
 		email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
 		email.send();
+	}
+
+	public void enviarEmailLembreteDeAudiencia(SessaoJuridica sessaoJuridica) {
+		try {
+
+			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+			String dataHoraSessao = "";
+			List<ParteInteressada> partesInteressadas = sessaoJuridica.getPartesInteressadas();
+
+			for (ParteInteressada parteInteressada : partesInteressadas) {
+				HtmlEmail email = construirEmail();
+				email.setSubject("Lembrete de audiência");
+
+				email.addTo(parteInteressada.getEmail());
+
+				dataHoraSessao = sessaoJuridica.getAgendamento().format(pattern);
+
+				email.setHtmlMsg(converterHtmlEmString("lembrete_audiencia")
+						.replaceAll("NOMEDAPARTEINTERESSADA", parteInteressada.getNome())
+						.replace("DATAHORASESSAO", dataHoraSessao)
+						.replace("FUNCAODAPARTEINTERESSADA", parteInteressada.getFuncao()));
+
+				email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
+				email.send();
+			}
+		} catch (EmailException ex) {
+			throw new FalhaNoEnvioDoEmailException(ex.getCause());
+		}
+
 	}
 
 	private HtmlEmail construirEmail() throws EmailException {

@@ -26,22 +26,19 @@ public class AgendamentoService {
 
 	@Autowired
 	private ConciliacaoRepository conciliacaoRepository;
+	
+	@Autowired
+	private EmailService emailService;
 
 	public void validarAgendamento(SessaoJuridica sessaoJuridica) {
-		LocalDateTime agendamentoPretendido = sessaoJuridica.getAgendamento();
-
-		validarHorarioConformeFuncionamento(agendamentoPretendido, sessaoJuridica.getDuracaoEstimada());
 
 		if (sessaoJuridica instanceof Audiencia) {
 			validarAgendamentoDeAudiencia(sessaoJuridica);
+			notificarPartesInteressadas(sessaoJuridica);
 		} else if (sessaoJuridica instanceof Conciliacao) {
 			validarAgendamentoDeConciliacao(sessaoJuridica);
 		}
-	}
 
-	private void validarHorarioConformeFuncionamento(LocalDateTime agendamentoPretendido, Integer duracaoEstimada) {
-		// TODO: impedir que sessoes ocorram antes das 9h e impedir que ocorram depois
-		// das 18h
 	}
 
 	private void validarAgendamentoDeAudiencia(SessaoJuridica agendamentoPretendido) {
@@ -49,7 +46,7 @@ public class AgendamentoService {
 
 		try {
 			for (Audiencia audiencia : audiencias) {
-				if(audiencia.getStatusAgendamento() == StatusAgendamento.CONFIRMADO) {
+				if (audiencia.getStatusAgendamento() == StatusAgendamento.CONFIRMADO) {
 					verificarConflito(audiencia, agendamentoPretendido);
 				}
 			}
@@ -63,7 +60,7 @@ public class AgendamentoService {
 
 		try {
 			for (Conciliacao conciliacao : conciliacoes) {
-				if(conciliacao.getStatusAgendamento() == StatusAgendamento.CONFIRMADO) {
+				if (conciliacao.getStatusAgendamento() == StatusAgendamento.CONFIRMADO) {
 					verificarConflito(conciliacao, agendamentoPretendido);
 				}
 			}
@@ -89,11 +86,19 @@ public class AgendamentoService {
 				ldtPretendido.plusMinutes(duracaoPretendida).atZone(fusoHorarioRecifeNordeste).toInstant());
 
 		if (intervaloCadastrado.isConnected(intervaloPretendido)) {
-			if(agendamentoCadastrado.getCodigo() != agendamentoPretendido.getCodigo()) {
-				throw new AgendamentoConclituosoException();				
+			if (agendamentoCadastrado.getCodigo() != agendamentoPretendido.getCodigo()) {
+				throw new AgendamentoConclituosoException();
 			}
 		}
 
+	}
+
+	private void notificarPartesInteressadas(SessaoJuridica sessaoJuridica) {
+		if(sessaoJuridica.getPartesInteressadas() != null) {
+			if(!sessaoJuridica.getPartesInteressadas().isEmpty()) {
+				emailService.enviarEmailLembreteDeAudiencia(sessaoJuridica);				
+			}
+		}
 	}
 
 }
