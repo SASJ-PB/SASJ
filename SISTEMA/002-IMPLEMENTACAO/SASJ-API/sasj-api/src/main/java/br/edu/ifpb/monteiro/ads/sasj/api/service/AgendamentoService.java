@@ -113,7 +113,13 @@ public class AgendamentoService {
 	}
 	
 	public void notificarPartesSobreAdiamento(SessaoJuridica sessaoJuridica) {
-		
+		if (possuiPartesInteressadas(sessaoJuridica)) {
+			if (sessaoJuridica instanceof Audiencia) {
+				emailService.enviarEmailLembreteDeAudienciaAdiada(sessaoJuridica);
+			} else if (sessaoJuridica instanceof Conciliacao) {
+				emailService.enviarEmailLembreteDeConciliacaoAdiada(sessaoJuridica);
+			}
+		}
 	}
 
 	private boolean possuiPartesInteressadas(SessaoJuridica sessaoJuridica) {
