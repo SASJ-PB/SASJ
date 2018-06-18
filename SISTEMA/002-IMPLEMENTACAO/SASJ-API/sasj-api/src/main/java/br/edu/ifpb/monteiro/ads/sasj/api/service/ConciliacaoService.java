@@ -36,6 +36,9 @@ public class ConciliacaoService {
 
 	@Autowired
 	private AgendamentoService agendamentoService;
+	
+	@Autowired
+	private NotificacaoService notificacaoService;
 
 	public Conciliacao criar(Conciliacao conciliacao) {
 
@@ -48,8 +51,7 @@ public class ConciliacaoService {
 			throw new SessaoJuridicaInvalidaException();
 		}
 
-		if (conciliacao.getStatusAgendamento() == StatusAgendamento.ADIADO
-				|| conciliacao.getStatusAgendamento() == StatusAgendamento.CANCELADO) {
+		if (conciliacao.getStatusAgendamento() != StatusAgendamento.CONFIRMADO) {
 			throw new StatusInvalidoParaCadastroException();
 		}
 
@@ -60,10 +62,10 @@ public class ConciliacaoService {
 		if (processo != null) {
 			conciliacao.setProcesso(processo);
 		}
-
-		Conciliacao conciliacaoSalva = conciliacaoRepository.save(conciliacao);
-
-		return conciliacaoSalva;
+		
+		notificacaoService.notificarPartesSobreConfirmacao(conciliacao);
+		
+		return conciliacaoRepository.save(conciliacao);
 	}
 
 	public List<Conciliacao> listar() {
