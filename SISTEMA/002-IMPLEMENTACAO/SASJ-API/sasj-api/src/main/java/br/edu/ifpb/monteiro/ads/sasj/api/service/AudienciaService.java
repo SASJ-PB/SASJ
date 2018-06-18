@@ -37,6 +37,9 @@ public class AudienciaService {
 	@Autowired
 	private AgendamentoService agendamentoService;
 
+	@Autowired
+	private NotificacaoService notificacaoService;
+
 	public Audiencia criar(Audiencia audiencia) {
 
 		if (audiencia.getProcesso().getNumeroProcesso().trim().isEmpty()
@@ -48,8 +51,7 @@ public class AudienciaService {
 			throw new SessaoJuridicaInvalidaException();
 		}
 
-		if (audiencia.getStatusAgendamento() == StatusAgendamento.ADIADO
-				|| audiencia.getStatusAgendamento() == StatusAgendamento.CANCELADO) {
+		if (audiencia.getStatusAgendamento() != StatusAgendamento.CONFIRMADO) {
 			throw new StatusInvalidoParaCadastroException();
 		}
 
@@ -61,15 +63,16 @@ public class AudienciaService {
 			audiencia.setProcesso(processo);
 		}
 
-		Audiencia audienciaSalva = audienciaRepository.save(audiencia);
+		notificacaoService.notificarPartesSobreConfirmacao(audiencia);
 
-		return audienciaSalva;
+		return audienciaRepository.save(audiencia);
+
 	}
 
 	public List<Audiencia> listar() {
 		return audienciaRepository.findAll();
 	}
-	
+
 	public Page<Audiencia> filtrar(AudienciaFilter lancamentoFilter, Pageable pageable) {
 		return audienciaRepository.filtrar(lancamentoFilter, pageable);
 	}
@@ -79,13 +82,21 @@ public class AudienciaService {
 
 		if (audienciaSalva.getStatusAgendamento() == StatusAgendamento.CANCELADO) {
 			if (audiencia.getStatusAgendamento() != StatusAgendamento.CANCELADO) {
-				 throw new MudancaDeStatusInvalidaException();
+				throw new MudancaDeStatusInvalidaException();
 			}
 		}
+
+		boolean isAudienciaConfirmada = notificacaoService.isConfirmado(audiencia, audienciaSalva);
+		boolean isReagendada = notificacaoService.isReagendado(audiencia, audienciaSalva);
+		boolean isAudienciaAdiada = notificacaoService.isAdiado(audiencia, audienciaSalva);
+		boolean isAudienciaCancelada = notificacaoService.isCancelado(audiencia, audienciaSalva);
 
 		BeanUtils.copyProperties(audiencia, audienciaSalva, "codigo", "processo");
 
 		agendamentoService.validarAgendamento(audienciaSalva);
+
+		definirNotificacao(audienciaSalva, isAudienciaConfirmada,
+				isReagendada, isAudienciaAdiada, isAudienciaCancelada);
 
 		return audienciaRepository.save(audienciaSalva);
 	}
@@ -110,6 +121,19 @@ public class AudienciaService {
 			processoRepository.delete(processo.getCodigo());
 		}
 
+	}
+
+	private void definirNotificacao(Audiencia audienciaSalva, boolean isAudienciaConfirmada, boolean isReagendada, boolean isAudienciaAdiada,
+			boolean isAudienciaCancelada) {
+		if(isAudienciaConfirmada) {
+			notificacaoService.notificarPartesSobreConfirmacao(audienciaSalva);
+		} else if(isReagendada) {
+			notificacaoService.notificarPartesSobreReagendamento(audienciaSalva);
+		} else if(isAudienciaAdiada) {
+			notificacaoService.notificarPartesSobreAdiamento(audienciaSalva);
+		} else if(isAudienciaCancelada) {
+			notificacaoService.notificarPartesSobreCancelamento(audienciaSalva);
+		}
 	}
 
 }

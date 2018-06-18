@@ -68,7 +68,7 @@ public class EmailService {
 		email.send();
 	}
 
-	public void enviarEmailLembreteDeAudiencia(SessaoJuridica sessaoJuridica) {
+	public void enviarEmailLembreteDeAudienciaConfirmada(SessaoJuridica sessaoJuridica) {
 		try {
 
 			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -77,16 +77,17 @@ public class EmailService {
 
 			for (ParteInteressada parteInteressada : partesInteressadas) {
 				HtmlEmail email = construirEmail();
-				email.setSubject("Lembrete de audiência");
+				email.setSubject("Lembrete de confirmação de audiência");
 
 				email.addTo(parteInteressada.getEmail());
 
 				dataHoraSessao = sessaoJuridica.getAgendamento().format(pattern);
 
-				email.setHtmlMsg(converterHtmlEmString("lembrete_audiencia")
+				email.setHtmlMsg(converterHtmlEmString("lembrete_audiencia_confirmada")
 						.replaceAll("NOMEDAPARTEINTERESSADA", parteInteressada.getNome())
 						.replace("DATAHORASESSAO", dataHoraSessao)
-						.replace("FUNCAODAPARTEINTERESSADA", parteInteressada.getFuncao()));
+						.replace("FUNCAODAPARTEINTERESSADA", parteInteressada.getFuncao())
+						.replace("SATATUSSESSAO", sessaoJuridica.getStatusAgendamento().toString()));
 
 				email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
 				email.send();
@@ -94,9 +95,92 @@ public class EmailService {
 		} catch (EmailException ex) {
 			throw new FalhaNoEnvioDoEmailException(ex.getCause());
 		}
+	}
+	
+	public void enviarEmailLembreteDeConciliacaoConfirmada(SessaoJuridica sessaoJuridica) {
+		try {
+			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+			String dataHoraSessao = "";
+			List<ParteInteressada> partesInteressadas = sessaoJuridica.getPartesInteressadas();
 
+			for (ParteInteressada parteInteressada : partesInteressadas) {
+				HtmlEmail email = construirEmail();
+				email.setSubject("Lembrete de confirmação de conciliação");
+
+				email.addTo(parteInteressada.getEmail());
+
+				dataHoraSessao = sessaoJuridica.getAgendamento().format(pattern);
+
+				email.setHtmlMsg(converterHtmlEmString("lembrete_conciliacao_confirmada")
+						.replaceAll("NOMEDAPARTEINTERESSADA", parteInteressada.getNome())
+						.replace("DATAHORASESSAO", dataHoraSessao)
+						.replace("FUNCAODAPARTEINTERESSADA", parteInteressada.getFuncao())
+						.replace("SATATUSSESSAO", sessaoJuridica.getStatusAgendamento().toString()));
+
+				email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
+				email.send();
+			}
+		} catch (EmailException ex) {
+			throw new FalhaNoEnvioDoEmailException(ex.getCause());
+		}
 	}
 
+	public void enviarEmailLembreteDeAudienciaReagendada(SessaoJuridica sessaoJuridica) {
+		try {
+			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+			String dataHoraSessao = "";
+			List<ParteInteressada> partesInteressadas = sessaoJuridica.getPartesInteressadas();
+
+			for (ParteInteressada parteInteressada : partesInteressadas) {
+				HtmlEmail email = construirEmail();
+				email.setSubject("Lembrete de atualização de audiência");
+
+				email.addTo(parteInteressada.getEmail());
+
+				dataHoraSessao = sessaoJuridica.getAgendamento().format(pattern);
+
+				email.setHtmlMsg(converterHtmlEmString("lembrete_atualizacao_audiencia")
+						.replaceAll("NOMEDAPARTEINTERESSADA", parteInteressada.getNome())
+						.replace("DATAHORASESSAO", dataHoraSessao)
+						.replace("FUNCAODAPARTEINTERESSADA", parteInteressada.getFuncao())
+						.replace("STATUSAUDIENCIA", sessaoJuridica.getStatusAgendamento().toString()));
+
+				email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
+				email.send();
+			}
+		} catch (EmailException ex) {
+			throw new FalhaNoEnvioDoEmailException(ex.getCause());
+		}
+	}
+	
+	public void enviarEmailLembreteDeConciliacaoReagendada(SessaoJuridica sessaoJuridica) {
+		try {
+			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+			String dataHoraSessao = "";
+			List<ParteInteressada> partesInteressadas = sessaoJuridica.getPartesInteressadas();
+
+			for (ParteInteressada parteInteressada : partesInteressadas) {
+				HtmlEmail email = construirEmail();
+				email.setSubject("Lembrete de atualização de audiência");
+
+				email.addTo(parteInteressada.getEmail());
+
+				dataHoraSessao = sessaoJuridica.getAgendamento().format(pattern);
+
+				email.setHtmlMsg(converterHtmlEmString("lembrete_atualizacao_audiencia")
+						.replaceAll("NOMEDAPARTEINTERESSADA", parteInteressada.getNome())
+						.replace("DATAHORASESSAO", dataHoraSessao)
+						.replace("FUNCAODAPARTEINTERESSADA", parteInteressada.getFuncao())
+						.replace("STATUSAUDIENCIA", sessaoJuridica.getStatusAgendamento().toString()));
+
+				email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
+				email.send();
+			}
+		} catch (EmailException ex) {
+			throw new FalhaNoEnvioDoEmailException(ex.getCause());
+		}
+	}
+	
 	private HtmlEmail construirEmail() throws EmailException {
 		HtmlEmail email = new HtmlEmail();
 		email.setHostName("smtp.zoho.com");
@@ -123,6 +207,11 @@ public class EmailService {
 			System.out.println("ERRO DE CONVERSÃO: " + e.getMessage());
 		}
 		return contentBuilder.toString();
+	}
+
+	public void enviarEmailAtualizacaoDeConciliacao(SessaoJuridica sessaoJuridica) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

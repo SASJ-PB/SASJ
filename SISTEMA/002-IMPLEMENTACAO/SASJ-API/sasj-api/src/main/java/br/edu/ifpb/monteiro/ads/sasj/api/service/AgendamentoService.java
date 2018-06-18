@@ -26,7 +26,7 @@ public class AgendamentoService {
 
 	@Autowired
 	private ConciliacaoRepository conciliacaoRepository;
-	
+
 	@Autowired
 	private EmailService emailService;
 
@@ -34,7 +34,6 @@ public class AgendamentoService {
 
 		if (sessaoJuridica instanceof Audiencia) {
 			validarAgendamentoDeAudiencia(sessaoJuridica);
-			notificarPartesInteressadas(sessaoJuridica);
 		} else if (sessaoJuridica instanceof Conciliacao) {
 			validarAgendamentoDeConciliacao(sessaoJuridica);
 		}
@@ -93,12 +92,34 @@ public class AgendamentoService {
 
 	}
 
-	private void notificarPartesInteressadas(SessaoJuridica sessaoJuridica) {
-		if(sessaoJuridica.getPartesInteressadas() != null) {
-			if(!sessaoJuridica.getPartesInteressadas().isEmpty()) {
-				emailService.enviarEmailLembreteDeAudiencia(sessaoJuridica);				
+	public void notificarPartesSobreConfirmacao(SessaoJuridica sessaoJuridica) {
+		if (possuiPartesInteressadas(sessaoJuridica)) {
+			if (sessaoJuridica instanceof Audiencia) {
+				emailService.enviarEmailLembreteDeAudienciaConfirmada(sessaoJuridica);
+			} else if (sessaoJuridica instanceof Conciliacao) {
+				emailService.enviarEmailLembreteDeConciliacaoConfirmada(sessaoJuridica);
 			}
 		}
+	}
+	
+	public void notificarPartesSobreReagendamento(SessaoJuridica sessaoJuridica) {
+		if (possuiPartesInteressadas(sessaoJuridica)) {
+			if (sessaoJuridica instanceof Audiencia) {
+				emailService.enviarEmailLembreteDeAudienciaReagendada(sessaoJuridica);
+			} else if (sessaoJuridica instanceof Conciliacao) {
+				emailService.enviarEmailLembreteDeConciliacaoReagendada(sessaoJuridica);
+			}
+		}
+		
+	}
+
+	private boolean possuiPartesInteressadas(SessaoJuridica sessaoJuridica) {
+		if (sessaoJuridica.getPartesInteressadas() != null) {
+			if (!sessaoJuridica.getPartesInteressadas().isEmpty()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
