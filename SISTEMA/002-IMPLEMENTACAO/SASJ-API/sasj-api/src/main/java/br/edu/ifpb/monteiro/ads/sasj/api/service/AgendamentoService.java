@@ -121,6 +121,16 @@ public class AgendamentoService {
 			}
 		}
 	}
+	
+	public void notificarPartesSobreCancelamento(SessaoJuridica sessaoJuridica) {
+		if (possuiPartesInteressadas(sessaoJuridica)) {
+			if (sessaoJuridica instanceof Audiencia) {
+				emailService.enviarEmailLembreteDeAudienciaCancelada(sessaoJuridica);
+			} else if (sessaoJuridica instanceof Conciliacao) {
+				emailService.enviarEmailLembreteDeConciliacaoCancelada(sessaoJuridica);
+			}
+		}
+	}
 
 	private boolean possuiPartesInteressadas(SessaoJuridica sessaoJuridica) {
 		if (sessaoJuridica.getPartesInteressadas() != null) {

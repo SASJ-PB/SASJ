@@ -38,7 +38,7 @@ public class NotificacaoService {
 	}
 
 	public void notificarPartesSobreCancelamento(SessaoJuridica sessaoJuridica) {
-		System.out.println("--------------------------NOTIFICANDO SOBRE CANCELAMENTO--------------------------");
+		agendamentoService.notificarPartesSobreCancelamento(sessaoJuridica);
 	}
 
 	public boolean isConfirmado(SessaoJuridica sessaoJuridica, SessaoJuridica sessaoJuridicaSalva) {
