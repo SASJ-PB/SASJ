@@ -12,6 +12,19 @@ public class NotificacaoService {
 	@Autowired
 	private AgendamentoService agendamentoService;
 
+	public void definirNotificacao(SessaoJuridica sessaoJuridicaSalva, boolean isAudienciaConfirmada, boolean isReagendada, boolean isAudienciaAdiada,
+			boolean isAudienciaCancelada) {
+		if(isAudienciaConfirmada) {
+			notificarPartesSobreConfirmacao(sessaoJuridicaSalva);
+		} else if(isReagendada) {
+			notificarPartesSobreReagendamento(sessaoJuridicaSalva);
+		} else if(isAudienciaAdiada) {
+			notificarPartesSobreAdiamento(sessaoJuridicaSalva);
+		} else if(isAudienciaCancelada) {
+			notificarPartesSobreCancelamento(sessaoJuridicaSalva);
+		}
+	}
+	
 	public void notificarPartesSobreConfirmacao(SessaoJuridica sessaoJuridica) {
 		agendamentoService.notificarPartesSobreConfirmacao(sessaoJuridica);
 	}
@@ -21,7 +34,7 @@ public class NotificacaoService {
 	}
 
 	public void notificarPartesSobreAdiamento(SessaoJuridica sessaoJuridica) {
-		System.out.println("--------------------------NOTIFICANDO SOBRE ADIAMENTO--------------------------");
+		agendamentoService.notificarPartesSobreAdiamento(sessaoJuridica);
 	}
 
 	public void notificarPartesSobreCancelamento(SessaoJuridica sessaoJuridica) {

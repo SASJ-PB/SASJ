@@ -133,17 +133,17 @@ public class EmailService {
 
 			for (ParteInteressada parteInteressada : partesInteressadas) {
 				HtmlEmail email = construirEmail();
-				email.setSubject("Lembrete de atualização de audiência");
+				email.setSubject("Lembrete de reagendamento de audiência");
 
 				email.addTo(parteInteressada.getEmail());
 
 				dataHoraSessao = sessaoJuridica.getAgendamento().format(pattern);
 
-				email.setHtmlMsg(converterHtmlEmString("lembrete_atualizacao_audiencia")
+				email.setHtmlMsg(converterHtmlEmString("lembrete_audiencia_reagendada")
 						.replaceAll("NOMEDAPARTEINTERESSADA", parteInteressada.getNome())
 						.replace("DATAHORASESSAO", dataHoraSessao)
 						.replace("FUNCAODAPARTEINTERESSADA", parteInteressada.getFuncao())
-						.replace("STATUSAUDIENCIA", sessaoJuridica.getStatusAgendamento().toString()));
+						.replace("STATUSSESSAO", sessaoJuridica.getStatusAgendamento().toString()));
 
 				email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
 				email.send();
@@ -161,17 +161,17 @@ public class EmailService {
 
 			for (ParteInteressada parteInteressada : partesInteressadas) {
 				HtmlEmail email = construirEmail();
-				email.setSubject("Lembrete de atualização de audiência");
+				email.setSubject("Lembrete de reagendamento de conciliação");
 
 				email.addTo(parteInteressada.getEmail());
 
 				dataHoraSessao = sessaoJuridica.getAgendamento().format(pattern);
 
-				email.setHtmlMsg(converterHtmlEmString("lembrete_atualizacao_audiencia")
+				email.setHtmlMsg(converterHtmlEmString("lembrete_conciliacao_reagendada")
 						.replaceAll("NOMEDAPARTEINTERESSADA", parteInteressada.getNome())
 						.replace("DATAHORASESSAO", dataHoraSessao)
 						.replace("FUNCAODAPARTEINTERESSADA", parteInteressada.getFuncao())
-						.replace("STATUSAUDIENCIA", sessaoJuridica.getStatusAgendamento().toString()));
+						.replace("STATUSSESSAO", sessaoJuridica.getStatusAgendamento().toString()));
 
 				email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
 				email.send();
@@ -185,7 +185,6 @@ public class EmailService {
 		HtmlEmail email = new HtmlEmail();
 		email.setHostName("smtp.zoho.com");
 		email.setSmtpPort(587);
-		// TODO: Criar e-mail "sasj.desenvolvimento@hotmail.com"
 		email.setAuthenticator(new DefaultAuthenticator("sasj.desenvolvimento@zoho.com", "123456789"));
 		email.setStartTLSEnabled(true);
 		email.setFrom("sasj.desenvolvimento@zoho.com", "Sistema de Alocação de Sessões Jurídicas");

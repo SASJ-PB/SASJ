@@ -110,6 +110,9 @@ public class AgendamentoService {
 				emailService.enviarEmailLembreteDeConciliacaoReagendada(sessaoJuridica);
 			}
 		}
+	}
+	
+	public void notificarPartesSobreAdiamento(SessaoJuridica sessaoJuridica) {
 		
 	}
 

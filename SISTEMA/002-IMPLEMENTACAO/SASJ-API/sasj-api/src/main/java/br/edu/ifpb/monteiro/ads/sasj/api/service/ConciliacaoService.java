@@ -85,9 +85,17 @@ public class ConciliacaoService {
 			}
 		}
 
+		boolean isConciliacaoConfirmada = notificacaoService.isConfirmado(conciliacao, conciliacaoSalva);
+		boolean isConciliacaoReagendada = notificacaoService.isReagendado(conciliacao, conciliacaoSalva);
+		boolean isConciliacaoAdiada = notificacaoService.isAdiado(conciliacao, conciliacaoSalva);
+		boolean isConciliacaoCancelada = notificacaoService.isCancelado(conciliacao, conciliacaoSalva);
+		
 		BeanUtils.copyProperties(conciliacao, conciliacaoSalva, "codigo", "processo");
 
 		agendamentoService.validarAgendamento(conciliacaoSalva);
+		
+		notificacaoService.definirNotificacao(conciliacaoSalva, isConciliacaoConfirmada, isConciliacaoReagendada,
+				isConciliacaoAdiada, isConciliacaoCancelada);
 
 		return conciliacaoRepository.save(conciliacaoSalva);
 	}
