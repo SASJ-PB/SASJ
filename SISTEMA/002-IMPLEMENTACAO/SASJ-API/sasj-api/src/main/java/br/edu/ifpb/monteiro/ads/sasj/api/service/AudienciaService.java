@@ -90,13 +90,14 @@ public class AudienciaService {
 		boolean isAudienciaReagendada = notificacaoService.isReagendado(audiencia, audienciaSalva);
 		boolean isAudienciaAdiada = notificacaoService.isAdiado(audiencia, audienciaSalva);
 		boolean isAudienciaCancelada = notificacaoService.isCancelado(audiencia, audienciaSalva);
+		boolean possuiNovaParteInteressada = notificacaoService.possuiNovaParteInteressada(audiencia);
 
 		BeanUtils.copyProperties(audiencia, audienciaSalva, "codigo", "processo");
 
 		agendamentoService.validarAgendamento(audienciaSalva);
 
 		notificacaoService.definirNotificacao(audienciaSalva, isAudienciaConfirmada, isAudienciaReagendada,
-				isAudienciaAdiada, isAudienciaCancelada);
+				isAudienciaAdiada, isAudienciaCancelada, possuiNovaParteInteressada);
 
 		return audienciaRepository.save(audienciaSalva);
 	}

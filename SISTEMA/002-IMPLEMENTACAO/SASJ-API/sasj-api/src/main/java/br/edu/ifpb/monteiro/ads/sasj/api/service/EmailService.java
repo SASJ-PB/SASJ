@@ -15,6 +15,7 @@ import org.apache.commons.mail.HtmlEmail;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpb.monteiro.ads.sasj.api.enums.StatusAgendamento;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.ParteInteressada;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.SessaoJuridica;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Usuario;
@@ -96,7 +97,36 @@ public class EmailService {
 			throw new FalhaNoEnvioDoEmailException(ex.getCause());
 		}
 	}
-	
+
+	public void enviarEmailLembreteDeAudienciaConfirmadaParaNovasPartes(SessaoJuridica sessaoJuridica,
+			List<ParteInteressada> novasPartesInteressadas) {
+		try {
+
+			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+			String dataHoraSessao = "";
+
+			for (ParteInteressada parteInteressada : novasPartesInteressadas) {
+				HtmlEmail email = construirEmail();
+				email.setSubject("Lembrete de confirmação de audiência");
+
+				email.addTo(parteInteressada.getEmail());
+
+				dataHoraSessao = sessaoJuridica.getAgendamento().format(pattern);
+
+				email.setHtmlMsg(converterHtmlEmString("lembrete_audiencia_confirmada")
+						.replaceAll("NOMEDAPARTEINTERESSADA", parteInteressada.getNome())
+						.replace("DATAHORASESSAO", dataHoraSessao)
+						.replace("FUNCAODAPARTEINTERESSADA", parteInteressada.getFuncao())
+						.replace("SATATUSSESSAO", sessaoJuridica.getStatusAgendamento().toString()));
+
+				email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
+				email.send();
+			}
+		} catch (EmailException ex) {
+			throw new FalhaNoEnvioDoEmailException(ex.getCause());
+		}
+	}
+
 	public void enviarEmailLembreteDeConciliacaoConfirmada(SessaoJuridica sessaoJuridica) {
 		try {
 			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -104,6 +134,35 @@ public class EmailService {
 			List<ParteInteressada> partesInteressadas = sessaoJuridica.getPartesInteressadas();
 
 			for (ParteInteressada parteInteressada : partesInteressadas) {
+				HtmlEmail email = construirEmail();
+				email.setSubject("Lembrete de confirmação de conciliação");
+
+				email.addTo(parteInteressada.getEmail());
+
+				dataHoraSessao = sessaoJuridica.getAgendamento().format(pattern);
+
+				email.setHtmlMsg(converterHtmlEmString("lembrete_conciliacao_confirmada")
+						.replaceAll("NOMEDAPARTEINTERESSADA", parteInteressada.getNome())
+						.replace("DATAHORASESSAO", dataHoraSessao)
+						.replace("FUNCAODAPARTEINTERESSADA", parteInteressada.getFuncao())
+						.replace("SATATUSSESSAO", sessaoJuridica.getStatusAgendamento().toString()));
+
+				email.setTextMsg("Seu servidor de e-mail não suporta mensagem HTML");
+				email.send();
+			}
+		} catch (EmailException ex) {
+			throw new FalhaNoEnvioDoEmailException(ex.getCause());
+		}
+	}
+	
+	public void enviarEmailLembreteDeConciliacaoConfirmadaParaNovasPartes(SessaoJuridica sessaoJuridica,
+			List<ParteInteressada> novasPartesInteressadas) {
+		try {
+
+			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+			String dataHoraSessao = "";
+
+			for (ParteInteressada parteInteressada : novasPartesInteressadas) {
 				HtmlEmail email = construirEmail();
 				email.setSubject("Lembrete de confirmação de conciliação");
 
@@ -152,7 +211,7 @@ public class EmailService {
 			throw new FalhaNoEnvioDoEmailException(ex.getCause());
 		}
 	}
-	
+
 	public void enviarEmailLembreteDeConciliacaoReagendada(SessaoJuridica sessaoJuridica) {
 		try {
 			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -180,7 +239,7 @@ public class EmailService {
 			throw new FalhaNoEnvioDoEmailException(ex.getCause());
 		}
 	}
-	
+
 	public void enviarEmailLembreteDeAudienciaAdiada(SessaoJuridica sessaoJuridica) {
 		try {
 			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -236,7 +295,7 @@ public class EmailService {
 			throw new FalhaNoEnvioDoEmailException(ex.getCause());
 		}
 	}
-	
+
 	public void enviarEmailLembreteDeAudienciaCancelada(SessaoJuridica sessaoJuridica) {
 		try {
 			DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
@@ -292,7 +351,21 @@ public class EmailService {
 			throw new FalhaNoEnvioDoEmailException(ex.getCause());
 		}
 	}
-	
+
+	public void enviarEmailLembreteDeEstadoAtualDeAudiencia(SessaoJuridica sessaoJuridica,
+			List<ParteInteressada> novasPartesInteressadas) {
+		if (sessaoJuridica.getStatusAgendamento() == StatusAgendamento.CONFIRMADO) {
+			enviarEmailLembreteDeAudienciaConfirmadaParaNovasPartes(sessaoJuridica, novasPartesInteressadas);
+		}
+	}
+
+	public void enviarEmailLembreteDeEstadoAtualDeConciliacao(SessaoJuridica sessaoJuridica,
+			List<ParteInteressada> novasPartesInteressadas) {
+		if (sessaoJuridica.getStatusAgendamento() == StatusAgendamento.CONFIRMADO) {
+			enviarEmailLembreteDeConciliacaoConfirmadaParaNovasPartes(sessaoJuridica, novasPartesInteressadas);
+		}
+	}
+
 	private HtmlEmail construirEmail() throws EmailException {
 		HtmlEmail email = new HtmlEmail();
 		email.setHostName("smtp.zoho.com");

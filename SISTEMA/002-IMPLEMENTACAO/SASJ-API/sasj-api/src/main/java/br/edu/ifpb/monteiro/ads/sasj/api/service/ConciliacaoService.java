@@ -89,13 +89,14 @@ public class ConciliacaoService {
 		boolean isConciliacaoReagendada = notificacaoService.isReagendado(conciliacao, conciliacaoSalva);
 		boolean isConciliacaoAdiada = notificacaoService.isAdiado(conciliacao, conciliacaoSalva);
 		boolean isConciliacaoCancelada = notificacaoService.isCancelado(conciliacao, conciliacaoSalva);
+		boolean possuiNovaParteInteressada = notificacaoService.possuiNovaParteInteressada(conciliacao);
 		
 		BeanUtils.copyProperties(conciliacao, conciliacaoSalva, "codigo", "processo");
 
 		agendamentoService.validarAgendamento(conciliacaoSalva);
 		
 		notificacaoService.definirNotificacao(conciliacaoSalva, isConciliacaoConfirmada, isConciliacaoReagendada,
-				isConciliacaoAdiada, isConciliacaoCancelada);
+				isConciliacaoAdiada, isConciliacaoCancelada, possuiNovaParteInteressada);
 
 		return conciliacaoRepository.save(conciliacaoSalva);
 	}

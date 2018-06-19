@@ -11,6 +11,7 @@ import org.threeten.extra.Interval;
 import br.edu.ifpb.monteiro.ads.sasj.api.enums.StatusAgendamento;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao;
+import br.edu.ifpb.monteiro.ads.sasj.api.model.ParteInteressada;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.SessaoJuridica;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.AudienciaRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ConciliacaoRepository;
@@ -128,6 +129,17 @@ public class AgendamentoService {
 				emailService.enviarEmailLembreteDeAudienciaCancelada(sessaoJuridica);
 			} else if (sessaoJuridica instanceof Conciliacao) {
 				emailService.enviarEmailLembreteDeConciliacaoCancelada(sessaoJuridica);
+			}
+		}
+	}
+	
+	public void notificarNovasPartesInteressadasSobreEstadoAtual(SessaoJuridica sessaoJuridica,
+			List<ParteInteressada> novasPartesInteressadas) {
+		if (possuiPartesInteressadas(sessaoJuridica)) {
+			if (sessaoJuridica instanceof Audiencia) {
+				emailService.enviarEmailLembreteDeEstadoAtualDeAudiencia(sessaoJuridica, novasPartesInteressadas);
+			} else if (sessaoJuridica instanceof Conciliacao) {
+				emailService.enviarEmailLembreteDeEstadoAtualDeConciliacao(sessaoJuridica, novasPartesInteressadas);
 			}
 		}
 	}
