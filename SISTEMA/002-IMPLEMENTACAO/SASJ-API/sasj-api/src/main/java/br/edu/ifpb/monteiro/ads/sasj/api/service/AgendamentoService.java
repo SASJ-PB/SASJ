@@ -11,6 +11,7 @@ import org.threeten.extra.Interval;
 import br.edu.ifpb.monteiro.ads.sasj.api.enums.StatusAgendamento;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao;
+import br.edu.ifpb.monteiro.ads.sasj.api.model.ParteInteressada;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.SessaoJuridica;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.AudienciaRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ConciliacaoRepository;
@@ -26,7 +27,7 @@ public class AgendamentoService {
 
 	@Autowired
 	private ConciliacaoRepository conciliacaoRepository;
-	
+
 	@Autowired
 	private EmailService emailService;
 
@@ -34,7 +35,6 @@ public class AgendamentoService {
 
 		if (sessaoJuridica instanceof Audiencia) {
 			validarAgendamentoDeAudiencia(sessaoJuridica);
-			notificarPartesInteressadas(sessaoJuridica);
 		} else if (sessaoJuridica instanceof Conciliacao) {
 			validarAgendamentoDeConciliacao(sessaoJuridica);
 		}
@@ -93,12 +93,64 @@ public class AgendamentoService {
 
 	}
 
-	private void notificarPartesInteressadas(SessaoJuridica sessaoJuridica) {
-		if(sessaoJuridica.getPartesInteressadas() != null) {
-			if(!sessaoJuridica.getPartesInteressadas().isEmpty()) {
-				emailService.enviarEmailLembreteDeAudiencia(sessaoJuridica);				
+	public void notificarPartesSobreConfirmacao(SessaoJuridica sessaoJuridica) {
+		if (possuiPartesInteressadas(sessaoJuridica)) {
+			if (sessaoJuridica instanceof Audiencia) {
+				emailService.enviarEmailLembreteDeAudienciaConfirmada(sessaoJuridica);
+			} else if (sessaoJuridica instanceof Conciliacao) {
+				emailService.enviarEmailLembreteDeConciliacaoConfirmada(sessaoJuridica);
 			}
 		}
+	}
+	
+	public void notificarPartesSobreReagendamento(SessaoJuridica sessaoJuridica) {
+		if (possuiPartesInteressadas(sessaoJuridica)) {
+			if (sessaoJuridica instanceof Audiencia) {
+				emailService.enviarEmailLembreteDeAudienciaReagendada(sessaoJuridica);
+			} else if (sessaoJuridica instanceof Conciliacao) {
+				emailService.enviarEmailLembreteDeConciliacaoReagendada(sessaoJuridica);
+			}
+		}
+	}
+	
+	public void notificarPartesSobreAdiamento(SessaoJuridica sessaoJuridica) {
+		if (possuiPartesInteressadas(sessaoJuridica)) {
+			if (sessaoJuridica instanceof Audiencia) {
+				emailService.enviarEmailLembreteDeAudienciaAdiada(sessaoJuridica);
+			} else if (sessaoJuridica instanceof Conciliacao) {
+				emailService.enviarEmailLembreteDeConciliacaoAdiada(sessaoJuridica);
+			}
+		}
+	}
+	
+	public void notificarPartesSobreCancelamento(SessaoJuridica sessaoJuridica) {
+		if (possuiPartesInteressadas(sessaoJuridica)) {
+			if (sessaoJuridica instanceof Audiencia) {
+				emailService.enviarEmailLembreteDeAudienciaCancelada(sessaoJuridica);
+			} else if (sessaoJuridica instanceof Conciliacao) {
+				emailService.enviarEmailLembreteDeConciliacaoCancelada(sessaoJuridica);
+			}
+		}
+	}
+	
+	public void notificarNovasPartesInteressadasSobreEstadoAtual(SessaoJuridica sessaoJuridica,
+			List<ParteInteressada> novasPartesInteressadas) {
+		if (possuiPartesInteressadas(sessaoJuridica)) {
+			if (sessaoJuridica instanceof Audiencia) {
+				emailService.enviarEmailLembreteDeEstadoAtualDeAudiencia(sessaoJuridica, novasPartesInteressadas);
+			} else if (sessaoJuridica instanceof Conciliacao) {
+				emailService.enviarEmailLembreteDeEstadoAtualDeConciliacao(sessaoJuridica, novasPartesInteressadas);
+			}
+		}
+	}
+
+	private boolean possuiPartesInteressadas(SessaoJuridica sessaoJuridica) {
+		if (sessaoJuridica.getPartesInteressadas() != null) {
+			if (!sessaoJuridica.getPartesInteressadas().isEmpty()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

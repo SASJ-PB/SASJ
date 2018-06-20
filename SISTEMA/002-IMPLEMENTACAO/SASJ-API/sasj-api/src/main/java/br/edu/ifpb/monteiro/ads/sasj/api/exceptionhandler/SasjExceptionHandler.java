@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.validation.ConstraintViolationException;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.PersistentObjectException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -213,8 +215,7 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler({ PersistentObjectException.class })
 	public ResponseEntity<Object> handlePersistentObjectException(PersistentObjectException ex, WebRequest request) {
-		String mensagemUsuario = messageSource.getMessage("Ocorreu um erro ao tentar salvar os dados", null,
-				LocaleContextHolder.getLocale());
+		String mensagemUsuario = "Ocorreu um erro ao tentar salvar os dados";
 		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
@@ -314,16 +315,25 @@ public class SasjExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler({ FalhaNoEnvioDoEmailException.class })
 	public ResponseEntity<Object> handleFalhaNoEnvioDoEmailException(FalhaNoEnvioDoEmailException ex,
 			WebRequest request) {
-		String mensagemUsuario = messageSource.getMessage("Erro ao enviar e-mail para a parte interessada", null,
-				LocaleContextHolder.getLocale());
-		String mensagemDesenvolvedor = messageSource.getMessage(ex.getCause().getMessage(), null,
-				LocaleContextHolder.getLocale());
+		String mensagemUsuario = "Erro ao enviar e-mail para a parte interessada";
+		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
 
 		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
 
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
+	
+	@ExceptionHandler({ ConstraintViolationException.class })
+	public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex,
+			WebRequest request) {
+		String mensagemUsuario = "Preencha os campos corretamente";
+		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
 
+		List<Erro> erros = Arrays.asList(new Erro(mensagemUsuario, mensagemDesenvolvedor));
+
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
 	private List<Erro> criarListaErros(BindingResult bindingResult) {
 
 		List<Erro> erros = new ArrayList<>();
