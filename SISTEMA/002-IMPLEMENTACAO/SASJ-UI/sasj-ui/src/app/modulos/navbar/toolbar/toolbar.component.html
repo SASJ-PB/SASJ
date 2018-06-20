@@ -15,7 +15,7 @@
 
       <mat-menu #menu="matMenu" [overlapTrigger]="false" xPosition="before">
         <div class="mat-typography" id="div-label-bem-vindo">
-          <span>Bem-vindo(a) {{ storageDataService.usuarioLogado.nome }}</span>
+          <span>Bem-vindo(a) {{ storageDataService.usuarioLogado?.nome }}</span>
         </div>
         <mat-divider></mat-divider>
         <button mat-menu-item (click)="redirecionar('/perfil')">

@@ -40,8 +40,6 @@ export class ToolbarComponent implements OnInit {
       private errorHandlerService: ErrorHandlerService, private router: Router,
       private usuarioService: UsuarioService, private storageDataService: StorageDataService) {
 
-    this.storageDataService.atualizarUsuarioLogado();
-
     // se a largura da tela for 700 ou mais, o menu lateral fica fixo e
     // aparece ao lado do conteúdo se não, ele é ocultado e sobrepõe o conteúdo.
 
@@ -56,7 +54,6 @@ export class ToolbarComponent implements OnInit {
 
   ngOnInit() {
 
-    // console.log(this.router.url);
 
     if (this.router.url !== '/'){ // /login
       if (this.mobileQuery.matches) {
@@ -82,6 +79,7 @@ export class ToolbarComponent implements OnInit {
     this.logoutService.logout()
       .then(() => {
         this.router.navigate(['/login']);
+        this.storageDataService.usuarioLogado = null;
       })
       .catch(erro => this.errorHandlerService.handle(erro));
   }
