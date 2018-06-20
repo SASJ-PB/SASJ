@@ -43,7 +43,7 @@ public class Usuario {
 	@Size(min = 5)
 	private String senha;
 
-	@Email
+	@Email(message = "O e-mail informado não é valido")
 	@NotEmpty
 	private String email;
 
