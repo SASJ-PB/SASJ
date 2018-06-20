@@ -38,6 +38,8 @@ export class Audiencia{
   observacao: string;
   duracaoEstimada: number;
   processo: Processo;
+  partesInteressadas: ParteInteressada[];
+  pendencias: Pendencia[];
   agendamento: string;
   statusAgendamento: string;
 }
@@ -63,6 +65,8 @@ export class Conciliacao {
   observacao: string;
   duracaoEstimada: number;
   processo: Processo;
+  partesInteressadas: ParteInteressada[];
+  pendencias: Pendencia[];
   agendamento: string;
   statusAgendamento: string;
 }
@@ -79,4 +83,18 @@ export class ConciliacaoFilter{
   observacao: string;
   numeroProcesso: string;
   nomeDaParteProcesso: string;
+}
+
+export class ParteInteressada {
+  codigo: number;
+  nome: string;
+  email: string;
+  funcao: string;
+}
+
+export class Pendencia {
+  codigo: number;
+  descricao: string;
+  responsavel: string;
+  resolvida = false;
 }

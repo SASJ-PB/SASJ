@@ -204,7 +204,7 @@ export class AtualizacaoStatusAgendamentoComponent {
   }
 
   private converterTipoAudienciaLabelParaEnum(tipoAudiencia: any): string{
-    if (tipoAudiencia === 'Ação civíl'){
+    if (tipoAudiencia === 'Ação civil'){
       return 'ACAO_CIVIL';
     }
     else if (tipoAudiencia === 'Custódia'){
@@ -272,7 +272,7 @@ export class AgendamentoPesquisaAvancadaComponent implements OnInit {
   campoObservacao: FormControl = new FormControl({value: '', disabled: true});
 
   tiposAudiencias = [
-    {label: 'Ação civíl', enum: 'ACAO_CIVIL'}, {label: 'Custódia', enum: 'CUSTODIA'},
+    {label: 'Ação civil', enum: 'ACAO_CIVIL'}, {label: 'Custódia', enum: 'CUSTODIA'},
     {label: 'Improbidade', enum: 'IMPROBIDADE'}, {label: 'Instrução do creta', enum: 'INSTRUCAO_CRETA'},
     {label: 'Leilão', enum: 'LEILAO'}, {label: 'Outros', enum: 'OUTROS'}, {label: 'Penal', enum: 'PENAL'},
     {label: 'PJE', enum: 'PJE'}, {label: 'Tebas improbidade', enum: 'TEBAS_IMPROBIDADE'},

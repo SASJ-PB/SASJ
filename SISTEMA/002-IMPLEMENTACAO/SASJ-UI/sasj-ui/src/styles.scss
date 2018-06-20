@@ -19,3 +19,15 @@ $style-theme: mat-light-theme($style-primary, $style-accent, $style-warn);
   background-size: 172px;
   background-position: -11px -11px;
 }
+
+#titulo-dialog{
+  text-align: center;
+}
+
+.espacamento-card{
+  margin: 10px 0;
+}
+
+.titulo-card{
+  font-size: 13px;
+}

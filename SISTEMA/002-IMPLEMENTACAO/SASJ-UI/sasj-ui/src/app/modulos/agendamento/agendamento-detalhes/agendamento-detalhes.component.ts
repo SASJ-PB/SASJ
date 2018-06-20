@@ -1,4 +1,4 @@
-import { Audiencia, Conciliacao } from './../../core/model';
+import { Audiencia, Conciliacao, ParteInteressada, Pendencia } from './../../core/model';
 import { MatSort } from '@angular/material/sort';
 import { Component, OnInit, ViewChild, Input, Inject } from '@angular/core';
 import { MatDialog, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
@@ -17,14 +17,14 @@ export class AgendamentoDetalhesComponent implements OnInit {
   @Input() conciliacao: Conciliacao;
   @Input() isAudiencia: boolean;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit() {}
 
   private formatarLabelTipoAudiencia(){
     if (this.audiencia.tipoAudiencia === 'ACAO_CIVIL'
-        || this.audiencia.tipoAudiencia.toLowerCase() === 'ação civíl'){
-      this.audiencia.tipoAudiencia = 'Ação civíl';
+        || this.audiencia.tipoAudiencia.toLowerCase() === 'ação civil'){
+      this.audiencia.tipoAudiencia = 'Ação civil';
     }
     else if (this.audiencia.tipoAudiencia === 'CUSTODIA'
         || this.audiencia.tipoAudiencia.toLowerCase() === 'custódia'){
@@ -87,7 +87,10 @@ export class AgendamentoDetalhesComponent implements OnInit {
 })
 export class AgendamentoDetalhesDialogComponent implements OnInit {
 
-  colunasExibidas = ['nome', 'email', 'papel']; // 'acoes'
+  colunasExibidas = ['nome', 'email', 'funcao'];
+  colunasPendenciasExibidas = ['descricao', 'responsavel', 'status'];
+  dataSourcePartesInteressadas: MatTableDataSource<ParteInteressada> = new MatTableDataSource();
+  dataSourcePendencias: MatTableDataSource<Pendencia> = new MatTableDataSource();
 
   conciliacao: Conciliacao;
   audiencia: Audiencia;
@@ -100,12 +103,17 @@ export class AgendamentoDetalhesDialogComponent implements OnInit {
     this.isAudiencia = this.data.isAudiencia;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+    if (this.audiencia != null) {
+      this.dataSourcePartesInteressadas.data = this.audiencia.partesInteressadas;
+      this.dataSourcePendencias.data = this.audiencia.pendencias;
+    }
+    else {
+      this.dataSourcePartesInteressadas.data = this.conciliacao.partesInteressadas;
+      this.dataSourcePendencias.data = this.conciliacao.pendencias;
+    }
+  }
 
 }
 
-export interface ParteInteressada {
-  nome: string;
-  email: string;
-  papel: string;
-}

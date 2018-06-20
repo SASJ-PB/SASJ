@@ -28,7 +28,7 @@
     <ng-container matColumnDef="numeroProcesso">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> PROCESSO </th>
       <td mat-cell *matCellDef="let element">
-        {{element.processo.numeroProcesso !== '-' ? element.processo.numeroProcesso : 'RESERVADO'}}
+        {{element.processo.numeroProcesso !== '-' ? element.processo.numeroProcesso : '-'}}
       </td>
     </ng-container>
 

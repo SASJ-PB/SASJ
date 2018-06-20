@@ -23,21 +23,21 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { AgendamentoPesquisaComponent} from './agendamento-pesquisa/agendamento-pesquisa.component';
 
 import { AgendamentoTabelaComponent, AtualizacaoStatusAgendamentoComponent,
-    AgendamentoPesquisaAvancadaComponent} from './agendamento-tabela/agendamento-tabela.component';
+  AgendamentoPesquisaAvancadaComponent} from './agendamento-tabela/agendamento-tabela.component';
 import { AgendamentoDetalhesComponent, AgendamentoDetalhesDialogComponent } from './agendamento-detalhes/agendamento-detalhes.component';
 import { AgendamentoCadastroComponent } from './agendamento-cadastro/agendamento-cadastro.component';
 import { AgendamentoRoutingModule } from './agendamento-routing.module';
 import { AgendamentoRemocaoComponent, AgendamentoRemocaoDialogComponent } from './agendamento-remocao/agendamento-remocao.component';
 
-@NgModule({
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
+  @NgModule({
+    imports: [
+      CommonModule,
+      ReactiveFormsModule,
+      FormsModule,
 
-    AgendamentoRoutingModule,
+      AgendamentoRoutingModule,
 
-    TextMaskModule,
+      TextMaskModule,
 
     MatTabsModule,
     MatButtonModule,
@@ -60,13 +60,11 @@ import { AgendamentoRemocaoComponent, AgendamentoRemocaoDialogComponent } from '
     AgendamentoTabelaComponent,
     AgendamentoDetalhesComponent,
     AgendamentoCadastroComponent,
-
     AgendamentoDetalhesDialogComponent,
-
     AgendamentoRemocaoComponent,
     AgendamentoRemocaoDialogComponent,
     AtualizacaoStatusAgendamentoComponent,
-    AgendamentoPesquisaAvancadaComponent
+    AgendamentoPesquisaAvancadaComponent,
   ],
   providers: [
   ],
