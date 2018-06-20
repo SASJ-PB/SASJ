@@ -11,7 +11,7 @@
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>Matrícula</mat-label>
         <input id="campo-matricula" matInput placeholder="Matrícula"
-            required [textMask]="{mask: mascaraMatricula}" [formControl]="campoMatricula"
+            required [textMask]="{mask: mascaraMatricula, guide: false}" [formControl]="campoMatricula"
             ngModel name="campoMatricula">
 
         <mat-error *ngIf="campoMatricula.hasError('required')">

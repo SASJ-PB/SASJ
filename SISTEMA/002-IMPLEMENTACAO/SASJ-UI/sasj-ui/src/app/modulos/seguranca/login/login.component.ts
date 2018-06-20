@@ -1,3 +1,4 @@
+import { StorageDataService } from './../../core/storage-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
@@ -22,7 +23,8 @@ export class LoginComponent implements OnInit{
   public mascaraMatricula = [/[a-zA-Z]/, /[a-zA-Z]/, '-', /\d/, /\d/, /\d/, /\d/];
 
   constructor(private authService: AuthService, private router: Router,
-      private errorHandlerService: ErrorHandlerService, public dialog: MatDialog) {}
+      private errorHandlerService: ErrorHandlerService, public dialog: MatDialog,
+      private storageDataService: StorageDataService) {}
 
   ngOnInit() {
     this.campoMatricula = new FormControl('', [Validators.required]);
@@ -30,9 +32,10 @@ export class LoginComponent implements OnInit{
   }
 
   login() {
-    this.authService.login(this.campoMatricula.value.replace('_', ''), this.campoSenha.value)
+    this.authService.login(this.campoMatricula.value, this.campoSenha.value)
       .then(() => {
         this.router.navigate(['/agendamentos']);
+        this.storageDataService.atualizarUsuarioLogado();
       })
       .catch(erro => {
         this.errorHandlerService.handle(erro);
