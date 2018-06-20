@@ -23,7 +23,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -43,7 +42,7 @@ public abstract class SessaoJuridica {
 	@JoinColumn(name = "codigo_processo", nullable = false)
 	private Processo processo;
 
-	@NotBlank
+	@NotNull
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime agendamento;
 
@@ -61,12 +60,12 @@ public abstract class SessaoJuridica {
 	@JoinTable(name = "sessao_parte_interessada", joinColumns = @JoinColumn(name = "codigo_sessao"), inverseJoinColumns = @JoinColumn(name = "codigo_parte_interessada"))
 	private List<ParteInteressada> partesInteressadas;
 
-	@NotBlank
+	@NotNull
 	@Column(name = "quantidade_oitivas")
 	private Integer quantidadeOitivas;
 
 	// Duracao em minutos
-	@NotBlank
+	@NotNull
 	@Column(name = "duracao_estimada")
 	private Integer duracaoEstimada;
 
