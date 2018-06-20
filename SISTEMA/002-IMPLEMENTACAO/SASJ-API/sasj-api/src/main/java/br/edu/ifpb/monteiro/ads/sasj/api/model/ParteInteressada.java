@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "parte_interessada")
@@ -17,14 +17,14 @@ public class ParteInteressada {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 
-	@NotEmpty
+	@NotBlank
 	private String nome;
 
-	@NotEmpty
-	@Email
+	@NotBlank
+	@Email(message = "O e-mail informado não é valido")
 	private String email;
 
-	@NotEmpty
+	@NotBlank
 	private String funcao;
 
 	public Long getCodigo() {

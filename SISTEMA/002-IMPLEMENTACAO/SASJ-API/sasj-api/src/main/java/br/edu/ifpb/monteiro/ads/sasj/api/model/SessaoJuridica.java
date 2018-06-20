@@ -23,6 +23,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -41,33 +42,31 @@ public abstract class SessaoJuridica {
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "codigo_processo", nullable = false)
 	private Processo processo;
-	
-	@NotNull
+
+	@NotBlank
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime agendamento;
-	
+
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status_agendamento")
 	private StatusAgendamento statusAgendamento;
-	
+
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-	@JoinTable(name = "sessao_pendencia", joinColumns = @JoinColumn(name = "codigo_sessao"),
-	inverseJoinColumns = @JoinColumn(name = "codigo_pendencia"))
+	@JoinTable(name = "sessao_pendencia", joinColumns = @JoinColumn(name = "codigo_sessao"), inverseJoinColumns = @JoinColumn(name = "codigo_pendencia"))
 	private List<Pendencia> pendencias;
-	
+
 	@OneToMany(cascade = { CascadeType.ALL })
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@JoinTable(name = "sessao_parte_interessada", joinColumns = @JoinColumn(name = "codigo_sessao"),
-	inverseJoinColumns = @JoinColumn(name = "codigo_parte_interessada"))
+	@JoinTable(name = "sessao_parte_interessada", joinColumns = @JoinColumn(name = "codigo_sessao"), inverseJoinColumns = @JoinColumn(name = "codigo_parte_interessada"))
 	private List<ParteInteressada> partesInteressadas;
-	
-	@NotNull
+
+	@NotBlank
 	@Column(name = "quantidade_oitivas")
 	private Integer quantidadeOitivas;
 
 	// Duracao em minutos
-	@NotNull
+	@NotBlank
 	@Column(name = "duracao_estimada")
 	private Integer duracaoEstimada;
 
@@ -88,7 +87,7 @@ public abstract class SessaoJuridica {
 	public void setAgendamento(LocalDateTime agendamento) {
 		this.agendamento = agendamento;
 	}
-	
+
 	public StatusAgendamento getStatusAgendamento() {
 		return statusAgendamento;
 	}
@@ -128,7 +127,7 @@ public abstract class SessaoJuridica {
 	public void setProcesso(Processo processo) {
 		this.processo = processo;
 	}
-	
+
 	public List<Pendencia> getPendencias() {
 		return pendencias;
 	}
@@ -136,7 +135,7 @@ public abstract class SessaoJuridica {
 	public void setPendencias(List<Pendencia> pendencias) {
 		this.pendencias = pendencias;
 	}
-	
+
 	public List<ParteInteressada> getPartesInteressadas() {
 		return partesInteressadas;
 	}
