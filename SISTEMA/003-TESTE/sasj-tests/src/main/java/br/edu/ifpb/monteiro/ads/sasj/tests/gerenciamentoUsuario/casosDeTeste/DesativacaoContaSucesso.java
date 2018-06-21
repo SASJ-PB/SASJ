@@ -32,9 +32,9 @@ public class DesativacaoContaSucesso extends TestCase {
 	@Test
 	public void testDesativarContaComSucesso() throws Exception {
 		driver.get(baseUrl + "/login");
-		driver.findElement(By.id("campo-matricula")).sendKeys("mm-1234");
+		driver.findElement(By.id("campo-matricula")).sendKeys("MM-2000");
 		driver.findElement(By.xpath("//mat-form-field[2]/div/div/div")).click();
-		driver.findElement(By.id("campo-senha")).sendKeys("admin");
+		driver.findElement(By.id("campo-senha")).sendKeys("admin2");
 		driver.findElement(By.xpath("//button[@type='submit']")).click();
 		
 		driver.findElement(By.id("botaoUsuario")).click();

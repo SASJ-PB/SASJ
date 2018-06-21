@@ -47,7 +47,7 @@ public class CadastroUsuarioCampoCargoVazio extends TestCase {
 
 		driver.findElement(By.id("botaoCadastrarUsuario")).click();
 		try {
-		    assertEquals("cargo é obrigatório(a)", driver.findElement(By.xpath("//simple-snack-bar")).getText());
+		    assertEquals("Não pode estar em branco", driver.findElement(By.xpath("//simple-snack-bar")).getText());
 		} 
 		catch (Error e) {
 		    verificationErrors.append(e.toString());

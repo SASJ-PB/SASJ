@@ -47,7 +47,7 @@ public class CadastroUsuarioCampoMatriculaVazio extends TestCase{
 
 		driver.findElement(By.id("botaoCadastrarUsuario")).click();
 		try {
-		    assertEquals("matricula é obrigatório(a)", 
+		    assertEquals("Não pode estar em branco", 
 		    		driver.findElement(By.xpath("//simple-snack-bar")).getText());
 		} 
 		catch (Error e) {

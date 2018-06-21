@@ -47,7 +47,7 @@ public class CadastroUsuarioCampoNomeVazio extends TestCase {
 
 		driver.findElement(By.id("botaoCadastrarUsuario")).click();
 		try {
-		    assertEquals("nome é obrigatório(a)", 
+		    assertEquals("Não pode estar em branco", 
 		    		driver.findElement(By.xpath("//simple-snack-bar")).getText());
 		} 
 		catch (Error e) {

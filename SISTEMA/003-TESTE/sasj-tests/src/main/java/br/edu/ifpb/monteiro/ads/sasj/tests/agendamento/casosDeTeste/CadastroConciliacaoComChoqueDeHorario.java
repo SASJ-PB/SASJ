@@ -65,7 +65,7 @@ public class CadastroConciliacaoComChoqueDeHorario extends TestCase{
 	    	driver.findElement(By.id("botao-cadastrar-agendamento")).click();
 	        
 	        try {
-	            assertEquals("A data e hora da conciliaáo conflita com um agendamento já cadastrado", 
+	            assertEquals("A data e hora da conciliação conflita com um agendamento já cadastrado", 
 	            		driver.findElement(By.xpath("//simple-snack-bar")).getText());
 	        } catch (Error e) {
 	            verificationErrors.append(e.toString());

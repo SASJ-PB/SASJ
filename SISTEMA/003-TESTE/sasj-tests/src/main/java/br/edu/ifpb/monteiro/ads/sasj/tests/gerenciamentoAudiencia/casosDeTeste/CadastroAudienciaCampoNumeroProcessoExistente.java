@@ -4,6 +4,8 @@ import java.util.concurrent.TimeUnit;
 import org.junit.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import junit.framework.TestCase;
 
@@ -55,6 +57,9 @@ public class CadastroAudienciaCampoNumeroProcessoExistente extends TestCase{
         driver.findElement(By.id("campo-oitivas")).sendKeys("8");
         driver.findElement(By.id("campo-tipo-audiencia")).sendKeys("Leil");
         driver.findElement(By.id("botao-cadastrar-agendamento")).click();
+        
+        new WebDriverWait(driver, 5).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//simple-snack-bar")));
+        
         try {
             assertEquals("Audiência cadastrada com sucesso", driver.findElement(By.xpath("//simple-snack-bar")).getText());
         } catch (Error e) {
