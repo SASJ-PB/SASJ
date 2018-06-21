@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 import br.edu.ifpb.monteiro.ads.sasj.api.enums.TipoUsuario;
 
@@ -29,21 +30,21 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo;
 
-	@NotNull
+	@NotBlank
 	private String nome;
 
-	@NotNull
+	@NotBlank
 	private String cargo;
 
-	@NotNull
+	@NotBlank
 	private String matricula;
 
-	@NotNull
+	@NotBlank
 	@Size(min = 5)
 	private String senha;
 
-	@Email
-	@NotNull
+	@Email(message = "O e-mail informado não é valido")
+	@NotBlank
 	private String email;
 
 	@Enumerated(EnumType.STRING)

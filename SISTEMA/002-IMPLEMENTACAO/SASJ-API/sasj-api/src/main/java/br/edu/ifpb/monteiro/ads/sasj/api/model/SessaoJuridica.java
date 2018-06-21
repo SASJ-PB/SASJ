@@ -41,27 +41,25 @@ public abstract class SessaoJuridica {
 	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "codigo_processo", nullable = false)
 	private Processo processo;
-	
+
 	@NotNull
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private LocalDateTime agendamento;
-	
+
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status_agendamento")
 	private StatusAgendamento statusAgendamento;
-	
+
 	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-	@JoinTable(name = "sessao_pendencia", joinColumns = @JoinColumn(name = "codigo_sessao"),
-	inverseJoinColumns = @JoinColumn(name = "codigo_pendencia"))
+	@JoinTable(name = "sessao_pendencia", joinColumns = @JoinColumn(name = "codigo_sessao"), inverseJoinColumns = @JoinColumn(name = "codigo_pendencia"))
 	private List<Pendencia> pendencias;
-	
+
 	@OneToMany(cascade = { CascadeType.ALL })
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@JoinTable(name = "sessao_parte_interessada", joinColumns = @JoinColumn(name = "codigo_sessao"),
-	inverseJoinColumns = @JoinColumn(name = "codigo_parte_interessada"))
+	@JoinTable(name = "sessao_parte_interessada", joinColumns = @JoinColumn(name = "codigo_sessao"), inverseJoinColumns = @JoinColumn(name = "codigo_parte_interessada"))
 	private List<ParteInteressada> partesInteressadas;
-	
+
 	@NotNull
 	@Column(name = "quantidade_oitivas")
 	private Integer quantidadeOitivas;
@@ -88,7 +86,7 @@ public abstract class SessaoJuridica {
 	public void setAgendamento(LocalDateTime agendamento) {
 		this.agendamento = agendamento;
 	}
-	
+
 	public StatusAgendamento getStatusAgendamento() {
 		return statusAgendamento;
 	}
@@ -128,7 +126,7 @@ public abstract class SessaoJuridica {
 	public void setProcesso(Processo processo) {
 		this.processo = processo;
 	}
-	
+
 	public List<Pendencia> getPendencias() {
 		return pendencias;
 	}
@@ -136,7 +134,7 @@ public abstract class SessaoJuridica {
 	public void setPendencias(List<Pendencia> pendencias) {
 		this.pendencias = pendencias;
 	}
-	
+
 	public List<ParteInteressada> getPartesInteressadas() {
 		return partesInteressadas;
 	}

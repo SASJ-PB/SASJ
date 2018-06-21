@@ -19,7 +19,7 @@ public class Audiencia extends SessaoJuridica {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "tipo_audiencia")
 	private TipoAudiencia tipoAudiencia;
-	
+
 	public TipoAudiencia getTipoAudiencia() {
 		return tipoAudiencia;
 	}
