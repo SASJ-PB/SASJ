@@ -4,7 +4,7 @@
 
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>Nome e sobrenome</mat-label>
-        <input matInput placeholder="Nome e sobrenome do usuário" [formControl]="campoNome"
+        <input id="campoNome" matInput placeholder="Nome e sobrenome do usuário" [formControl]="campoNome"
             required>
 
         <mat-error *ngIf="campoNome.hasError('required')">
@@ -14,7 +14,7 @@
 
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>Cargo</mat-label>
-        <input matInput placeholder="Cargo do usuário" [formControl]="campoCargo"
+        <input id="campoCargo" matInput placeholder="Cargo do usuário" [formControl]="campoCargo"
             required>
 
         <mat-error *ngIf="campoCargo.hasError('required')">
@@ -24,7 +24,7 @@
 
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>Matrícula</mat-label>
-        <input matInput placeholder="Matrícula do usuário" [formControl]="campoMatricula"
+        <input id="campoMatricula" matInput placeholder="Matrícula do usuário" [formControl]="campoMatricula"
             [textMask]="{mask: mascaraMatricula, guide: false}" required>
 
         <mat-error *ngIf="campoMatricula.hasError('required')">
@@ -34,7 +34,7 @@
 
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>E-mail</mat-label>
-        <input matInput placeholder="Endereço de e-mail do usuário"
+        <input id="campoEmail" matInput placeholder="Endereço de e-mail do usuário"
             [formControl]="campoEmail" required>
 
         <mat-error *ngIf="campoEmail.hasError('email')">
@@ -47,8 +47,7 @@
 
       <mat-form-field appearance="outline" class="spacer-field campo-tipo-usuario" *ngIf="!isEdicao">
         <mat-label>Tipo de usuário</mat-label>
-        <mat-select [formControl]="campoTipoUsuario" required>
-          <mat-option>--</mat-option>
+        <mat-select id="campoTipoUsuario" [formControl]="campoTipoUsuario" required>
           <mat-option *ngFor="let tipo of tiposUsuarios" [value]="tipo">
             {{tipo}}
           </mat-option>
@@ -60,13 +59,13 @@
       </mat-form-field>
 
       <div>
-        <button class="spacer-button" color="accent" mat-raised-button
+        <button id="botaoCadastrarUsuario" class="spacer-button" color="accent" mat-raised-button
             (click)="salvar()"> {{isEdicao ? 'ATUALIZAR' : 'SALVAR'}} </button>
-        <a class="spacer-button" [routerLink]="isEdicao ? ['/agendamentos'] : ['/usuarios']"
+        <a id="botaoCancelarCadastro" class="spacer-button" [routerLink]="isEdicao ? ['/agendamentos'] : ['/usuarios']"
             mat-raised-button> CANCELAR </a>
-        <button *ngIf="isEdicao" class="spacer-button" mat-raised-button
+        <button id="botaoRedefinirSenha" *ngIf="isEdicao" class="spacer-button" mat-raised-button
             (click)="openDialog()">REDEFINIR SENHA</button>
-        <button *ngIf="isEdicao" class="spacer-button" color="warn" mat-raised-button
+        <button id="botaoDesativarConta" *ngIf="isEdicao" class="spacer-button" color="warn" mat-raised-button
             (click)="openDialogDesativacao()">DESATIVAR CONTA</button>
       </div>
 

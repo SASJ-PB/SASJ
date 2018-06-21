@@ -1,5 +1,8 @@
 package br.edu.ifpb.monteiro.ads.sasj.tests;
 
+import br.edu.ifpb.monteiro.ads.sasj.tests.agendamento.casosDeTeste.CadastroAudienciaComChoqueDeHorario;
+import br.edu.ifpb.monteiro.ads.sasj.tests.agendamento.casosDeTeste.CadastroConciliacaoComChoqueDeHorario;
+import br.edu.ifpb.monteiro.ads.sasj.tests.agendamento.casosDeTeste.CadastroConciliacaoComHorarioIgualAudienciaSucesso;
 import br.edu.ifpb.monteiro.ads.sasj.tests.autenticacaoEPermissao.casosDeTeste.AcessoNaoPermitido;
 import br.edu.ifpb.monteiro.ads.sasj.tests.autenticacaoEPermissao.casosDeTeste.AcessoPaginaComSucesso;
 import br.edu.ifpb.monteiro.ads.sasj.tests.autenticacaoEPermissao.casosDeTeste.AcessoSemAutenticacao;
@@ -33,6 +36,18 @@ import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoConciliacao.casosDeTeste
 import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoConciliacao.casosDeTeste.CadastroConciliacaoCampoOitivasVazio;
 import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoConciliacao.casosDeTeste.CadastroConciliacaoSucesso;
 import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoConciliacao.casosDeTeste.RemocaoConciliacaoSucesso;
+import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoUsuario.casosDeTeste.CadastroUsuarioCampoCargoVazio;
+import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoUsuario.casosDeTeste.CadastroUsuarioCampoEmailVazio;
+import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoUsuario.casosDeTeste.CadastroUsuarioCampoMatriculaInvalido;
+import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoUsuario.casosDeTeste.CadastroUsuarioCampoMatriculaVazio;
+import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoUsuario.casosDeTeste.CadastroUsuarioCampoNomeInvalido;
+import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoUsuario.casosDeTeste.CadastroUsuarioCampoNomeVazio;
+import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoUsuario.casosDeTeste.CadastroUsuarioEmailDuplicado;
+import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoUsuario.casosDeTeste.CadastroUsuarioMatriculaDuplicada;
+import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoUsuario.casosDeTeste.CadastroUsuarioSucesso;
+import br.edu.ifpb.monteiro.ads.sasj.tests.gerenciamentoUsuario.casosDeTeste.DesativacaoContaSucesso;
+import br.edu.ifpb.monteiro.ads.sasj.tests.pesquisaAvancada.casosDeTeste.BuscaAudienciasPorData;
+import br.edu.ifpb.monteiro.ads.sasj.tests.pesquisaAvancada.casosDeTeste.BuscaConciliacaoCampoMarcadoInvalido;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -80,6 +95,27 @@ public class RunAll {
         suite.addTestSuite(CadastroConciliacaoCampoNumeroProcessoExistente.class);
         suite.addTestSuite(AtualizacaoConciliacaoSucesso.class);
         suite.addTestSuite(RemocaoConciliacaoSucesso.class);
+        
+        // Agendamento
+        suite.addTestSuite(CadastroAudienciaComChoqueDeHorario.class);
+        suite.addTestSuite(CadastroConciliacaoComChoqueDeHorario.class);
+        suite.addTestSuite(CadastroConciliacaoComHorarioIgualAudienciaSucesso.class);
+        
+        // Gerenciamento de usuario
+        suite.addTestSuite(CadastroUsuarioSucesso.class);
+        suite.addTestSuite(CadastroUsuarioCampoCargoVazio.class);
+        suite.addTestSuite(CadastroUsuarioCampoEmailVazio.class);
+        suite.addTestSuite(CadastroUsuarioCampoMatriculaInvalido.class);
+        suite.addTestSuite(CadastroUsuarioCampoMatriculaVazio.class);
+        suite.addTestSuite(CadastroUsuarioCampoNomeInvalido.class);
+        suite.addTestSuite(CadastroUsuarioCampoNomeVazio.class);
+        suite.addTestSuite(CadastroUsuarioEmailDuplicado.class);
+        suite.addTestSuite(CadastroUsuarioMatriculaDuplicada.class);
+        suite.addTestSuite(DesativacaoContaSucesso.class);
+        
+        // Pequisa avançada
+        suite.addTestSuite(BuscaAudienciasPorData.class);
+        suite.addTestSuite(BuscaConciliacaoCampoMarcadoInvalido.class);
         
         return suite;
 	}

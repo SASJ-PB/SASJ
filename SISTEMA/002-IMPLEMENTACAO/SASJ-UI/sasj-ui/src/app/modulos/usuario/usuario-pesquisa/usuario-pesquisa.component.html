@@ -41,7 +41,7 @@
                 <td mat-cell *matCellDef="let row; let i = index;" >
                   <form>
                     <mat-slide-toggle [(ngModel)]="row.ativo" name="slideToggle"
-                      color="accent" [checked]="row.ativo" (click)="atualizarAcesso(i)">
+                        color="accent" [checked]="row.ativo" (click)="atualizarAcesso(row)">
                       {{row.ativo ? 'Ativada' : 'Desativada'}}
                     </mat-slide-toggle>
                   </form>

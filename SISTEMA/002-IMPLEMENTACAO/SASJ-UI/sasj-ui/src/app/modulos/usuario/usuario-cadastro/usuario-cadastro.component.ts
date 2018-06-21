@@ -29,7 +29,7 @@ export class UsuarioCadastroComponent implements OnInit {
 
   public mascaraMatricula = [/[a-zA-Z]/, /[a-zA-Z]/, '-', /\d/, /\d/, /\d/, /\d/];
 
-  tiposUsuarios = ['Padrão', 'Administrador'];
+  tiposUsuarios = ['Administrador', 'Padrão'];
 
   constructor(private usuarioService: UsuarioService, private router: Router,
       private snackBar: MatSnackBar, private errorHandlerService: ErrorHandlerService,
@@ -48,14 +48,12 @@ export class UsuarioCadastroComponent implements OnInit {
       this.isEdicao = true;
     }
 
-    // console.log(this.usuario);
-
-    this.campoEmail = new FormControl('', [Validators.required, Validators.email]);
-    this.campoNome = new FormControl('', [Validators.required]);
-    this.campoMatricula = new FormControl('', [Validators.required]);
-    this.campoCargo = new FormControl('', [Validators.required]);
+    this.campoEmail = new FormControl(null, [Validators.required, Validators.email]);
+    this.campoNome = new FormControl(null, [Validators.required]);
+    this.campoMatricula = new FormControl(null, [Validators.required]);
+    this.campoCargo = new FormControl(null, [Validators.required]);
     this.campoSenhaUsuario = new FormControl('', [Validators.required]);
-    this.campoTipoUsuario = new FormControl('', [Validators.required]);
+    this.campoTipoUsuario = new FormControl('Administrador', [Validators.required]);
   }
 
   salvar() {
@@ -64,6 +62,19 @@ export class UsuarioCadastroComponent implements OnInit {
     this.usuario.matricula = this.campoMatricula.value;
     this.usuario.email = this.campoEmail.value;
     this.usuario.cargo = this.campoCargo.value;
+
+    if (this.campoNome.value === null || this.campoNome.value === '') {
+      this.usuario.nome = null;
+    }
+    else if (this.campoMatricula.value === null || this.campoMatricula.value === '') {
+      this.usuario.matricula = null;
+    }
+    else if (this.campoEmail.value === null || this.campoEmail.value === '') {
+      this.usuario.email = null;
+    }
+    else if (this.campoCargo.value === null || this.campoCargo.value === '') {
+      this.usuario.cargo = null;
+    }
 
     if (!this.isEdicao) {
 
@@ -208,7 +219,7 @@ export class EmailEnviadoDialogComponent {
         <mat-card-subtitle> Se você desativar sua conta, perderá seu acesso a ela. Deseja continuar? </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <button class="espacamento-botoes-desativacao"
+        <button id="confirmarDesativacao" class="espacamento-botoes-desativacao"
             mat-raised-button color="warn" (click)="desativar()">DESATIVAR</button>
         <button class="espacamento-botoes-desativacao"
             mat-raised-button (click)="cancelar()">CANCELAR</button>

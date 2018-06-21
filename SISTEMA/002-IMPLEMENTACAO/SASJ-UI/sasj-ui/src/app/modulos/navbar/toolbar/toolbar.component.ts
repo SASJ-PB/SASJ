@@ -27,12 +27,12 @@ export class ToolbarComponent implements OnInit {
 
   // {label: 'Relatórios', icone: 'description'} {label: 'Início', icone: 'home'},
   opcoesMenuLateralAdmin = [
-    {label: 'Usuários', icone: 'supervisor_account', url: '/usuarios'},
-    {label: 'Agendamentos', icone: 'calendar_today', url: '/agendamentos'},
+    {label: 'Usuários', icone: 'supervisor_account', url: '/usuarios', id: 'botaoUsuarios'},
+    {label: 'Agendamentos', icone: 'calendar_today', url: '/agendamentos', id: 'botaoAgendamentos'},
   ];
 
   opcoesMenuLateralPadrao = [
-    {label: 'Agendamentos', icone: 'calendar_today', url: '/agendamentos'}
+    {label: 'Agendamentos', icone: 'calendar_today', url: '/agendamentos', id: 'botaoAgendamentos'}
   ];
 
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
@@ -54,7 +54,6 @@ export class ToolbarComponent implements OnInit {
 
   ngOnInit() {
 
-
     if (this.router.url !== '/'){ // /login
       if (this.mobileQuery.matches) {
         this.sidenavRef.close();
@@ -64,6 +63,7 @@ export class ToolbarComponent implements OnInit {
       }
     }
 
+    this.storageDataService.atualizarUsuarioLogado();
   }
 
   redirecionar(url: string){

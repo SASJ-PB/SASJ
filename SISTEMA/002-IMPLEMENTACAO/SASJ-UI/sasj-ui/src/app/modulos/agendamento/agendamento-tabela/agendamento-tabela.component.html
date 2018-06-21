@@ -1,10 +1,10 @@
-<button mat-raised-button
+<button id="botaoPesquisaAvancada" mat-raised-button
     (click)="openDialog()" class="botao-busca-avancada">
   <mat-icon>search</mat-icon>
   PESQUISA AVANÇADA
 </button>
 
-<button *ngIf="storageDataService.isFiltragemConcluida()" mat-raised-button
+<button id="botaoExibirTudo" *ngIf="storageDataService.isFiltragemConcluida()" mat-raised-button
     (click)="isAudiencia ? listarAudiencias() : listarConciliacoes()"
     class="botao-busca-avancada">
   <mat-icon>undo</mat-icon>

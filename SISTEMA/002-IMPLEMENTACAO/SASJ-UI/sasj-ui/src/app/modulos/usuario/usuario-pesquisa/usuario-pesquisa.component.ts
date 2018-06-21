@@ -27,19 +27,25 @@ export class UsuarioPesquisaComponent implements OnInit {
     this.listarUsuarios();
   }
 
-  atualizarAcesso(indiceLinha: number) {
+  atualizarAcesso(usuario: Usuario) {
 
-    const usuario = this.dataSource.filteredData[indiceLinha];
+    const usuarios = this.dataSource.data;
 
-    this.usuarioService.atualizarAcesso(usuario)
-      .then(usuarioAlterado => {
-        this.dataSource._updateChangeSubscription();
-        // this.listarAudiencias();
+    usuarios.forEach(user => {
 
-      })
-      .catch(erro => {
-        this.errorHandlerService.handle(erro);
-      });
+      if (user.codigo === usuario.codigo){
+
+        this.usuarioService.atualizarAcesso(usuario)
+          .then(usuarioAlterado => {
+            this.dataSource._updateChangeSubscription();
+
+          })
+          .catch(erro => {
+            this.errorHandlerService.handle(erro);
+          });
+      }
+    });
+
   }
 
   listarUsuarios() {

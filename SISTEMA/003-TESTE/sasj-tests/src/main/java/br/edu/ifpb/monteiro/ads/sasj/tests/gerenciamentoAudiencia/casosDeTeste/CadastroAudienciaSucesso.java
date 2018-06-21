@@ -8,6 +8,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import junit.framework.TestCase;
 
 public class CadastroAudienciaSucesso extends TestCase{
+
   private WebDriver driver;
   private String baseUrl;
   private StringBuffer verificationErrors = new StringBuffer();

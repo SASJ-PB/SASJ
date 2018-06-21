@@ -1,7 +1,7 @@
 <div class="container" [class.is-mobile]="mobileQuery.matches">
   <mat-toolbar color="primary" class="toolbar" *ngIf="ocultarToolbar()">
     <mat-toolbar-row *ngIf="ocultarToolbar()">
-      <button mat-icon-button (click)="sidenavRef.toggle()">
+      <button id="botaoMenu" mat-icon-button (click)="sidenavRef.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
 
@@ -9,7 +9,7 @@
 
       <span class="spacer"></span>
 
-      <button mat-icon-button [matMenuTriggerFor]="menu">
+      <button id="botaoUsuario" mat-icon-button [matMenuTriggerFor]="menu">
         <mat-icon>person</mat-icon>
       </button>
 
@@ -18,7 +18,7 @@
           <span>Bem-vindo(a) {{ storageDataService.usuarioLogado?.nome }}</span>
         </div>
         <mat-divider></mat-divider>
-        <button mat-menu-item (click)="redirecionar('/perfil')">
+        <button id="botaoPerfil" mat-menu-item (click)="redirecionar('/perfil')">
           <span>Perfil</span>
         </button>
         <mat-divider></mat-divider>
@@ -36,7 +36,7 @@
     <mat-sidenav #sidenavRef [mode]="mobileQuery.matches ? 'over' : 'side'" *ngIf="ocultarToolbar()"
                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" id="sidebar">
       <mat-nav-list *ngIf="authService.temPermissao('ROLE_CADASTRAR_USUARIO')">
-        <mat-list-item *ngFor="let opcao of opcoesMenuLateralAdmin"
+        <mat-list-item [id]="opcao.id" *ngFor="let opcao of opcoesMenuLateralAdmin"
             (click)="redirecionar(opcao.url)">
           <mat-icon mat-list-icon>{{opcao.icone}}</mat-icon>
           <a matLine>{{opcao.label}}</a>
@@ -44,7 +44,7 @@
       </mat-nav-list>
 
       <mat-nav-list *ngIf="!authService.temPermissao('ROLE_CADASTRAR_USUARIO')">
-        <mat-list-item *ngFor="let opcao of opcoesMenuLateralPadrao"
+        <mat-list-item [id]="opcao.id" *ngFor="let opcao of opcoesMenuLateralPadrao"
             (click)="redirecionar(opcao.url)">
           <mat-icon mat-list-icon>{{opcao.icone}}</mat-icon>
           <a matLine>{{opcao.label}}</a>

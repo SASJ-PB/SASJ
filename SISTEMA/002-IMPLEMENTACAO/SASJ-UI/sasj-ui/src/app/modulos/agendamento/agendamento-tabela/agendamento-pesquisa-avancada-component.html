@@ -16,7 +16,7 @@
       <span style="padding: 5px"></span>
       <mat-form-field class="spacer-field" style="width: 80%">
         <mat-label> Número do processo </mat-label>
-        <input matInput required [formControl]="campoNumeroProcesso"> <!-- [formControl]="campoNome" appearance="outline" -->
+        <input id="campoNumeroProcesso" matInput required [formControl]="campoNumeroProcesso"> <!-- [formControl]="campoNome" appearance="outline" -->
 
         <mat-error *ngIf="campoNumeroProcesso.hasError('required')">
           O número do processo deve ser informado
@@ -25,12 +25,12 @@
     </div>
 
     <div *ngIf="false">
-      <mat-checkbox [(ngModel)]="isNomeParteChecked" name="checkNomeParte"
+      <mat-checkbox id="checkNomeParte" [(ngModel)]="isNomeParteChecked" name="checkNomeParte"
           (click)="setEnable(campoNomeParte, isNomeParteChecked)"> </mat-checkbox>
       <span style="padding: 5px"></span>
       <mat-form-field class="spacer-field" style="width: 80%">
         <mat-label>Nome da parte (processo)</mat-label>
-        <input matInput required [formControl]="campoNomeParte"> <!-- [formControl]="campoNome" appearance="outline" -->
+        <input id="campoNomeParte" matInput required [formControl]="campoNomeParte"> <!-- [formControl]="campoNome" appearance="outline" -->
 
         <mat-error *ngIf="campoNomeParte.hasError('required')">
           O nome da parte deve ser informado
@@ -39,7 +39,7 @@
     </div>
 
     <div>
-      <mat-checkbox [(ngModel)]="isQuantidadeOitivasChecked" name="checkOitivas"
+      <mat-checkbox id="checkOitivas" [(ngModel)]="isQuantidadeOitivasChecked" name="checkOitivas"
           (click)="setEnable(campoOitivasA, isQuantidadeOitivasChecked, true, 'oitivas');">
         Quantidade de oitivas
       </mat-checkbox>
@@ -47,7 +47,7 @@
       <span style="margin-right: 10px;"></span>
       <mat-form-field class="spacer-field" style="width: 10%">
         <mat-label>de</mat-label>
-        <input matInput required type="number" min="1" [formControl]="campoOitivasA"
+        <input id="campoOitivasA" matInput required type="number" min="1" [formControl]="campoOitivasA"
             onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57">
 
         <mat-error *ngIf="campoOitivasA.hasError('required')">
@@ -59,7 +59,7 @@
 
       <mat-form-field class="spacer-field" style="width: 10%">
         <mat-label>até</mat-label>
-        <input matInput required type="number" min="1" [formControl]="campoOitivasB"
+        <input id="campoOitivasB" matInput required type="number" min="1" [formControl]="campoOitivasB"
             onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57">
 
         <mat-error *ngIf="campoOitivasB.hasError('required')">
@@ -69,12 +69,12 @@
     </div>
 
     <div>
-      <mat-checkbox [(ngModel)]="isStatusChecked" name="checkStatus"
+      <mat-checkbox id="checkStatus" [(ngModel)]="isStatusChecked" name="checkStatus"
           (click)="setEnable(campoStatus, isStatusChecked)"></mat-checkbox>
       <span style="padding: 5px"></span>
       <mat-form-field style="width: 30%">
         <mat-label>Status do agendamento</mat-label>
-        <mat-select required [formControl]="campoStatus">
+        <mat-select id="campoStatus" required [formControl]="campoStatus">
           <mat-option *ngFor="let status of tiposStatus" [value]="status">
             {{status}}
           </mat-option>
@@ -87,12 +87,12 @@
     </div>
 
     <div *ngIf="data.isAudiencia">
-      <mat-checkbox [(ngModel)]="isTipoAudienciaChecked" name="checkTipoAudiencia"
+      <mat-checkbox id="checkTipoAudiencia" [(ngModel)]="isTipoAudienciaChecked" name="checkTipoAudiencia"
           (click)="setEnable(campoTipoAudiencia, isTipoAudienciaChecked)"></mat-checkbox>
       <span style="padding: 5px"></span>
       <mat-form-field>
         <mat-label>Tipo de Audiência</mat-label>
-        <mat-select required [formControl]="campoTipoAudiencia">
+        <mat-select id="campoTipoAudiencia" required [formControl]="campoTipoAudiencia">
           <mat-option *ngFor="let tipo of tiposAudiencias" [value]="tipo.enum">
             {{tipo.label}}
           </mat-option>
@@ -105,12 +105,12 @@
     </div>
 
     <div *ngIf="!data.isAudiencia">
-      <mat-checkbox [(ngModel)]="isNomeConciliadorChecked" name="checkConciliador"
+      <mat-checkbox id="checkConciliador" [(ngModel)]="isNomeConciliadorChecked" name="checkConciliador"
           (click)="setEnable(campoConciliador, isNomeConciliadorChecked)"></mat-checkbox>
       <span style="padding: 5px"></span>
       <mat-form-field class="spacer-field" style="width: 80%">
         <mat-label> Nome do conciliador </mat-label>
-        <input matInput required [formControl]="campoConciliador">
+        <input id="campoConciliador" matInput required [formControl]="campoConciliador">
 
         <mat-error *ngIf="campoConciliador.hasError('required')">
           O nome do conciliador deve ser informado
@@ -119,14 +119,14 @@
     </div>
 
     <div>
-      <mat-checkbox [(ngModel)]="isDataSessaoChecked" name="checkDataSessao"
+      <mat-checkbox id="checkData" [(ngModel)]="isDataSessaoChecked" name="checkDataSessao"
           (click)="setEnable(campoDataSessaoA, isDataSessaoChecked, true, 'data')">
         Data da sessão
       </mat-checkbox>
       <span style="padding: 2%"></span>
       <mat-form-field>
         <mat-label>De</mat-label>
-        <input matInput placeholder="dd/mm/aaaa hh:mm" required [formControl]="campoDataSessaoA"
+        <input id="campoDataA" matInput placeholder="dd/mm/aaaa hh:mm" required [formControl]="campoDataSessaoA"
             [textMask]="{mask: mascaraData, guide: false}">
 
         <mat-error *ngIf="campoDataSessaoA.hasError('required')">
@@ -141,7 +141,7 @@
 
       <mat-form-field>
         <mat-label>Até</mat-label>
-        <input matInput placeholder="dd/mm/aaaa hh:mm" required [formControl]="campoDataSessaoB"
+        <input id="campoDataB" matInput placeholder="dd/mm/aaaa hh:mm" required [formControl]="campoDataSessaoB"
             [textMask]="{mask: mascaraData, guide: false}">
 
         <mat-error *ngIf="campoDataSessaoB.hasError('required')">
@@ -154,7 +154,7 @@
     </div>
 
     <div>
-      <mat-checkbox [(ngModel)]="isTempoDuracaoChecked" name="checkDuracao"
+      <mat-checkbox id="checkDuracao" [(ngModel)]="isTempoDuracaoChecked" name="checkDuracao"
           (click)="setEnable(campoDuracaoA, isTempoDuracaoChecked, true, 'duracao');">
         Tempo de duração (minutos)
       </mat-checkbox>
@@ -162,7 +162,7 @@
       <span style="margin-right: 10px;"></span>
       <mat-form-field class="spacer-field" style="width: 15%">
         <mat-label>De</mat-label>
-        <input matInput required type="number" min="1" [formControl]="campoDuracaoA"
+        <input id="campoDuracaoA" matInput required type="number" min="1" [formControl]="campoDuracaoA"
             onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57">
 
         <mat-error *ngIf="campoDuracaoA.hasError('required')">
@@ -174,7 +174,7 @@
 
       <mat-form-field class="spacer-field" style="width: 15%">
         <mat-label>até</mat-label>
-        <input matInput required type="number" min="1" [formControl]="campoDuracaoB"
+        <input id="campoDuracaoB" matInput required type="number" min="1" [formControl]="campoDuracaoB"
             onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57">
 
         <mat-error *ngIf="campoDuracaoB.hasError('required')">
@@ -184,7 +184,7 @@
     </div>
 
     <div *ngIf="false">
-      <mat-checkbox [(ngModel)]="isObservacaoChecked" name="checkObservacao"
+      <mat-checkbox id="checkNomeParte" [(ngModel)]="isObservacaoChecked" name="checkObservacao"
           (click)="setEnable(campoObservacao, isObservacaoChecked)"></mat-checkbox>
       <span style="padding: 5px"></span>
       <mat-form-field class="spacer-field" style="width: 80%">
@@ -198,7 +198,7 @@
     </div>
 
     <div style="text-align: right;">
-      <button mat-raised-button color="accent" (click)="aplicarFiltro()"
+      <button id="botaoPesquisar" mat-raised-button color="accent" (click)="aplicarFiltro()"
           [disabled]="!enableButton">
         PESQUISAR
       </button>
