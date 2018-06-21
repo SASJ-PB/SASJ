@@ -5,11 +5,11 @@
 
 	<groupId>br.edu.ifpb.monteiro.ads</groupId>
 	<artifactId>sasj-api</artifactId>
-	<version>R-0.5.0-IT-05</version>
+	<version>R-0.5.5-IT-06</version>
 	<packaging>jar</packaging>
 
 	<name>sasj-api</name>
-	<description>API REST do Sistema de Alocacao de Sessoes Jurídicas</description>
+	<description>API REST do Sistema de Alocação de Sessões Jurídicas</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
