@@ -1,11 +1,7 @@
 package br.edu.ifpb.monteiro.ads.sasj.api.model.relatorio;
 
-import java.time.LocalDateTime;
-
 public class RelatorioQuantidadeTipoAudiencia {
 
-	private LocalDateTime de;
-	private LocalDateTime ate;
 	private int qtdPenal;
 	private int qtdAcaoCivil;
 	private int qtdCustodia;
@@ -17,20 +13,21 @@ public class RelatorioQuantidadeTipoAudiencia {
 	private int qtdVideoconferencia;
 	private int qtdOutros;
 
-	public LocalDateTime getDe() {
-		return de;
-	}
+	public RelatorioQuantidadeTipoAudiencia(int qtdPenal, int qtdAcaoCivil, int qtdCustodia, int qtdImprobidade,
+			int qtdInstrucaoCreta, int qtdLeilao, int qtdPJE, int qtdTebasImprobidade, int qtdVideoconferencia,
+			int qtdOutros) {
 
-	public void setDe(LocalDateTime de) {
-		this.de = de;
-	}
-
-	public LocalDateTime getAte() {
-		return ate;
-	}
-
-	public void setAte(LocalDateTime ate) {
-		this.ate = ate;
+		this.qtdPenal = qtdPenal;
+		this.qtdAcaoCivil = qtdAcaoCivil;
+		this.qtdCustodia = qtdCustodia;
+		this.qtdImprobidade = qtdImprobidade;
+		this.qtdInstrucaoCreta = qtdInstrucaoCreta;
+		this.qtdLeilao = qtdLeilao;
+		this.qtdPJE = qtdPJE;
+		this.qtdTebasImprobidade = qtdTebasImprobidade;
+		this.qtdVideoconferencia = qtdVideoconferencia;
+		this.qtdOutros = qtdOutros;
+		
 	}
 
 	public int getQtdPenal() {
