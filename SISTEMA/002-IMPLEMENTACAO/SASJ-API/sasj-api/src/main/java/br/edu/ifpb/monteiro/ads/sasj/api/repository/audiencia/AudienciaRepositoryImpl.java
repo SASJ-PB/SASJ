@@ -42,6 +42,23 @@ public class AudienciaRepositoryImpl implements AudienciaRepositoryQuery {
 		return new PageImpl<>(query.getResultList(), pageable, total(audienciaFilter));
 	}
 
+	@Override
+	public List<Audiencia> filtrarPorData(AudienciaFilter audienciaFilterData) {
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Audiencia> criteria = builder.createQuery(Audiencia.class);
+
+		Root<Audiencia> root = criteria.from(Audiencia.class);
+
+		// Criar restricoes
+		Predicate[] predicates = criarRestricoes(audienciaFilterData, builder, root);
+
+		criteria.where(predicates);
+
+		TypedQuery<Audiencia> query = entityManager.createQuery(criteria);
+
+		return query.getResultList();
+	}
+
 	private Predicate[] criarRestricoes(AudienciaFilter audienciaFilter, CriteriaBuilder builder,
 			Root<Audiencia> root) {
 
@@ -90,22 +107,6 @@ public class AudienciaRepositoryImpl implements AudienciaRepositoryQuery {
 		if (audienciaFilter.getTipoAudiencia() != null) {
 			predicates.add(builder.equal(root.get(Audiencia_.tipoAudiencia), audienciaFilter.getTipoAudiencia()));
 		}
-
-		// if (audienciaFilter.getNumeroProcesso() != null) {
-		// Join<Audiencia, Processo> join = root.join("processo");
-		// System.out.println(join.isNull());
-		// Expression<Long> codigo = join.get(Processo_.codigo).get("numeroProcesso");
-		// predicates
-		// .add(builder.equal(codigo, audienciaFilter.getNumeroProcesso()));
-		// }
-
-		// if (conciliacaoFilter.getNomeDaParteProcesso() != null) {
-		// Join<Audiencia, Processo> join = root.join("processo");
-		// System.out.println(join.isNull());
-		// Expression<Long> codigo = join.get(Processo_.codigo).get("nomeDaParte");
-		// predicates.add(builder.equal(codigo,
-		// conciliacaoFilter.getNomeDaParteProcesso()));
-		// }
 
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
