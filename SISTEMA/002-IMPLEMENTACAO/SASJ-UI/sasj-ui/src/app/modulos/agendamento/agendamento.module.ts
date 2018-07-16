@@ -29,15 +29,15 @@ import { AgendamentoCadastroComponent } from './agendamento-cadastro/agendamento
 import { AgendamentoRoutingModule } from './agendamento-routing.module';
 import { AgendamentoRemocaoComponent, AgendamentoRemocaoDialogComponent } from './agendamento-remocao/agendamento-remocao.component';
 
-  @NgModule({
-    imports: [
-      CommonModule,
-      ReactiveFormsModule,
-      FormsModule,
+@NgModule({
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
 
-      AgendamentoRoutingModule,
+    AgendamentoRoutingModule,
 
-      TextMaskModule,
+    TextMaskModule,
 
     MatTabsModule,
     MatButtonModule,

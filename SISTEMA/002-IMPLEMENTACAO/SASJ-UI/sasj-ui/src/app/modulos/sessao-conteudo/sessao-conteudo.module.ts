@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { SegurancaModule } from './../seguranca/seguranca.module';
 import { UsuarioModule } from './../usuario/usuario.module';
 import { AgendamentoModule } from './../agendamento/agendamento.module';
+import { RelatorioModule } from './../relatorio/relatorio.module';
 
 import { ConteudoComponent } from './conteudo/conteudo.component';
 
@@ -15,7 +16,8 @@ import { ConteudoComponent } from './conteudo/conteudo.component';
     RouterModule,
     UsuarioModule,
     SegurancaModule,
-    AgendamentoModule
+    AgendamentoModule,
+    RelatorioModule
   ],
   declarations: [ConteudoComponent],
   exports: [

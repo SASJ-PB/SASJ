@@ -1,7 +1,7 @@
-import { PaginaNaoEncontradaComponent } from './modulos/core/pagina-nao-encontrada.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { NaoAutorizadoComponent } from './modulos/core/nao-autorizado.component';
+import { PaginaNaoEncontradaComponent } from './modulos/core/pagina-nao-encontrada.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'agendamentos', pathMatch: 'full'},

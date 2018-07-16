@@ -9,6 +9,7 @@ import { LogoutService } from './../seguranca/logout.service';
 import { UsuarioService } from './../usuario/usuario.service';
 import { AgendamentoService } from './../agendamento/agendamento.service';
 import { StorageDataService } from './storage-data.service';
+import { RelatorioService } from './../relatorio/relatorio.service';
 
 import { NaoAutorizadoComponent } from './nao-autorizado.component';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
@@ -36,8 +37,8 @@ import { JwtHelper } from 'angular2-jwt';
     ErrorHandlerService,
     UsuarioService,
     AgendamentoService,
-    StorageDataService
+    StorageDataService,
+    RelatorioService
   ]
-
 })
 export class CoreModule { }
