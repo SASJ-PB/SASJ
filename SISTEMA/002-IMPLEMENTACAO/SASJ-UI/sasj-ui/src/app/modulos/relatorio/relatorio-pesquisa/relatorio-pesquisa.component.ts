@@ -1,6 +1,7 @@
 import { AbstractControl, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { RelatorioService } from './../relatorio.service';
+import { ErrorHandlerService } from '../../core/error-handler.service';
 
 @Component({
   selector: 'app-relatorio-pesquisa',
@@ -24,7 +25,8 @@ export class RelatorioPesquisaComponent implements OnInit {
 
   public mascaraData = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
-  constructor(private relatorioService: RelatorioService) {}
+  constructor(private relatorioService: RelatorioService,
+      private errorHandlerService: ErrorHandlerService) {}
 
   ngOnInit() {
     this.campoDataInicio = new FormControl('', [Validators.required, Validators.minLength(10), ValidateDate]);
@@ -37,160 +39,187 @@ export class RelatorioPesquisaComponent implements OnInit {
     const valorDataAte = this.formatarDataAte(this.campoDataFinal.value);
 
     this.gerarGraficoAudiencias(valorDataDe, valorDataAte);
-    // this.gerarGraficoOitivas();
-    // this.gerarGraficoTempoDeUsoSala();
-    // this.gerarGraficoConciliadores();
+    // this.gerarGraficoOitivas(valorDataDe, valorDataAte);
+    // this.gerarGraficoTempoDeUsoSala(valorDataDe, valorDataAte);
+    // this.gerarGraficoConciliadores(valorDataDe, valorDataAte);
   }
 
   gerarGraficoAudiencias(dataDe: string, dataAte: string) {
 
-    const respostaJson = this.relatorioService.listarQtdAudienciasPorTipo(dataDe, dataAte);
+    this.relatorioService.listarQtdAudienciasPorTipo(dataDe, dataAte)
+      .then(resultado => {
 
-    console.log(respostaJson);
+          this.dataGraficoA = {
+            labels: ['AÇÃO CIVIL', 'CUSTÓDIA', 'IMPROBIDADE', 'INSTRUÇÃO DO CRETA',
+              'LEILÃO', 'OUTROS', 'PENAL', 'PJE', 'TEBAS IMPROBIDADE', 'VIDEOCONFERÊNCIA'
+            ],
+            datasets: [
+              {
+                data:
+                  [
+                    resultado.qtdPenal, resultado.qtdAcaoCivil, resultado.qtdCustodia,
+                    resultado.qtdImprobidade, resultado.qtdInstrucaoCreta, resultado.qtdLeilao,
+                    resultado.qtdOutros, resultado.qtdPJE, resultado.qtdPenal, resultado.qtdTebasImprobidade,
+                    resultado.qtdVideoConferencia
+                  ],
+                backgroundColor: [
+                  '#f44336',
+                  '#9c27b0',
+                  '#FFCE56',
+                  '#3f51b5',
+                  '#03a9f4',
+                  '#009688',
+                  '#8bc34a',
+                  '#ffeb3b',
+                  '#ff9800',
+                  '#795548',
+                ],
+                hoverBackgroundColor: [
+                  '#f44336',
+                  '#9c27b0',
+                  '#FFCE56',
+                  '#3f51b5',
+                  '#03a9f4',
+                  '#009688',
+                  '#8bc34a',
+                  '#ffeb3b',
+                  '#ff9800',
+                  '#795548',
+                ]
+              }
+            ]
+          };
 
-    /*this.dataGraficoA = {
-      labels: ['AÇÃO CIVIL', 'CUSTÓDIA', 'IMPROBIDADE', 'INSTRUÇÃO DO CRETA',
-        'LEILÃO', 'OUTROS', 'PENAL', 'PJE', 'TEBAS IMPROBIDADE', 'VIDEOCONFERÊNCIA'
-      ],
-      datasets: [
-        {
-          data: [300, 50, 100, 50, 20, 10, 203, 150, 200, 120],
-          backgroundColor: [
-            '#f44336',
-            '#9c27b0',
-            '#FFCE56',
-            '#3f51b5',
-            '#03a9f4',
-            '#009688',
-            '#8bc34a',
-            '#ffeb3b',
-            '#ff9800',
-            '#795548',
-          ],
-          hoverBackgroundColor: [
-            '#f44336',
-            '#9c27b0',
-            '#FFCE56',
-            '#3f51b5',
-            '#03a9f4',
-            '#009688',
-            '#8bc34a',
-            '#ffeb3b',
-            '#ff9800',
-            '#795548',
-          ]
-        }
-      ]
-    };
-
-    this.optionsGraficoA = {
-      responsive: true,
-      title: {
-        display: true,
-        text: 'QUANTIDADE DE AUDIÊNCIAS POR TIPO DE AUDIÊNCIA',
-        fontSize: 20
-      },
-      legend: {
-        position: 'right'
-      }
-    };*/
+          this.optionsGraficoA = {
+            responsive: true,
+            title: {
+              display: true,
+              text: 'QUANTIDADE DE AUDIÊNCIAS POR TIPO DE AUDIÊNCIA',
+              fontSize: 20
+            },
+            legend: {
+              position: 'right'
+            }
+          };
+      })
+      .catch(erro => this.errorHandlerService.handle(erro));
   }
 
-  gerarGraficoOitivas() {
-    this.dataGraficoB = {
-      labels: ['AÇÃO CIVÍL', 'CUSTÓDIA', 'IMPROBIDADE', 'INSTRUÇÃO DO CRETA',
-        'LEILÃO', 'OUTROS', 'PENAL', 'PJE', 'TEBAS IMPROBIDADE', 'VIDEOCONFERÊNCIA'
-      ],
-      datasets: [
-        {
-          data: [300, 50, 100, 50, 20, 10, 203, 150, 200, 120],
-          backgroundColor: [
-            '#f44336',
-            '#9c27b0',
-            '#FFCE56',
-            '#3f51b5',
-            '#03a9f4',
-            '#009688',
-            '#8bc34a',
-            '#ffeb3b',
-            '#ff9800',
-            '#795548',
+  gerarGraficoOitivas(dataDe: string, dataAte: string) {
+
+    this.relatorioService.listarQtdOitivasPorTipoAudiencia(dataDe, dataAte)
+      .then(resultado => {
+        this.dataGraficoB = {
+          labels: ['AÇÃO CIVÍL', 'CUSTÓDIA', 'IMPROBIDADE', 'INSTRUÇÃO DO CRETA',
+            'LEILÃO', 'OUTROS', 'PENAL', 'PJE', 'TEBAS IMPROBIDADE', 'VIDEOCONFERÊNCIA'
           ],
-          hoverBackgroundColor: [
-            '#f44336',
-            '#9c27b0',
-            '#FFCE56',
-            '#3f51b5',
-            '#03a9f4',
-            '#009688',
-            '#8bc34a',
-            '#ffeb3b',
-            '#ff9800',
-            '#795548',
+          datasets: [
+            {
+              data: [
+                resultado.qtdPenal, resultado.qtdAcaoCivil, resultado.qtdCustodia,
+                resultado.qtdImprobidade, resultado.qtdInstrucaoCreta, resultado.qtdLeilao,
+                resultado.qtdOutros, resultado.qtdPJE, resultado.qtdPenal, resultado.qtdTebasImprobidade,
+                resultado.qtdVideoConferencia
+              ],
+              backgroundColor: [
+                '#f44336',
+                '#9c27b0',
+                '#FFCE56',
+                '#3f51b5',
+                '#03a9f4',
+                '#009688',
+                '#8bc34a',
+                '#ffeb3b',
+                '#ff9800',
+                '#795548',
+              ],
+              hoverBackgroundColor: [
+                '#f44336',
+                '#9c27b0',
+                '#FFCE56',
+                '#3f51b5',
+                '#03a9f4',
+                '#009688',
+                '#8bc34a',
+                '#ffeb3b',
+                '#ff9800',
+                '#795548',
+              ]
+            }
           ]
-        }
-      ]
-    };
+        };
 
-    this.optionsGraficoB = {
-      title: {
-        display: true,
-        text: 'QUANTIDADE DE OITIVAS POR TIPO DE AUDIÊNCIA',
-        fontSize: 20
-      },
-      legend: {
-        position: 'right'
-      }
-    };
-
+        this.optionsGraficoB = {
+          title: {
+            display: true,
+            text: 'QUANTIDADE DE OITIVAS POR TIPO DE AUDIÊNCIA',
+            fontSize: 20
+          },
+          legend: {
+            position: 'right'
+          }
+        };
+      })
+      .catch(erro => this.errorHandlerService.handle(erro));
   }
 
-  gerarGraficoTempoDeUsoSala() {
-    this.dataGraficoC = {
-      labels: ['AÇÃO CIVÍL', 'CUSTÓDIA', 'IMPROBIDADE', 'INSTRUÇÃO DO CRETA',
-        'LEILÃO', 'OUTROS', 'PENAL', 'PJE', 'TEBAS IMPROBIDADE', 'VIDEOCONFERÊNCIA'
-      ],
-      datasets: [
-        {
-          data: [300, 50, 100, 50, 20, 10, 203, 150, 200, 120],
-          backgroundColor: [
-            '#f44336',
-            '#9c27b0',
-            '#FFCE56',
-            '#3f51b5',
-            '#03a9f4',
-            '#009688',
-            '#8bc34a',
-            '#ffeb3b',
-            '#ff9800',
-            '#795548',
-          ],
-          hoverBackgroundColor: [
-            '#f44336',
-            '#9c27b0',
-            '#FFCE56',
-            '#3f51b5',
-            '#03a9f4',
-            '#009688',
-            '#8bc34a',
-            '#ffeb3b',
-            '#ff9800',
-            '#795548',
-          ]
-        }
-      ]
-    };
+  gerarGraficoTempoDeUsoSala(dataDe: string, dataAte: string) {
 
-    this.optionsGraficoC = {
-      title: {
-        display: true,
-        text: 'TEMPO DE USO DA SALA POR TIPO DE AUDIÊNCIA',
-        fontSize: 20
-      },
-      legend: {
-        position: 'right'
-      }
-    };
+    this.relatorioService.listarQtdHorasPorTipoAudiencia(dataDe, dataAte)
+      .then(resultado => {
+        this.dataGraficoC = {
+          labels: ['AÇÃO CIVÍL', 'CUSTÓDIA', 'IMPROBIDADE', 'INSTRUÇÃO DO CRETA',
+            'LEILÃO', 'OUTROS', 'PENAL', 'PJE', 'TEBAS IMPROBIDADE', 'VIDEOCONFERÊNCIA'
+          ],
+          datasets: [
+            {
+              data: [
+                resultado.qtdPenal, resultado.qtdAcaoCivil, resultado.qtdCustodia,
+                resultado.qtdImprobidade, resultado.qtdInstrucaoCreta, resultado.qtdLeilao,
+                resultado.qtdOutros, resultado.qtdPJE, resultado.qtdPenal, resultado.qtdTebasImprobidade,
+                resultado.qtdVideoConferencia
+              ],
+              backgroundColor: [
+                '#f44336',
+                '#9c27b0',
+                '#FFCE56',
+                '#3f51b5',
+                '#03a9f4',
+                '#009688',
+                '#8bc34a',
+                '#ffeb3b',
+                '#ff9800',
+                '#795548',
+              ],
+              hoverBackgroundColor: [
+                '#f44336',
+                '#9c27b0',
+                '#FFCE56',
+                '#3f51b5',
+                '#03a9f4',
+                '#009688',
+                '#8bc34a',
+                '#ffeb3b',
+                '#ff9800',
+                '#795548',
+              ]
+            }
+          ]
+        };
+
+        this.optionsGraficoC = {
+          title: {
+            display: true,
+            text: 'TEMPO DE USO DA SALA POR TIPO DE AUDIÊNCIA',
+            fontSize: 20
+          },
+          legend: {
+            position: 'right'
+          }
+        };
+      })
+      .catch(erro => this.errorHandlerService.handle(erro));
+
   }
 
   gerarGraficoConciliadores() {
