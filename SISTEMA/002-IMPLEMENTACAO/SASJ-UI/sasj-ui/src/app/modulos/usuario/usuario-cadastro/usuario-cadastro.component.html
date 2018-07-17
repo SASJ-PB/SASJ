@@ -1,33 +1,33 @@
-<form>
+<form [formGroup]="usuarioForm">
   <mat-card style="margin:10px">
     <div class="form-container-usuario" >
 
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>Nome e sobrenome</mat-label>
-        <input id="campoNome" matInput placeholder="Nome e sobrenome do usuário" [formControl]="campoNome"
-            required>
+        <input id="campoNome" matInput placeholder="Nome e sobrenome do usuário"
+            formControlName="campoNome" required>
 
-        <mat-error *ngIf="campoNome.hasError('required')">
+        <mat-error *ngIf="usuarioForm.get('campoNome').hasError('required')">
           O nome deve ser informado
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>Cargo</mat-label>
-        <input id="campoCargo" matInput placeholder="Cargo do usuário" [formControl]="campoCargo"
+        <input id="campoCargo" matInput placeholder="Cargo do usuário" formControlName="campoCargo"
             required>
 
-        <mat-error *ngIf="campoCargo.hasError('required')">
+        <mat-error *ngIf="usuarioForm.get('campoCargo').hasError('required')">
           O cargo deve ser informado
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>Matrícula</mat-label>
-        <input id="campoMatricula" matInput placeholder="Matrícula do usuário" [formControl]="campoMatricula"
+        <input id="campoMatricula" matInput placeholder="Matrícula do usuário" formControlName="campoMatricula"
             [textMask]="{mask: mascaraMatricula, guide: false}" required>
 
-        <mat-error *ngIf="campoMatricula.hasError('required')">
+        <mat-error *ngIf="usuarioForm.get('campoMatricula').hasError('required')">
           A matrícula deve ser informada
         </mat-error>
       </mat-form-field>
@@ -35,25 +35,25 @@
       <mat-form-field appearance="outline" class="spacer-field">
         <mat-label>E-mail</mat-label>
         <input id="campoEmail" matInput placeholder="Endereço de e-mail do usuário"
-            [formControl]="campoEmail" required>
+            formControlName="campoEmail" required>
 
-        <mat-error *ngIf="campoEmail.hasError('email')">
+        <mat-error *ngIf="usuarioForm.get('campoEmail').hasError('email')">
           O e-mail informado não é válido
         </mat-error>
-        <mat-error *ngIf="campoEmail.hasError('required')">
+        <mat-error *ngIf="usuarioForm.get('campoEmail').hasError('required')">
           O e-mail deve ser informado
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="spacer-field campo-tipo-usuario" *ngIf="!isEdicao">
         <mat-label>Tipo de usuário</mat-label>
-        <mat-select id="campoTipoUsuario" [formControl]="campoTipoUsuario" required>
+        <mat-select id="campoTipoUsuario" formControlName="campoTipoUsuario" required>
           <mat-option *ngFor="let tipo of tiposUsuarios" [value]="tipo">
             {{tipo}}
           </mat-option>
         </mat-select>
 
-        <mat-error *ngIf="campoTipoUsuario.hasError('required')">
+        <mat-error *ngIf="usuarioForm.get('campoTipoUsuario').hasError('required')">
           O tipo de usuário deve ser informado
         </mat-error>
       </mat-form-field>

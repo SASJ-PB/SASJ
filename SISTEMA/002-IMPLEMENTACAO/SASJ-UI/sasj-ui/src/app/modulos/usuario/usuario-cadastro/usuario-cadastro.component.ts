@@ -6,9 +6,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Usuario } from './../../core/model';
 import { UsuarioService } from './../usuario.service';
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { StorageDataService } from '../../core/storage-data.service';
+import { LoadingComponent } from '../../core/loading.component';
 
 @Component({
   selector: 'app-usuario-cadastro',
@@ -19,13 +20,7 @@ export class UsuarioCadastroComponent implements OnInit {
 
   isEdicao = false;
   usuario = new Usuario();
-
-  campoNome: FormControl;
-  campoEmail: FormControl;
-  campoMatricula: FormControl;
-  campoCargo: FormControl;
-  campoSenhaUsuario: FormControl;
-  campoTipoUsuario: FormControl;
+  usuarioForm: FormGroup;
 
   public mascaraMatricula = [/[a-zA-Z]/, /[a-zA-Z]/, '-', /\d/, /\d/, /\d/, /\d/];
 
@@ -34,11 +29,14 @@ export class UsuarioCadastroComponent implements OnInit {
   constructor(private usuarioService: UsuarioService, private router: Router,
       private snackBar: MatSnackBar, private errorHandlerService: ErrorHandlerService,
       private activatedRoute: ActivatedRoute, private authService: AuthService,
-      public dialog: MatDialog, private storageDataService: StorageDataService) {
+      public dialog: MatDialog, private storageDataService: StorageDataService,
+      private formBuilder: FormBuilder)
+  {
+    this.createForm();
   }
 
-  ngOnInit() {
-
+  ngOnInit()
+  {
     const edicaoPerfil = this.router.url === '/perfil';
 
     if (edicaoPerfil) {
@@ -47,38 +45,29 @@ export class UsuarioCadastroComponent implements OnInit {
 
       this.isEdicao = true;
     }
-
-    this.campoEmail = new FormControl(null, [Validators.required, Validators.email]);
-    this.campoNome = new FormControl(null, [Validators.required]);
-    this.campoMatricula = new FormControl(null, [Validators.required]);
-    this.campoCargo = new FormControl(null, [Validators.required]);
-    this.campoSenhaUsuario = new FormControl('', [Validators.required]);
-    this.campoTipoUsuario = new FormControl('Administrador', [Validators.required]);
   }
 
-  salvar() {
+  private createForm()
+  {
+    this.usuarioForm = this.formBuilder.group({
+      campoEmail: [null, [Validators.required, Validators.email]],
+      campoNome: [null, Validators.required],
+      campoMatricula: [null, [Validators.required]],
+      campoCargo: [null, [Validators.required]],
+      campoTipoUsuario: ['Administrador', [Validators.required]]
+    });
+  }
 
-    this.usuario.nome = this.campoNome.value;
-    this.usuario.matricula = this.campoMatricula.value;
-    this.usuario.email = this.campoEmail.value;
-    this.usuario.cargo = this.campoCargo.value;
-
-    if (this.campoNome.value === null || this.campoNome.value === '') {
-      this.usuario.nome = null;
-    }
-    else if (this.campoMatricula.value === null || this.campoMatricula.value === '') {
-      this.usuario.matricula = null;
-    }
-    else if (this.campoEmail.value === null || this.campoEmail.value === '') {
-      this.usuario.email = null;
-    }
-    else if (this.campoCargo.value === null || this.campoCargo.value === '') {
-      this.usuario.cargo = null;
-    }
+  salvar()
+  {
+    this.usuario.nome = this.usuarioForm.get('campoNome').value;
+    this.usuario.matricula = this.usuarioForm.get('campoMatricula').value;
+    this.usuario.email = this.usuarioForm.get('campoEmail').value;
+    this.usuario.cargo = this.usuarioForm.get('campoCargo').value;
 
     if (!this.isEdicao) {
 
-      if (this.campoTipoUsuario.value === 'Administrador'){
+      if (this.usuarioForm.get('campoTipoUsuario').value === 'Administrador'){
         this.usuario.tipoUsuario = 'ADMIN';
       }
       else {
@@ -87,26 +76,37 @@ export class UsuarioCadastroComponent implements OnInit {
 
       this.usuario.senha = '123456';
 
-      this.usuarioService.cadastrar(this.usuario)
-      .then((usuarioAdicionado) => {
-        this.router.navigate(['/usuarios']);
-        this.snackBar.open('Usuário cadastrado com sucesso', '', { duration: 4500});
-      })
-      .catch(erro => {
-        this.errorHandlerService.handle(erro);
-      });
+      if (this.usuarioForm.status !== 'INVALID') {
+
+        this.dialog.open(LoadingComponent, { disableClose: true });
+
+        this.usuarioService.cadastrar(this.usuario)
+        .then((usuarioAdicionado) => {
+
+          this.router.navigate(['/usuarios']);
+
+          this.dialog.closeAll();
+
+          this.snackBar.open('Usuário cadastrado com sucesso', '', { duration: 4500});
+        })
+        .catch(erro => {
+          this.dialog.closeAll();
+          this.errorHandlerService.handle(erro);
+        });
+      }
+
     }
     else{
       this.atualizarPerfilPessoal();
     }
   }
 
-  atualizarPerfilPessoal() {
-
-    this.usuario.nome = this.campoNome.value;
-    this.usuario.matricula = this.campoMatricula.value;
-    this.usuario.email = this.campoEmail.value;
-    this.usuario.cargo = this.campoCargo.value;
+  atualizarPerfilPessoal()
+  {
+    this.usuario.nome = this.usuarioForm.get('campoNome').value;
+    this.usuario.matricula = this.usuarioForm.get('campoMatricula').value;
+    this.usuario.email = this.usuarioForm.get('campoEmail').value;
+    this.usuario.cargo = this.usuarioForm.get('campoCargo').value;
 
     this.usuarioService.atualizar(this.usuario)
       .then(usuario => {
@@ -120,7 +120,6 @@ export class UsuarioCadastroComponent implements OnInit {
       .catch(erro => {
         this.errorHandlerService.handle(erro);
       });
-
   }
 
   openDialog() {
@@ -141,19 +140,21 @@ export class UsuarioCadastroComponent implements OnInit {
     });
   }
 
-  carregarUsuario(){
-
+  carregarUsuario()
+  {
     this.usuarioService.listarTodos().then(resultado => {
 
       const emailUsuarioLogado = this.authService.jwtPayload.user_name;
 
       this.usuario = resultado.usuarios.filter(filtro => filtro.email === emailUsuarioLogado)[0];
 
-      this.campoNome.setValue(this.usuario.nome);
-      this.campoMatricula.setValue(this.usuario.matricula);
-      this.campoEmail.setValue(this.usuario.email);
-      this.campoTipoUsuario.setValue(this.usuario.tipoUsuario === 'ADMIN' ? 'Administrador' : 'Padrão');
-      this.campoCargo.setValue(this.usuario.cargo);
+      this.usuarioForm.setValue({
+        campoNome: this.usuario.nome,
+        campoMatricula: this.usuario.matricula,
+        campoEmail: this.usuario.email,
+        campoCargo: this.usuario.cargo,
+        campoTipoUsuario: this.usuario.tipoUsuario === 'ADMIN' ? 'Administrador' : 'Padrão',
+      });
     })
     .catch(erro => this.errorHandlerService.handle(erro));
   }
@@ -184,29 +185,36 @@ export class EmailEnviadoDialogComponent {
   constructor(public dialogRef: MatDialogRef<EmailEnviadoDialogComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any, private authService: AuthService,
       private usuarioService: UsuarioService, private snackBar: MatSnackBar,
-      private errorHandlerService: ErrorHandlerService) { }
+      private errorHandlerService: ErrorHandlerService, private dialog: MatDialog,
+      private router: Router) {
+  }
 
-    enviar() {
+  enviar()
+  {
+    this.dialogRef.close();
 
-      this.authService.login('PP-1234', 'public')
-      .then(() => {
-        this.usuarioService.recuperarSenha(this.data.email)
-          .then(() => {
-            this.authService.limparAccessToken();
-            this.snackBar.open('E-mail de redefinição de senha enviado', '', { duration: 4500});
-          })
-          .catch(erro => {
-            this.errorHandlerService.handle(erro);
-            this.authService.limparAccessToken();
-          });
-      })
-      .catch(erro => {
-        this.errorHandlerService.handle(erro);
-        this.authService.limparAccessToken();
+    this.dialog.open(LoadingComponent, { disableClose: true });
 
-      });
-      this.dialogRef.close();
-    }
+    this.authService.login('PP-1234', 'public')
+    .then(() => {
+      this.usuarioService.recuperarSenha(this.data.email)
+        .then(() => {
+          this.authService.limparAccessToken();
+          this.router.navigate(['/login']);
+          this.snackBar.open('E-mail de redefinição de senha enviado', '', { duration: 4500});
+        })
+        .catch(erro => {
+          this.errorHandlerService.handle(erro);
+          this.authService.limparAccessToken();
+        });
+
+        this.dialog.closeAll();
+    })
+    .catch(erro => {
+      this.errorHandlerService.handle(erro);
+      this.authService.limparAccessToken();
+    });
+  }
 }
 
 @Component({

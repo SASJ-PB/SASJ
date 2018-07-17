@@ -10,6 +10,7 @@ import { FormControl, Validators, FormGroup, AbstractControl } from '@angular/fo
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { StorageDataService } from '../../core/storage-data.service';
+import { LoadingComponent } from '../../core/loading.component';
 
 @Component({
   selector: 'app-agendamento-cadastro',
@@ -263,8 +264,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.router.navigate(['/agendamentos']);
   }
 
-  cadastrar(){
-
+  cadastrar()
+  {
     if (this.isCadastroReserva()) {
       this.setDadosReserva();
       this.processo.numeroProcesso = '-';
@@ -320,14 +321,21 @@ export class AgendamentoCadastroComponent implements OnInit {
       }
 
       // Chamando a URL de cadastro na API para salvar a audiência no banco
-      if (!this.isEdicao) {
+      if (!this.isEdicao)
+      {
+        this.dialog.open(LoadingComponent, { disableClose: true });
+
         this.agendamentoService.cadastrarAudiencia(this.audiencia)
         .then((audienciaAdicionada) => {
           this.router.navigate(['/agendamentos']);
+
+          this.dialog.closeAll();
+
           this.snackBar.open('Audiência cadastrada com sucesso', '', { duration: 4500});
         })
         .catch(erro => {
           this.errorHandlerService.handle(erro);
+          this.dialog.closeAll();
         });
       }
       else{
@@ -390,14 +398,21 @@ export class AgendamentoCadastroComponent implements OnInit {
       }
 
       // Chamando a URL de cadastro na API para salvar a conciliação no banco
-      if (!this.isEdicao) {
+      if (!this.isEdicao)
+      {
+        this.dialog.open(LoadingComponent, { disableClose: true });
+
         this.agendamentoService.cadastrarConciliacao(this.conciliacao)
           .then((conciliacaoAdicionada) => {
             this.router.navigate(['/agendamentos']);
+
+            this.dialog.closeAll();
+
             this.snackBar.open('Conciliação cadastrada com sucesso', '', { duration: 4500});
           })
           .catch(erro => {
             this.errorHandlerService.handle(erro);
+            this.dialog.closeAll();
           }
         );
       }
@@ -424,8 +439,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     }
   }
 
-  atualizarAudiencia() {
-
+  atualizarAudiencia()
+  {
     this.audiencia.duracaoEstimada = this.campoTempoDuracao.value;
     this.audiencia.observacao = this.campoObservacao.value;
     this.audiencia.quantidadeOitivas = this.campoQuantidadeOitivas.value;
@@ -433,7 +448,7 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.audiencia.agendamento = this.formatarDataHora();
     this.audiencia.partesInteressadas = this.dataSourcePartesInteressadas.data;
 
-    console.log(this.dataSourcePendencias.data);
+    // console.log(this.dataSourcePendencias.data);
 
     this.audiencia.pendencias = this.dataSourcePendencias.data;
 
@@ -452,8 +467,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     );
   }
 
-  atualizarConciliacao() {
-
+  atualizarConciliacao()
+  {
     this.conciliacao.duracaoEstimada = this.campoTempoDuracao.value;
     this.conciliacao.observacao = this.campoObservacao.value;
     this.conciliacao.quantidadeOitivas = this.campoQuantidadeOitivas.value;
@@ -477,7 +492,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     );
   }
 
-  private atualizarProcesso() {
+  private atualizarProcesso()
+  {
     this.processo.numeroProcesso = this.campoNumeroProcesso.value;
     this.processo.nomeDaParte = this.campoNomeParte.value;
 
@@ -490,8 +506,8 @@ export class AgendamentoCadastroComponent implements OnInit {
       });
   }
 
-  carregarAgendamento(codigo: number) {
-
+  carregarAgendamento(codigo: number)
+  {
     if (this.activatedRoute.snapshot.data.tipo === 'audiencia') {
       this.agendamentoService.buscarAudienciaPorCodigo(codigo)
         .then(audiencia => {
@@ -528,7 +544,6 @@ export class AgendamentoCadastroComponent implements OnInit {
                 this.selection.select(pendencia);
               }
             });
-
 
             // console.log('Carregando pendencias...');
             // console.log(this.audiencia.pendencias);
@@ -606,8 +621,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     pendencia.resolvida = !pendencia.resolvida;
   }
 
-  private salvarPendencias() {
-
+  private salvarPendencias()
+  {
     this.selection.selected.forEach(pendencia => {
       pendencia.resolvida = true;
     });
@@ -617,7 +632,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     // this.storageDataServi.setPendencias(this.dataSourcePendencias.data);
   }
 
-  validarBotaoPendencia() {
+  validarBotaoPendencia()
+  {
     if (this.campoPendencia.value === '' || this.nomeResponsavel === ''){
       this.isCamposPendenciasInvalidos = true;
     }
@@ -626,7 +642,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     }
   }
 
-  adicionarPendencia() {
+  adicionarPendencia()
+  {
     const pendencia = new Pendencia();
     pendencia.descricao = this.campoPendencia.value;
     pendencia.responsavel = this.nomeResponsavel;
@@ -645,7 +662,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.salvarPendencias();
   }
 
-  removerPendencia(pendencia: Pendencia) {
+  removerPendencia(pendencia: Pendencia)
+  {
     const pendencias: Pendencia[] = this.dataSourcePendencias.data;
 
     // Removendo parte interessada
@@ -656,8 +674,8 @@ export class AgendamentoCadastroComponent implements OnInit {
   /*------------- PENDENCIAS -----------*/
 
   //            para cadastro            [0] [1] [2]
-  private formatarDataHora(): string{ // aaaa-MM-dd HH:mm
-
+  private formatarDataHora(): string
+  { // aaaa-MM-dd HH:mm
     const valorCampoData: string = this.campoData.value;
 
     const data = valorCampoData.split('/');
@@ -665,8 +683,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     return data[2] + '-' + data[1] + '-' + data[0] + ' ' + this.campoHora.value;
   }
 
-  private preencherDataHoraAudiencia(audiencia: Audiencia) {
-
+  private preencherDataHoraAudiencia(audiencia: Audiencia)
+  {
     const dataHora = audiencia.agendamento.split(' ');
 
     const data = dataHora[0];
@@ -680,8 +698,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.campoHora.setValue(hora);
   }
 
-  private preencherDataHoraConciliacao(conciliacao: Conciliacao) {
-
+  private preencherDataHoraConciliacao(conciliacao: Conciliacao)
+  {
     const dataHora = conciliacao.agendamento.split(' ');
 
     const data = dataHora[0];
@@ -695,14 +713,16 @@ export class AgendamentoCadastroComponent implements OnInit {
     this.campoHora.setValue(hora);
   }
 
-  isAudiencia(): boolean{
+  isAudiencia(): boolean
+  {
     if (this.campoTipoSessao.value === 'Audiência'){ // this.tipoSessaoEscolhido === 'Audiência' ||
       return true;
     }
     return false;
   }
 
-  private converterTipoAudienciaLabelParaEnum(tipoAudiencia: any): string{
+  private converterTipoAudienciaLabelParaEnum(tipoAudiencia: any): string
+  {
     if (tipoAudiencia === 'Ação civil'){
       return 'ACAO_CIVIL';
     }
@@ -735,7 +755,8 @@ export class AgendamentoCadastroComponent implements OnInit {
     }
   }
 
-  private converterTipoAudienciaEnumParaLabel(tipoAudiencia: string): string{
+  private converterTipoAudienciaEnumParaLabel(tipoAudiencia: string): string
+  {
     if (tipoAudiencia === 'ACAO_CIVIL'){
       return 'Ação civil';
     }
@@ -770,7 +791,8 @@ export class AgendamentoCadastroComponent implements OnInit {
 
 }
 
-export function ValidateDate(control: AbstractControl){
+export function ValidateDate(control: AbstractControl)
+{
   // TENTAR CADASTRAR UM AGENDAMENTO NO MES 12
   const valorCampoData = control.value;
 
@@ -801,8 +823,8 @@ export function ValidateDate(control: AbstractControl){
   return null;
 }
 
-export function ValidateHour(control: AbstractControl){
-
+export function ValidateHour(control: AbstractControl)
+{
   const valorCampoHora = control.value;
 
   const time = valorCampoHora.split(':');

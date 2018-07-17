@@ -9,6 +9,7 @@ import { Usuario } from './../../core/model';
 import { ErrorHandlerService } from './../../core/error-handler.service';
 import { AuthService } from './../auth.service';
 import { UsuarioService } from './../../usuario/usuario.service';
+import { LoadingComponent } from '../../core/loading.component';
 
 @Component({
   selector: 'app-login',
@@ -67,7 +68,12 @@ export class RecuperacaoSenhaDialogComponent implements OnInit {
     this.campoEmailRecuperacao = new FormControl('', [Validators.required, Validators.email]);
   }
 
-  recuperar() {
+  recuperar()
+  {
+    this.dialog.closeAll();
+
+    this.dialog.open(LoadingComponent, { disableClose: true });
+
     this.authService.login('PP-1234', 'public')
     .then(() => {
       this.usuarioService.recuperarSenha(this.campoEmailRecuperacao.value)
@@ -79,12 +85,14 @@ export class RecuperacaoSenhaDialogComponent implements OnInit {
         .catch(erro => {
           this.errorHandlerService.handle(erro);
           this.authService.limparAccessToken();
+          this.dialog.closeAll();
         });
-    })
-    .catch(erro => {
-      this.errorHandlerService.handle(erro);
-      this.authService.limparAccessToken();
-    });
+      })
+      .catch(erro => {
+        this.errorHandlerService.handle(erro);
+        this.authService.limparAccessToken();
+      });
+
   }
 
 }
