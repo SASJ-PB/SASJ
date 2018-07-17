@@ -8,11 +8,13 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.monteiro.ads.sasj.api.enums.TipoAudiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
-import br.edu.ifpb.monteiro.ads.sasj.api.model.relatorio.RelatorioQuantidadeOitivaTipoAudiencia;
+import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao;
+import br.edu.ifpb.monteiro.ads.sasj.api.model.relatorio.RelatorioQuantidadeConciliacoesPorConciliador;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.relatorio.RelatorioQuantidadeTipoAudiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.AudienciaRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ConciliacaoRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.filter.AudienciaFilter;
+import br.edu.ifpb.monteiro.ads.sasj.api.repository.filter.ConciliacaoFilter;
 
 @Service
 public class RelatorioService {
@@ -38,7 +40,7 @@ public class RelatorioService {
 
 	}
 
-	public RelatorioQuantidadeOitivaTipoAudiencia gerarRelatorioQtdOitivaTipoAudiencia(LocalDateTime de, LocalDateTime ate) {
+	public RelatorioQuantidadeTipoAudiencia gerarRelatorioQtdOitivaTipoAudiencia(LocalDateTime de, LocalDateTime ate) {
 
 		AudienciaFilter filterData = new AudienciaFilter();
 		filterData.setDataAgendamentoDe(de);
@@ -46,9 +48,38 @@ public class RelatorioService {
 
 		List<Audiencia> audiencias = audienciaRepository.filtrarPorData(filterData);
 
-		RelatorioQuantidadeOitivaTipoAudiencia relatorioQOTA = montarRelatorioQOTA(audiencias);
+		RelatorioQuantidadeTipoAudiencia relatorioQOTA = montarRelatorioQOTA(audiencias);
 
 		return relatorioQOTA;
+
+	}
+
+	public RelatorioQuantidadeTipoAudiencia gerarRelatorioQtdHoraTipoAudiencia(LocalDateTime de, LocalDateTime ate) {
+
+		AudienciaFilter filterData = new AudienciaFilter();
+		filterData.setDataAgendamentoDe(de);
+		filterData.setDataAgendamentoAte(ate);
+
+		List<Audiencia> audiencias = audienciaRepository.filtrarPorData(filterData);
+
+		RelatorioQuantidadeTipoAudiencia relatorioQHTA = montarRelatorioQHTA(audiencias);
+
+		return relatorioQHTA;
+
+	}
+
+	public RelatorioQuantidadeConciliacoesPorConciliador gerarRelatorioQuantidadeConciliacoesPorConciliador(
+			LocalDateTime de, LocalDateTime ate) {
+
+		ConciliacaoFilter filterData = new ConciliacaoFilter();
+		filterData.setDataAgendamentoDe(de);
+		filterData.setDataAgendamentoAte(ate);
+
+		List<Conciliacao> conciliacoes = conciliacaoRepository.filtrarPorData(filterData);
+
+		RelatorioQuantidadeConciliacoesPorConciliador relatorioQCC = montarRelatorioQCC(conciliacoes);
+
+		return relatorioQCC;
 
 	}
 
@@ -96,7 +127,7 @@ public class RelatorioService {
 		return RQTA;
 	}
 
-	private RelatorioQuantidadeOitivaTipoAudiencia montarRelatorioQOTA(List<Audiencia> audiencias) {
+	private RelatorioQuantidadeTipoAudiencia montarRelatorioQOTA(List<Audiencia> audiencias) {
 
 		int qtdOitivaPenal = 0;
 		int qtdOitivaAcaoCivil = 0;
@@ -133,11 +164,79 @@ public class RelatorioService {
 			}
 		}
 
-		RelatorioQuantidadeOitivaTipoAudiencia RQOTA = new RelatorioQuantidadeOitivaTipoAudiencia(qtdOitivaPenal,
+		RelatorioQuantidadeTipoAudiencia RQOTA = new RelatorioQuantidadeTipoAudiencia(qtdOitivaPenal,
 				qtdOitivaAcaoCivil, qtdOitivaCustodia, qtdOitivaImprobidade, qtdOitivaInstrucaoCreta, qtdOitivaLeilao,
 				qtdOitivaPJE, qtdOitivaTebasImprobidade, qtdOitivaVideoconferencia, qtdOitivaOutros);
 
 		return RQOTA;
 	}
 
+	private RelatorioQuantidadeTipoAudiencia montarRelatorioQHTA(List<Audiencia> audiencias) {
+
+		int qtdMinutoPenal = 0;
+		int qtdMinutoAcaoCivil = 0;
+		int qtdMinutoCustodia = 0;
+		int qtdMinutoImprobidade = 0;
+		int qtdMinutoInstrucaoCreta = 0;
+		int qtdMinutoLeilao = 0;
+		int qtdMinutoPJE = 0;
+		int qtdMinutoTebasImprobidade = 0;
+		int qtdMinutoVideoconferencia = 0;
+		int qtdMinutoOutros = 0;
+
+		for (Audiencia audiencia : audiencias) {
+			if (audiencia.getTipoAudiencia() == TipoAudiencia.PENAL) {
+				qtdMinutoPenal += audiencia.getDuracaoEstimada();
+			} else if (audiencia.getTipoAudiencia() == TipoAudiencia.ACAO_CIVIL) {
+				qtdMinutoAcaoCivil += audiencia.getDuracaoEstimada();
+			} else if (audiencia.getTipoAudiencia() == TipoAudiencia.CUSTODIA) {
+				qtdMinutoCustodia += audiencia.getDuracaoEstimada();
+			} else if (audiencia.getTipoAudiencia() == TipoAudiencia.IMPROBIDADE) {
+				qtdMinutoImprobidade += audiencia.getDuracaoEstimada();
+			} else if (audiencia.getTipoAudiencia() == TipoAudiencia.INSTRUCAO_CRETA) {
+				qtdMinutoInstrucaoCreta += audiencia.getDuracaoEstimada();
+			} else if (audiencia.getTipoAudiencia() == TipoAudiencia.LEILAO) {
+				qtdMinutoLeilao += audiencia.getDuracaoEstimada();
+			} else if (audiencia.getTipoAudiencia() == TipoAudiencia.PJE) {
+				qtdMinutoPJE += audiencia.getDuracaoEstimada();
+			} else if (audiencia.getTipoAudiencia() == TipoAudiencia.TEBAS_IMPROBIDADE) {
+				qtdMinutoTebasImprobidade += audiencia.getDuracaoEstimada();
+			} else if (audiencia.getTipoAudiencia() == TipoAudiencia.VIDEOCONFERENCIA) {
+				qtdMinutoVideoconferencia += audiencia.getDuracaoEstimada();
+			} else {
+				qtdMinutoOutros += audiencia.getDuracaoEstimada();
+			}
+		}
+
+		RelatorioQuantidadeTipoAudiencia RQHTA = new RelatorioQuantidadeTipoAudiencia(qtdMinutoPenal,
+				qtdMinutoAcaoCivil, qtdMinutoCustodia, qtdMinutoImprobidade, qtdMinutoInstrucaoCreta, qtdMinutoLeilao,
+				qtdMinutoPJE, qtdMinutoTebasImprobidade, qtdMinutoVideoconferencia, qtdMinutoOutros);
+
+		return RQHTA;
+	}
+
+	private RelatorioQuantidadeConciliacoesPorConciliador montarRelatorioQCC(List<Conciliacao> conciliacoes) {
+
+		int qtdMinutoPenal = 0;
+		int qtdMinutoAcaoCivil = 0;
+		int qtdMinutoCustodia = 0;
+		int qtdMinutoImprobidade = 0;
+		int qtdMinutoInstrucaoCreta = 0;
+		int qtdMinutoLeilao = 0;
+		int qtdMinutoPJE = 0;
+		int qtdMinutoTebasImprobidade = 0;
+		int qtdMinutoVideoconferencia = 0;
+		int qtdMinutoOutros = 0;
+
+		for (Conciliacao conciliacao : conciliacoes) {
+			
+		}
+
+		RelatorioQuantidadeConciliacoesPorConciliador RQHTA = new RelatorioQuantidadeConciliacoesPorConciliador(qtdMinutoPenal,
+				qtdMinutoAcaoCivil, qtdMinutoCustodia, qtdMinutoImprobidade, qtdMinutoInstrucaoCreta, qtdMinutoLeilao,
+				qtdMinutoPJE, qtdMinutoTebasImprobidade, qtdMinutoVideoconferencia, qtdMinutoOutros);
+
+		return RQHTA;
+	}
+	
 }
