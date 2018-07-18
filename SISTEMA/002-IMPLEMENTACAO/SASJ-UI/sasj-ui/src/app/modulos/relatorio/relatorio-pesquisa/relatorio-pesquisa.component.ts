@@ -39,7 +39,7 @@ export class RelatorioPesquisaComponent implements OnInit {
     const valorDataAte = this.formatarDataAte(this.campoDataFinal.value);
 
     this.gerarGraficoAudiencias(valorDataDe, valorDataAte);
-    // this.gerarGraficoOitivas(valorDataDe, valorDataAte);
+    this.gerarGraficoOitivas(valorDataDe, valorDataAte);
     // this.gerarGraficoTempoDeUsoSala(valorDataDe, valorDataAte);
     // this.gerarGraficoConciliadores(valorDataDe, valorDataAte);
   }
@@ -57,10 +57,10 @@ export class RelatorioPesquisaComponent implements OnInit {
               {
                 data:
                   [
-                    resultado.qtdPenal, resultado.qtdAcaoCivil, resultado.qtdCustodia,
-                    resultado.qtdImprobidade, resultado.qtdInstrucaoCreta, resultado.qtdLeilao,
-                    resultado.qtdOutros, resultado.qtdPJE, resultado.qtdPenal, resultado.qtdTebasImprobidade,
-                    resultado.qtdVideoConferencia
+                    resultado.qtdAcaoCivil, resultado.qtdCustodia, resultado.qtdImprobidade,
+                    resultado.qtdInstrucaoCreta, resultado.qtdLeilao, resultado.qtdOutros,
+                    resultado.qtdPenal, resultado.qtdPJE, resultado.qtdTebasImprobidade,
+                    resultado.qtdVideoconferencia
                   ],
                 backgroundColor: [
                   '#f44336',
@@ -116,10 +116,10 @@ export class RelatorioPesquisaComponent implements OnInit {
           datasets: [
             {
               data: [
-                resultado.qtdPenal, resultado.qtdAcaoCivil, resultado.qtdCustodia,
-                resultado.qtdImprobidade, resultado.qtdInstrucaoCreta, resultado.qtdLeilao,
-                resultado.qtdOutros, resultado.qtdPJE, resultado.qtdPenal, resultado.qtdTebasImprobidade,
-                resultado.qtdVideoConferencia
+                resultado.qtdOitivaAcaoCivil, resultado.qtdOitivaCustodia, resultado.qtdOitivaImprobidade,
+                resultado.qtdOitivaInstrucaoCreta, resultado.qtdOitivaLeilao, resultado.qtdOitivaOutros,
+                resultado.qtdOitivaPenal, resultado.qtdOitivaPJE, resultado.qtdOitivaTebasImprobidade,
+                resultado.qtdOitivaVideoconferencia
               ],
               backgroundColor: [
                 '#f44336',
@@ -222,7 +222,7 @@ export class RelatorioPesquisaComponent implements OnInit {
 
   }
 
-  gerarGraficoConciliadores() {
+  gerarGraficoConciliadores(dataDe: string, dataAte: string) {
     this.dataGraficoD = {
       labels: ['DANIELE', 'EWERTON', 'FRANCIMÁRIA', 'JÚLIO CESAR',
         'MARIA SILVANA', 'MAX', 'RAYANA'

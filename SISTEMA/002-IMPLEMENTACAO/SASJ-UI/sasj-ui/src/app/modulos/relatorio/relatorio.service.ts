@@ -36,7 +36,7 @@ export class RelatorioService {
     params.set('de', dataDe);
     params.set('ate', dataAte);
 
-    return this.http.get(`${this.relatorioUrl}/quantidadeOitivas`, { search: params })
+    return this.http.get(`${this.relatorioUrl}/quantidadeOitivaTipoAudiencia`, { search: params })
       .toPromise()
       .then(response => {
         const responseJson = response.json();
