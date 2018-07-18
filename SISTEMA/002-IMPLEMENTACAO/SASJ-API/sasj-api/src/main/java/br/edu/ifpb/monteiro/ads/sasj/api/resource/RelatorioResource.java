@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.ifpb.monteiro.ads.sasj.api.model.relatorio.RelatorioQuantidadeConciliacoesPorConciliador;
+import br.edu.ifpb.monteiro.ads.sasj.api.model.relatorio.RelatorioQuantidadeConciliacaoPorConciliador;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.relatorio.RelatorioQuantidadeTipoAudiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.service.RelatorioService;
 
@@ -50,13 +50,14 @@ public class RelatorioResource {
 
 		return ResponseEntity.ok().body(relatorioQMTA);
 	}
-	
-	@GetMapping("/quantidadeConciliacoesPorConciliador")
-	public ResponseEntity<RelatorioQuantidadeConciliacoesPorConciliador> gerarRelatorioQCC(
+
+	@GetMapping("/quantidadeConciliacaoPorConciliador")
+	public ResponseEntity<RelatorioQuantidadeConciliacaoPorConciliador> gerarRelatorioQCC(
 			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime de,
 			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm") LocalDateTime ate) {
 
-		RelatorioQuantidadeConciliacoesPorConciliador relatorioQCC = relatorioService.gerarRelatorioQtdHoraTipoAudiencia(de, ate);
+		RelatorioQuantidadeConciliacaoPorConciliador relatorioQCC = relatorioService
+				.gerarRelatorioQuantidadeConciliacoesPorConciliador(de, ate);
 
 		return ResponseEntity.ok().body(relatorioQCC);
 	}

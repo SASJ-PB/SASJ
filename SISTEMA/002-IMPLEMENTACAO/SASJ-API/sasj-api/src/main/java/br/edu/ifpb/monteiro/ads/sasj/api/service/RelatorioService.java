@@ -1,6 +1,7 @@
 package br.edu.ifpb.monteiro.ads.sasj.api.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,8 @@ import org.springframework.stereotype.Service;
 import br.edu.ifpb.monteiro.ads.sasj.api.enums.TipoAudiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao;
-import br.edu.ifpb.monteiro.ads.sasj.api.model.relatorio.RelatorioQuantidadeConciliacoesPorConciliador;
+import br.edu.ifpb.monteiro.ads.sasj.api.model.relatorio.ConciliacoesPorConciliador;
+import br.edu.ifpb.monteiro.ads.sasj.api.model.relatorio.RelatorioQuantidadeConciliacaoPorConciliador;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.relatorio.RelatorioQuantidadeTipoAudiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.AudienciaRepository;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.ConciliacaoRepository;
@@ -68,7 +70,7 @@ public class RelatorioService {
 
 	}
 
-	public RelatorioQuantidadeConciliacoesPorConciliador gerarRelatorioQuantidadeConciliacoesPorConciliador(
+	public RelatorioQuantidadeConciliacaoPorConciliador gerarRelatorioQuantidadeConciliacoesPorConciliador(
 			LocalDateTime de, LocalDateTime ate) {
 
 		ConciliacaoFilter filterData = new ConciliacaoFilter();
@@ -77,7 +79,7 @@ public class RelatorioService {
 
 		List<Conciliacao> conciliacoes = conciliacaoRepository.filtrarPorData(filterData);
 
-		RelatorioQuantidadeConciliacoesPorConciliador relatorioQCC = montarRelatorioQCC(conciliacoes);
+		RelatorioQuantidadeConciliacaoPorConciliador relatorioQCC = montarRelatorioQCC(conciliacoes);
 
 		return relatorioQCC;
 
@@ -215,28 +217,40 @@ public class RelatorioService {
 		return RQHTA;
 	}
 
-	private RelatorioQuantidadeConciliacoesPorConciliador montarRelatorioQCC(List<Conciliacao> conciliacoes) {
+	private RelatorioQuantidadeConciliacaoPorConciliador montarRelatorioQCC(List<Conciliacao> conciliacoes) {
 
-		int qtdMinutoPenal = 0;
-		int qtdMinutoAcaoCivil = 0;
-		int qtdMinutoCustodia = 0;
-		int qtdMinutoImprobidade = 0;
-		int qtdMinutoInstrucaoCreta = 0;
-		int qtdMinutoLeilao = 0;
-		int qtdMinutoPJE = 0;
-		int qtdMinutoTebasImprobidade = 0;
-		int qtdMinutoVideoconferencia = 0;
-		int qtdMinutoOutros = 0;
+		List<String> nomeConciliadores = new ArrayList<>();
 
 		for (Conciliacao conciliacao : conciliacoes) {
-			
+			if (!nomeConciliadores.contains(conciliacao.getNomeConciliador().toUpperCase())) {
+				nomeConciliadores.add(conciliacao.getNomeConciliador().toUpperCase());
+			}
 		}
 
-		RelatorioQuantidadeConciliacoesPorConciliador RQHTA = new RelatorioQuantidadeConciliacoesPorConciliador(qtdMinutoPenal,
-				qtdMinutoAcaoCivil, qtdMinutoCustodia, qtdMinutoImprobidade, qtdMinutoInstrucaoCreta, qtdMinutoLeilao,
-				qtdMinutoPJE, qtdMinutoTebasImprobidade, qtdMinutoVideoconferencia, qtdMinutoOutros);
+		int[] numeroConciliacoes = new int[nomeConciliadores.size()];
+
+		for (int i = 0; i < numeroConciliacoes.length; i++) {
+			int numeroDeVezes = 0;
+			for (Conciliacao conciliacao : conciliacoes) {
+				if (conciliacao.getNomeConciliador().toUpperCase().equals(nomeConciliadores.get(i))) {
+					numeroDeVezes++;
+				}
+			}
+			numeroConciliacoes[i] = numeroDeVezes;
+		}
+
+		List<ConciliacoesPorConciliador> relacaoConciliacaoConciliador = new ArrayList<>();
+
+		for (int i = 0; i < numeroConciliacoes.length; i++) {
+			ConciliacoesPorConciliador conciliacoesPorConciliador = new ConciliacoesPorConciliador(
+					nomeConciliadores.get(i), numeroConciliacoes[i]);
+			relacaoConciliacaoConciliador.add(conciliacoesPorConciliador);
+		}
+
+		RelatorioQuantidadeConciliacaoPorConciliador RQHTA = new RelatorioQuantidadeConciliacaoPorConciliador(
+				relacaoConciliacaoConciliador);
 
 		return RQHTA;
 	}
-	
+
 }

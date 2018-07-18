@@ -16,10 +16,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.util.StringUtils;
 
-import br.edu.ifpb.monteiro.ads.sasj.api.model.Audiencia;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao;
 import br.edu.ifpb.monteiro.ads.sasj.api.model.Conciliacao_;
-import br.edu.ifpb.monteiro.ads.sasj.api.repository.filter.AudienciaFilter;
 import br.edu.ifpb.monteiro.ads.sasj.api.repository.filter.ConciliacaoFilter;
 
 public class ConciliacaoRepositoryImpl implements ConciliacaoRepositoryQuery {
@@ -61,7 +59,7 @@ public class ConciliacaoRepositoryImpl implements ConciliacaoRepositoryQuery {
 
 		return query.getResultList();
 	}
-	
+
 	private Predicate[] criarRestricoes(ConciliacaoFilter conciliacaoFilter, CriteriaBuilder builder,
 			Root<Conciliacao> root) {
 
@@ -106,7 +104,7 @@ public class ConciliacaoRepositoryImpl implements ConciliacaoRepositoryQuery {
 					builder.equal(root.get(Conciliacao_.statusAgendamento), conciliacaoFilter.getStatusAgendamento()));
 		}
 
-		// Tipo audiência
+		// Nome conciliador
 		if (!StringUtils.isEmpty(conciliacaoFilter.getNomeConciliador())) {
 			predicates.add(builder.like(builder.lower(root.get(Conciliacao_.nomeConciliador)),
 					"%" + conciliacaoFilter.getNomeConciliador().toLowerCase() + "%"));
