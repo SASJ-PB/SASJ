@@ -43,6 +43,23 @@ public class ConciliacaoRepositoryImpl implements ConciliacaoRepositoryQuery {
 		return new PageImpl<>(query.getResultList(), pageable, total(conciliacaoFilter));
 	}
 
+	@Override
+	public List<Conciliacao> filtrarPorData(ConciliacaoFilter conciliacaoFilterData) {
+		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Conciliacao> criteria = builder.createQuery(Conciliacao.class);
+
+		Root<Conciliacao> root = criteria.from(Conciliacao.class);
+
+		// Criar restricoes
+		Predicate[] predicates = criarRestricoes(conciliacaoFilterData, builder, root);
+
+		criteria.where(predicates);
+
+		TypedQuery<Conciliacao> query = entityManager.createQuery(criteria);
+
+		return query.getResultList();
+	}
+
 	private Predicate[] criarRestricoes(ConciliacaoFilter conciliacaoFilter, CriteriaBuilder builder,
 			Root<Conciliacao> root) {
 
@@ -87,27 +104,11 @@ public class ConciliacaoRepositoryImpl implements ConciliacaoRepositoryQuery {
 					builder.equal(root.get(Conciliacao_.statusAgendamento), conciliacaoFilter.getStatusAgendamento()));
 		}
 
-		// Tipo audiência
+		// Nome conciliador
 		if (!StringUtils.isEmpty(conciliacaoFilter.getNomeConciliador())) {
 			predicates.add(builder.like(builder.lower(root.get(Conciliacao_.nomeConciliador)),
 					"%" + conciliacaoFilter.getNomeConciliador().toLowerCase() + "%"));
 		}
-
-		// if (audienciaFilter.getNumeroProcesso() != null) {
-		// Join<Audiencia, Processo> join = root.join("processo");
-		// System.out.println(join.isNull());
-		// Expression<Long> codigo = join.get(Processo_.codigo).get("numeroProcesso");
-		// predicates
-		// .add(builder.equal(codigo, audienciaFilter.getNumeroProcesso()));
-		// }
-
-		// if (conciliacaoFilter.getNomeDaParteProcesso() != null) {
-		// Join<Audiencia, Processo> join = root.join("processo");
-		// System.out.println(join.isNull());
-		// Expression<Long> codigo = join.get(Processo_.codigo).get("nomeDaParte");
-		// predicates.add(builder.equal(codigo,
-		// conciliacaoFilter.getNomeDaParteProcesso()));
-		// }
 
 		return predicates.toArray(new Predicate[predicates.size()]);
 	}
