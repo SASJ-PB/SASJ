@@ -13,8 +13,8 @@ export class RelatorioService {
     this.relatorioUrl = `${environment.apiUrl}/relatorio`;
   }
 
-  listarQtdAudienciasPorTipo(dataDe: string, dataAte: string): Promise<any> {
-
+  listarQtdAudienciasPorTipo(dataDe: string, dataAte: string): Promise<any>
+  {
     const params = new URLSearchParams();
 
     params.set('de', dataDe);
@@ -29,14 +29,14 @@ export class RelatorioService {
       });
   }
 
-  listarQtdOitivasPorTipoAudiencia(dataDe: string, dataAte: string): Promise<any> {
-
+  listarQtdOitivasPorTipoAudiencia(dataDe: string, dataAte: string): Promise<any>
+  {
     const params = new URLSearchParams();
 
     params.set('de', dataDe);
     params.set('ate', dataAte);
 
-    return this.http.get(`${this.relatorioUrl}/quantidadeOitivaTipoAudiencia`, { search: params })
+    return this.http.get(`${this.relatorioUrl}/quantidadeOitivaPorTipoAudiencia`, { search: params })
       .toPromise()
       .then(response => {
         const responseJson = response.json();
@@ -45,14 +45,14 @@ export class RelatorioService {
       });
   }
 
-  listarQtdHorasPorTipoAudiencia(dataDe: string, dataAte: string): Promise<any> {
-
+  listarQtdHorasPorTipoAudiencia(dataDe: string, dataAte: string): Promise<any>
+  {
     const params = new URLSearchParams();
 
     params.set('de', dataDe);
     params.set('ate', dataAte);
 
-    return this.http.get(`${this.relatorioUrl}/quantidadeHoras`, { search: params })
+    return this.http.get(`${this.relatorioUrl}/quantidadeMinutoPorTipoAudiencia`, { search: params })
       .toPromise()
       .then(response => {
         const responseJson = response.json();
@@ -61,14 +61,14 @@ export class RelatorioService {
       });
   }
 
-  listarQtdConciliacoesPorConciliador(dataDe: string, dataAte: string): Promise<any> {
-
+  listarQtdConciliacoesPorConciliador(dataDe: string, dataAte: string): Promise<any>
+  {
     const params = new URLSearchParams();
 
     params.set('de', dataDe);
     params.set('ate', dataAte);
 
-    return this.http.get(`${this.relatorioUrl}/quantidadeConciliacoes`, { search: params })
+    return this.http.get(`${this.relatorioUrl}/quantidadeConciliacaoPorConciliador`, { search: params })
       .toPromise()
       .then(response => {
         const responseJson = response.json();

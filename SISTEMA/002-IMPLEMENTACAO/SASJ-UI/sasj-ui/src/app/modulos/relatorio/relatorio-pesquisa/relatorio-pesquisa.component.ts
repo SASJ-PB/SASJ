@@ -23,6 +23,11 @@ export class RelatorioPesquisaComponent implements OnInit {
   campoDataInicio: FormControl;
   campoDataFinal: FormControl;
 
+  exibirGraficos = false;
+  exibirGraficoA = false;
+  exibirGraficoB = false;
+  exibirGraficoC = false;
+
   public mascaraData = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
 
   constructor(private relatorioService: RelatorioService,
@@ -33,82 +38,99 @@ export class RelatorioPesquisaComponent implements OnInit {
     this.campoDataFinal = new FormControl('', [Validators.required, Validators.minLength(10), ValidateDate]);
   }
 
-  gerarEstatisticas() {
-
+  gerarEstatisticas()
+  {
     const valorDataDe = this.formatarDataDe(this.campoDataInicio.value);
     const valorDataAte = this.formatarDataAte(this.campoDataFinal.value);
 
     this.gerarGraficoAudiencias(valorDataDe, valorDataAte);
     this.gerarGraficoOitivas(valorDataDe, valorDataAte);
-    // this.gerarGraficoTempoDeUsoSala(valorDataDe, valorDataAte);
-    // this.gerarGraficoConciliadores(valorDataDe, valorDataAte);
+    this.gerarGraficoTempoDeUsoSala(valorDataDe, valorDataAte);
+    this.gerarGraficoConciliadores(valorDataDe, valorDataAte);
+
+    this.exibirGraficos = true;
   }
 
-  gerarGraficoAudiencias(dataDe: string, dataAte: string) {
-
+  gerarGraficoAudiencias(dataDe: string, dataAte: string)
+  {
     this.relatorioService.listarQtdAudienciasPorTipo(dataDe, dataAte)
       .then(resultado => {
 
-          this.dataGraficoA = {
-            labels: ['AÇÃO CIVIL', 'CUSTÓDIA', 'IMPROBIDADE', 'INSTRUÇÃO DO CRETA',
-              'LEILÃO', 'OUTROS', 'PENAL', 'PJE', 'TEBAS IMPROBIDADE', 'VIDEOCONFERÊNCIA'
-            ],
-            datasets: [
-              {
-                data:
-                  [
-                    resultado.qtdAcaoCivil, resultado.qtdCustodia, resultado.qtdImprobidade,
-                    resultado.qtdInstrucaoCreta, resultado.qtdLeilao, resultado.qtdOutros,
-                    resultado.qtdPenal, resultado.qtdPJE, resultado.qtdTebasImprobidade,
-                    resultado.qtdVideoconferencia
-                  ],
-                backgroundColor: [
-                  '#f44336',
-                  '#9c27b0',
-                  '#FFCE56',
-                  '#3f51b5',
-                  '#03a9f4',
-                  '#009688',
-                  '#8bc34a',
-                  '#ffeb3b',
-                  '#ff9800',
-                  '#795548',
-                ],
-                hoverBackgroundColor: [
-                  '#f44336',
-                  '#9c27b0',
-                  '#FFCE56',
-                  '#3f51b5',
-                  '#03a9f4',
-                  '#009688',
-                  '#8bc34a',
-                  '#ffeb3b',
-                  '#ff9800',
-                  '#795548',
-                ]
-              }
-            ]
-          };
+        if (this.isObjetoVazio(resultado)){
+          this.exibirGraficoA = false;
+        }
+        else{
+          this.exibirGraficoA = true;
+        }
 
-          this.optionsGraficoA = {
-            responsive: true,
-            title: {
-              display: true,
-              text: 'QUANTIDADE DE AUDIÊNCIAS POR TIPO DE AUDIÊNCIA',
-              fontSize: 20
-            },
-            legend: {
-              position: 'right'
+        this.dataGraficoA = {
+          labels: ['AÇÃO CIVIL', 'CUSTÓDIA', 'IMPROBIDADE', 'INSTRUÇÃO DO CRETA',
+            'LEILÃO', 'OUTROS', 'PENAL', 'PJE', 'TEBAS IMPROBIDADE', 'VIDEOCONFERÊNCIA'
+          ],
+          datasets: [
+            {
+              data:
+                [
+                  resultado.qtdAcaoCivil, resultado.qtdCustodia, resultado.qtdImprobidade,
+                  resultado.qtdInstrucaoCreta, resultado.qtdLeilao, resultado.qtdOutros,
+                  resultado.qtdPenal, resultado.qtdPJE, resultado.qtdTebasImprobidade,
+                  resultado.qtdVideoconferencia
+                ],
+              backgroundColor: [
+                '#f44336',
+                '#9c27b0',
+                '#FFCE56',
+                '#3f51b5',
+                '#03a9f4',
+                '#009688',
+                '#8bc34a',
+                '#ffeb3b',
+                '#ff9800',
+                '#795548',
+              ],
+              hoverBackgroundColor: [
+                '#f44336',
+                '#9c27b0',
+                '#FFCE56',
+                '#3f51b5',
+                '#03a9f4',
+                '#009688',
+                '#8bc34a',
+                '#ffeb3b',
+                '#ff9800',
+                '#795548',
+              ]
             }
-          };
-      })
-      .catch(erro => this.errorHandlerService.handle(erro));
+          ]
+        };
+
+        this.optionsGraficoA = {
+          responsive: true,
+          title: {
+            display: true,
+            text: 'QUANTIDADE DE AUDIÊNCIAS POR TIPO DE AUDIÊNCIA',
+            fontSize: 20
+          },
+          legend: {
+            position: 'right'
+          }
+        };
+    })
+    .catch(erro => this.errorHandlerService.handle(erro));
   }
 
-  gerarGraficoOitivas(dataDe: string, dataAte: string) {
-
+  gerarGraficoOitivas(dataDe: string, dataAte: string)
+  {
     this.relatorioService.listarQtdOitivasPorTipoAudiencia(dataDe, dataAte)
       .then(resultado => {
+
+        if (this.isObjetoVazio(resultado)){
+          this.exibirGraficoB = false;
+        }
+        else{
+          this.exibirGraficoB = true;
+        }
+
         this.dataGraficoB = {
           labels: ['AÇÃO CIVÍL', 'CUSTÓDIA', 'IMPROBIDADE', 'INSTRUÇÃO DO CRETA',
             'LEILÃO', 'OUTROS', 'PENAL', 'PJE', 'TEBAS IMPROBIDADE', 'VIDEOCONFERÊNCIA'
@@ -116,10 +138,10 @@ export class RelatorioPesquisaComponent implements OnInit {
           datasets: [
             {
               data: [
-                resultado.qtdOitivaAcaoCivil, resultado.qtdOitivaCustodia, resultado.qtdOitivaImprobidade,
-                resultado.qtdOitivaInstrucaoCreta, resultado.qtdOitivaLeilao, resultado.qtdOitivaOutros,
-                resultado.qtdOitivaPenal, resultado.qtdOitivaPJE, resultado.qtdOitivaTebasImprobidade,
-                resultado.qtdOitivaVideoconferencia
+                resultado.qtdAcaoCivil, resultado.qtdCustodia, resultado.qtdImprobidade,
+                resultado.qtdInstrucaoCreta, resultado.qtdLeilao, resultado.qtdOutros,
+                resultado.qtdPenal, resultado.qtdPJE, resultado.qtdTebasImprobidade,
+                resultado.qtdVideoconferencia
               ],
               backgroundColor: [
                 '#f44336',
@@ -163,10 +185,20 @@ export class RelatorioPesquisaComponent implements OnInit {
       .catch(erro => this.errorHandlerService.handle(erro));
   }
 
-  gerarGraficoTempoDeUsoSala(dataDe: string, dataAte: string) {
-
+  gerarGraficoTempoDeUsoSala(dataDe: string, dataAte: string)
+  {
     this.relatorioService.listarQtdHorasPorTipoAudiencia(dataDe, dataAte)
       .then(resultado => {
+
+        if (this.isObjetoVazio(resultado)){
+          this.exibirGraficoC = false;
+        }
+        else{
+          this.exibirGraficoC = true;
+        }
+
+        // const tempoFormatado: Array<string> = this.formatarTempo(resultado);
+
         this.dataGraficoC = {
           labels: ['AÇÃO CIVÍL', 'CUSTÓDIA', 'IMPROBIDADE', 'INSTRUÇÃO DO CRETA',
             'LEILÃO', 'OUTROS', 'PENAL', 'PJE', 'TEBAS IMPROBIDADE', 'VIDEOCONFERÊNCIA'
@@ -174,10 +206,10 @@ export class RelatorioPesquisaComponent implements OnInit {
           datasets: [
             {
               data: [
-                resultado.qtdPenal, resultado.qtdAcaoCivil, resultado.qtdCustodia,
-                resultado.qtdImprobidade, resultado.qtdInstrucaoCreta, resultado.qtdLeilao,
-                resultado.qtdOutros, resultado.qtdPJE, resultado.qtdPenal, resultado.qtdTebasImprobidade,
-                resultado.qtdVideoConferencia
+                resultado.qtdAcaoCivil, resultado.qtdCustodia, resultado.qtdImprobidade,
+                resultado.qtdInstrucaoCreta, resultado.qtdLeilao, resultado.qtdOutros,
+                resultado.qtdPenal, resultado.qtdPJE, resultado.qtdTebasImprobidade,
+                resultado.qtdVideoconferencia
               ],
               backgroundColor: [
                 '#f44336',
@@ -210,7 +242,7 @@ export class RelatorioPesquisaComponent implements OnInit {
         this.optionsGraficoC = {
           title: {
             display: true,
-            text: 'TEMPO DE USO DA SALA POR TIPO DE AUDIÊNCIA',
+            text: 'TEMPO DE USO DA SALA POR TIPO DE AUDIÊNCIA (MINUTOS)',
             fontSize: 20
           },
           legend: {
@@ -219,65 +251,120 @@ export class RelatorioPesquisaComponent implements OnInit {
         };
       })
       .catch(erro => this.errorHandlerService.handle(erro));
-
   }
 
-  gerarGraficoConciliadores(dataDe: string, dataAte: string) {
-    this.dataGraficoD = {
-      labels: ['DANIELE', 'EWERTON', 'FRANCIMÁRIA', 'JÚLIO CESAR',
-        'MARIA SILVANA', 'MAX', 'RAYANA'
-      ],
-      datasets: [
-        {
-          data: [130, 52, 112, 150, 192, 148, 70],
-          backgroundColor: [
-            '#f44336',
-            '#9c27b0',
-            '#FFCE56',
-            '#3f51b5',
-            '#03a9f4',
-            '#009688',
-            '#8bc34a',
-          ],
-          hoverBackgroundColor: [
-            '#f44336',
-            '#9c27b0',
-            '#FFCE56',
-            '#3f51b5',
-            '#03a9f4',
-            '#009688',
-            '#8bc34a',
+  gerarGraficoConciliadores(dataDe: string, dataAte: string)
+  {
+    this.relatorioService.listarQtdConciliacoesPorConciliador(dataDe, dataAte)
+      .then(resultado => {
+
+        const conciliadores = new Array();
+        const quantConciliacoes = new Array();
+
+        resultado.conciliacoesPorConciliador.forEach(element => {
+          conciliadores.push(element.nomeConciliador);
+          quantConciliacoes.push(element.numeroConciliacoes);
+        });
+
+        this.dataGraficoD = {
+          labels: conciliadores,
+          datasets: [
+            {
+              data: quantConciliacoes,
+              backgroundColor: [
+                '#f44336',
+                '#9c27b0',
+                '#FFCE56',
+                '#3f51b5',
+                '#03a9f4',
+                '#009688',
+                '#8bc34a',
+                '#ffeb3b',
+                '#ff9800',
+                '#795548',
+              ],
+              hoverBackgroundColor: [
+                '#f44336',
+                '#9c27b0',
+                '#FFCE56',
+                '#3f51b5',
+                '#03a9f4',
+                '#009688',
+                '#8bc34a',
+                '#ffeb3b',
+                '#ff9800',
+                '#795548',
+              ]
+            }
           ]
-        }
-      ]
-    };
+        };
 
-    this.optionsGraficoD = {
-      title: {
-        display: true,
-        text: 'QUANTIDADE DE CONCILIAÇÕES REALIZADAS POR CADA CONCILIADOR',
-        fontSize: 20
-      },
-      legend: {
-        position: 'right'
-      }
-    };
-
+        this.optionsGraficoD = {
+          title: {
+            display: true,
+            text: 'QUANTIDADE DE CONCILIAÇÕES REALIZADAS POR CADA CONCILIADOR',
+            fontSize: 20
+          },
+          legend: {
+            position: 'right'
+          }
+        };
+      })
+      .catch(erro => this.errorHandlerService.handle(erro));
   }
 
-  private formatarDataDe(data: string): string{ // aaaa-MM-dd HH:mm
+  private isObjetoVazio(objeto: any)
+  {
+    const array = new Array();
 
+    if (objeto.qtdAcaoCivil !== 0) {
+      array.push(objeto.qtdAcaoCivil);
+    }
+    if (objeto.qtdCustodia !== 0) {
+      array.push(objeto.qtdCustodia);
+    }
+    if (objeto.qtdImprobidade !== 0) {
+      array.push(objeto.qtdImprobidade);
+    }
+    if (objeto.qtdInstrucaoCreta !== 0) {
+      array.push(objeto.qtdInstrucaoCreta);
+    }
+    if (objeto.qtdLeilao !== 0) {
+      array.push(objeto.qtdLeilao);
+    }
+    if (objeto.qtdOutros !== 0) {
+      array.push(objeto.qtdOutros);
+    }
+    if (objeto.qtdPenal !== 0) {
+      array.push(objeto.qtdPenal);
+    }
+    if (objeto.qtdPJE !== 0) {
+      array.push(objeto.qtdPJE);
+    }
+    if (objeto.qtdTebasImprobidade !== 0) {
+      array.push(objeto.qtdTebasImprobidade);
+    }
+    if (objeto.qtdVideoconferencia !== 0) {
+      array.push(objeto.qtdVideoconferencia);
+    }
+
+    return array.length === 0;
+  }
+
+  private formatarDataDe(data: string): string
+  { // aaaa-MM-dd HH:mm
     const dataFormatada = data.split('/');
 
     return dataFormatada[2] + '-' + dataFormatada[1] + '-' + dataFormatada[0] + ' ' + '00:00';
   }
 
-  private formatarDataAte(data: string): string{ // aaaa-MM-dd HH:mm
-
+  private formatarDataAte(data: string): string
+  { // aaaa-MM-dd HH:mm
     const dataFormatada = data.split('/');
 
     return dataFormatada[2] + '-' + dataFormatada[1] + '-' + dataFormatada[0] + ' ' + '23:59';
   }
+
 }
 
 export function ValidateDate(control: AbstractControl){

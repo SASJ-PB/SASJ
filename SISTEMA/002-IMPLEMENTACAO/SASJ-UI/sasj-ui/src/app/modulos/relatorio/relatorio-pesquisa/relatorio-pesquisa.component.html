@@ -41,21 +41,27 @@
       </mat-card>
     </form>
 
-    <mat-card class="espacamento-card">
-      <p-chart type="pie" [data]="dataGraficoA" [options]="optionsGraficoA"></p-chart>
+    <mat-card class="espacamento-card" *ngIf="!exibirGraficoA && !exibirGraficoB && !exibirGraficoC && dataGraficoD?.datasets[0].data.length === 0">
+      <span style="margin:auto">Não existem dados para exibição</span>
     </mat-card>
 
-    <mat-card class="espacamento-card">
-      <p-chart type="pie" [data]="dataGraficoB" [options]="optionsGraficoB"></p-chart>
-    </mat-card>
+    <div *ngIf="exibirGraficos">
+      <mat-card class="espacamento-card" *ngIf="exibirGraficoA"> <!-- dataGraficoA?.datasets[0].data.length != 0 -->
+        <p-chart type="pie" [data]="dataGraficoA" [options]="optionsGraficoA"></p-chart>
+      </mat-card>
 
-    <mat-card class="espacamento-card">
-      <p-chart type="pie" [data]="dataGraficoC" [options]="optionsGraficoC"></p-chart>
-    </mat-card>
+      <mat-card class="espacamento-card" *ngIf="exibirGraficoB">
+        <p-chart type="pie" [data]="dataGraficoB" [options]="optionsGraficoB"></p-chart>
+      </mat-card>
 
-    <mat-card class="espacamento-card">
-      <p-chart type="pie" [data]="dataGraficoD" [options]="optionsGraficoD"></p-chart>
-    </mat-card>
+      <mat-card class="espacamento-card" *ngIf="exibirGraficoC">
+        <p-chart type="pie" [data]="dataGraficoC" [options]="optionsGraficoC"></p-chart>
+      </mat-card>
+
+      <mat-card class="espacamento-card" *ngIf="dataGraficoD?.datasets[0].data.length != 0">
+        <p-chart type="pie" [data]="dataGraficoD" [options]="optionsGraficoD"></p-chart>
+      </mat-card>
+    </div>
   </div>
 
 </div>
