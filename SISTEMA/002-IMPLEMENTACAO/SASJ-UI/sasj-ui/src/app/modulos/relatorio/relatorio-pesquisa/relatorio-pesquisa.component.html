@@ -1,0 +1,62 @@
+<div style="display: block; padding: 10px;">
+  <div>
+    <form>
+      <mat-card>
+        <mat-form-field appearance="outline">
+          <mat-label>de</mat-label>
+          <input id="campoDataInicio" matInput placeholder="dd/mm/aaaa" required
+              [formControl]="campoDataInicio"
+              [textMask]="{mask: mascaraData, guide: false}">
+
+          <mat-error *ngIf="campoDataInicio.hasError('required')">
+            A data deve ser informada
+          </mat-error>
+          <mat-error *ngIf="campoDataInicio.hasError('minlength') || campoDataInicio.hasError('validDate') && !campoDataInicio.hasError('required')">
+            A data informada não é válida
+          </mat-error>
+        </mat-form-field>
+
+        <span style="margin: 0px 10px;"></span>
+
+        <mat-form-field appearance="outline">
+          <mat-label>até</mat-label>
+          <input id="campoDataFinal" matInput placeholder="dd/mm/aaaa" required
+              [formControl]="campoDataFinal"
+              [textMask]="{mask: mascaraData, guide: false}">
+
+          <mat-error *ngIf="campoDataFinal.hasError('required')">
+            A data deve ser informada
+          </mat-error>
+          <mat-error *ngIf="campoDataFinal.hasError('minlength') || campoDataFinal.hasError('validDate') && !campoDataFinal.hasError('required')">
+            A data informada não é válida
+          </mat-error>
+        </mat-form-field>
+
+        <span style="padding: 1%"></span>
+
+        <button mat-raised-button type="submit" color="accent" (click)="gerarEstatisticas()">
+          GERAR ESTATÍSTICAS
+        </button>
+
+      </mat-card>
+    </form>
+
+    <mat-card class="espacamento-card">
+      <p-chart type="pie" [data]="dataGraficoA" [options]="optionsGraficoA"></p-chart>
+    </mat-card>
+
+    <mat-card class="espacamento-card">
+      <p-chart type="pie" [data]="dataGraficoB" [options]="optionsGraficoB"></p-chart>
+    </mat-card>
+
+    <mat-card class="espacamento-card">
+      <p-chart type="pie" [data]="dataGraficoC" [options]="optionsGraficoC"></p-chart>
+    </mat-card>
+
+    <mat-card class="espacamento-card">
+      <p-chart type="pie" [data]="dataGraficoD" [options]="optionsGraficoD"></p-chart>
+    </mat-card>
+  </div>
+
+</div>
+

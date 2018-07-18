@@ -9,6 +9,7 @@ import { LogoutService } from './../seguranca/logout.service';
 import { UsuarioService } from './../usuario/usuario.service';
 import { AgendamentoService } from './../agendamento/agendamento.service';
 import { StorageDataService } from './storage-data.service';
+import { RelatorioService } from './../relatorio/relatorio.service';
 
 import { NaoAutorizadoComponent } from './nao-autorizado.component';
 import { PaginaNaoEncontradaComponent } from './pagina-nao-encontrada.component';
@@ -17,17 +18,24 @@ import { NavbarModule } from './../navbar/navbar.module';
 
 import { JwtHelper } from 'angular2-jwt';
 
+import { LoadingComponent } from './loading.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
+
 @NgModule({
   imports: [
     CommonModule,
     NoopAnimationsModule,
     NavbarModule,
-    RouterModule
+    RouterModule,
+    MatProgressSpinnerModule,
+    MatDialogModule
   ],
-  declarations: [PaginaNaoEncontradaComponent, NaoAutorizadoComponent],
+  declarations: [PaginaNaoEncontradaComponent, NaoAutorizadoComponent, LoadingComponent],
   exports: [
     NavbarModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatDialogModule
   ],
   providers: [
     AuthService,
@@ -36,8 +44,11 @@ import { JwtHelper } from 'angular2-jwt';
     ErrorHandlerService,
     UsuarioService,
     AgendamentoService,
-    StorageDataService
-  ]
-
+    StorageDataService,
+    RelatorioService
+  ],
+  entryComponents: [
+    LoadingComponent
+  ],
 })
 export class CoreModule { }

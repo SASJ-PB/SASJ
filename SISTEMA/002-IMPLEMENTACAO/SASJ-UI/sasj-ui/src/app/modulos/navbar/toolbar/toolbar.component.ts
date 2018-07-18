@@ -29,10 +29,12 @@ export class ToolbarComponent implements OnInit {
   opcoesMenuLateralAdmin = [
     {label: 'Usuários', icone: 'supervisor_account', url: '/usuarios', id: 'botaoUsuarios'},
     {label: 'Agendamentos', icone: 'calendar_today', url: '/agendamentos', id: 'botaoAgendamentos'},
+    {label: 'Relatórios', icone: 'description', url: '/relatorios', id: 'botaoRelatorios'}
   ];
 
   opcoesMenuLateralPadrao = [
-    {label: 'Agendamentos', icone: 'calendar_today', url: '/agendamentos', id: 'botaoAgendamentos'}
+    {label: 'Agendamentos', icone: 'calendar_today', url: '/agendamentos', id: 'botaoAgendamentos'},
+    {label: 'Relatórios', icone: 'description', url: '/relatorios', id: 'botaoRelatorios'}
   ];
 
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
