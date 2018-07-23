@@ -5,7 +5,7 @@
 
 	<groupId>br.edu.ifpb.monteiro.ads</groupId>
 	<artifactId>sasj-api</artifactId>
-	<version>R-0.5.5-IT-05</version>
+	<version>R-1.0.0-IT-06</version>
 	<packaging>jar</packaging>
 
 	<name>sasj-api</name>
