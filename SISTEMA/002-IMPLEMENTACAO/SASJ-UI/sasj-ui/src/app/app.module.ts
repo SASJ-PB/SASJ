@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { Routes, RouterModule } from '@angular/router';
 import { HttpModule } from '@angular/http';
-import 'hammerjs';
 
 @NgModule({
   declarations: [

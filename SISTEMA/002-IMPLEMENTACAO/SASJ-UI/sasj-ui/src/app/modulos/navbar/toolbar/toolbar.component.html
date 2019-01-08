@@ -32,7 +32,7 @@
   </mat-toolbar>
 
   <mat-sidenav-container class="sidenav-container"
-                         [style.marginTop.px]="mobileQuery.matches && ocultarToolbar() ? 56 : 0">
+      [style.marginTop.px]="mobileQuery.matches && ocultarToolbar() ? 56 : 0">
     <mat-sidenav #sidenavRef [mode]="mobileQuery.matches ? 'over' : 'side'" *ngIf="ocultarToolbar()"
                  [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" id="sidebar">
       <mat-nav-list *ngIf="authService.temPermissao('ROLE_CADASTRAR_USUARIO')">
